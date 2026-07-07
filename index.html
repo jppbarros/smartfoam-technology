@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartFoam™ Technology — Rove Lab</title>
+<meta name="description" content="SmartFoam™ is the proprietary material that replaces a century of wood, metal and springs with a single, intelligent system. The technology behind every Lab Boneless Couch.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F0EFEA;--bg-2:#E9E7E0;--panel:#FBFAF7;
+    --ink:#211D2B;--dim:#7E7889;
+    --purple:#9F8FE0;--purple-hot:#8674D4;--purple-deep:#6E5DBF;
+    --pink:#F2B8CE;--blue:#AECBF2;
+    --grad:linear-gradient(120deg,#F2B8CE 0%,#C9B4EC 48%,#AECBF2 100%);
+    --line:rgba(33,29,43,.14);
+    font-size:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Urbanist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  button{font-family:inherit}
+  ::selection{background:var(--purple);color:#fff}
+  sup.tm2{font-size:.42em;line-height:0;vertical-align:super;letter-spacing:.02em}
+
+  .grain{
+    position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:999;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity:.05;mix-blend-mode:multiply;animation:grain 8s steps(10) infinite;
+  }
+  @keyframes grain{
+    0%,100%{transform:translate(0,0)}10%{transform:translate(-2%,-3%)}20%{transform:translate(3%,2%)}
+    30%{transform:translate(-3%,1%)}40%{transform:translate(2%,-2%)}50%{transform:translate(-1%,3%)}
+    60%{transform:translate(3%,-1%)}70%{transform:translate(-2%,2%)}80%{transform:translate(1%,-3%)}90%{transform:translate(-3%,-2%)}
+  }
+
+  /* nav */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;height:64px;
+    display:flex;align-items:center;justify-content:space-between;padding:0 5vw;
+    background:linear-gradient(180deg,rgba(240,239,234,.92),rgba(240,239,234,0));
+  }
+  .logo{display:flex;align-items:center;gap:.9rem;text-decoration:none;color:inherit}
+  .logo img{height:14px;width:auto;display:block}
+  .logo .sep{width:1px;height:18px;background:var(--line)}
+  .logo .prod{font-weight:900;font-size:1.02rem;letter-spacing:.08em;text-transform:uppercase}
+  nav ul{display:flex;gap:clamp(.9rem,2vw,1.6rem);list-style:none;align-items:center;margin:0 1rem}
+  nav ul a{color:var(--dim);text-decoration:none;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;transition:color .25s}
+  nav ul a:hover{color:var(--ink)}
+  .nav-cta{
+    background:var(--purple-hot);color:#fff;border:none;border-radius:2px;
+    padding:.55rem 1.3rem;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;
+    transition:background .2s,transform .2s;
+  }
+  .nav-cta:hover{background:var(--purple-deep);transform:translateY(-1px)}
+
+  /* shared */
+  section{position:relative;padding:8rem 5vw}
+  .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-hot);margin-bottom:1.3rem}
+  .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase}
+  .h-giant .soft{color:var(--dim)}
+  .h-giant .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .h-serifless{font-size:clamp(1.9rem,4.4vw,3.6rem);font-weight:900;line-height:1.12;letter-spacing:-.02em}
+  .lead{margin-top:1.5rem;font-size:1.05rem;color:var(--dim);max-width:620px;line-height:1.7}
+  .lead em{color:var(--purple-deep);font-style:normal;font-weight:600}
+  .reveal{
+    opacity:0;transform:translateY(40px);filter:blur(12px);
+    transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1),filter .7s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.in{opacity:1;transform:none;filter:blur(0)}
+  .hud{
+    position:absolute;z-index:2;font-size:.6rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--purple-deep);background:rgba(251,250,247,.85);padding:.35rem .6rem;border:1px solid rgba(134,116,212,.4);
+  }
+  .hud.tl{top:12px;left:12px}.hud.tr{top:12px;right:12px}
+
+  /* 01 — statement hero: the material is the protagonist */
+  .statement{
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding-top:110px;overflow:hidden;
+  }
+  .statement h1{
+    font-size:clamp(1.9rem,4.6vw,3.9rem);font-weight:900;line-height:1.12;letter-spacing:-.02em;max-width:1000px;
+  }
+  .statement h1 .soft{color:var(--dim)}
+  .statement h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .statement .lead{text-align:center;margin-left:auto;margin-right:auto}
+  /* cellular macro — slowly rotating bubble field, lavender + holographic */
+  .cellfield-wrap{position:relative;margin-top:3.2rem;width:min(430px,72vw);aspect-ratio:1}
+  .cellfield{
+    position:absolute;inset:0;border-radius:50%;overflow:hidden;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.75), transparent 55%),
+      conic-gradient(from 210deg, rgba(242,184,206,.35), rgba(201,180,236,.4), rgba(174,203,242,.35), rgba(187,240,214,.3), rgba(255,231,186,.32), rgba(242,184,206,.35));
+    border:1px solid rgba(134,116,212,.4);
+    box-shadow:inset 0 0 60px rgba(255,255,255,.6), 0 30px 80px rgba(134,116,212,.22);
+    animation:spinslow 60s linear infinite;
+  }
+  @keyframes spinslow{to{transform:rotate(360deg)}}
+  .cellfield i{
+    position:absolute;display:block;border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, rgba(255,255,255,.9), rgba(221,211,242,.55) 55%, rgba(159,143,224,.35));
+    border:1px solid rgba(134,116,212,.35);
+  }
+  .cellfield-wrap .select-frame{position:absolute;inset:-14px;border:1px dashed rgba(134,116,212,.6);border-radius:50%;pointer-events:none}
+  .cellfield-wrap .hud{bottom:-40px;top:auto;left:50%;transform:translateX(-50%);white-space:nowrap}
+
+  /* 02 — x-ray */
+  .th-box{position:relative;aspect-ratio:16/9;max-width:960px;overflow:hidden;border:1px solid rgba(134,116,212,.35);background:#fff;margin-top:3.2rem}
+  .th-box::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent 0 42px,rgba(33,29,43,.09) 42px 43px),
+               repeating-linear-gradient(90deg,transparent 0 42px,rgba(33,29,43,.09) 42px 43px);
+  }
+  .th-compare{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
+  .th-pane{position:relative;overflow:hidden}
+  .th-pane.xbad{border-right:1px dashed rgba(255,255,255,.25);background:#241F30}
+  .th-pane.xgood{background:#F1EEFA}
+  .sofa-svg{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);width:82%;height:auto}
+  .th-cap{
+    position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:2;
+    width:max-content;max-width:92%;text-align:center;
+    font-size:.53rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+    background:rgba(251,250,247,.85);padding:.3rem .55rem;border:1px solid var(--line);
+  }
+
+  /* 03 — the reveal: expanding block loop */
+  .reveal-scene{
+    position:relative;margin-top:3.2rem;max-width:760px;height:300px;overflow:hidden;
+    background:radial-gradient(ellipse 70% 90% at 50% 0%, #F4F2FB, var(--panel) 70%);
+    border:1px solid rgba(134,116,212,.3);box-shadow:0 24px 60px rgba(33,29,43,.08);
+  }
+  .exblock{
+    position:absolute;left:50%;bottom:44px;width:min(340px,60%);height:170px;
+    transform:translateX(-50%) scaleY(.12);transform-origin:50% 100%;
+    background:
+      radial-gradient(circle, rgba(134,116,212,.3) 0 2.5px, transparent 3.5px) 0 0/18px 18px,
+      radial-gradient(circle, rgba(134,116,212,.18) 0 2px, transparent 3px) 9px 9px/18px 18px,
+      #DDD3F2;
+    border:1px solid rgba(134,116,212,.45);border-radius:14px;
+    animation:expand 7s cubic-bezier(.34,1.4,.4,1) infinite;
+  }
+  @keyframes expand{
+    0%{transform:translateX(-50%) scaleY(.12)}
+    6%{transform:translateX(-50%) scaleY(.12)}
+    16%{transform:translateX(-50%) scaleY(1.05)}
+    22%{transform:translateX(-50%) scaleY(.985)}
+    27%{transform:translateX(-50%) scaleY(1)}
+    76%{transform:translateX(-50%) scaleY(1);opacity:1}
+    82%{opacity:0;transform:translateX(-50%) scaleY(1)}
+    83%{opacity:0;transform:translateX(-50%) scaleY(.12)}
+    90%{opacity:1;transform:translateX(-50%) scaleY(.12)}
+    100%{transform:translateX(-50%) scaleY(.12)}
+  }
+  .reveal-scene .ground{position:absolute;bottom:44px;left:8%;right:8%;height:1px;background:rgba(33,29,43,.25)}
+
+  /* 04 — science columns */
+  .cell3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:3.4rem}
+  .cellcard{background:var(--panel);border:1px solid var(--line);padding:1.8rem;box-shadow:0 14px 36px rgba(33,29,43,.07)}
+  .cellcard h3{font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem}
+  .cellcard p{color:var(--dim);font-size:.9rem;line-height:1.65}
+  .cellviz{height:64px;margin-bottom:1.1rem;display:flex;align-items:flex-end;gap:7px}
+  .cellviz.dots{align-items:center}
+  .cellviz.dots i{width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #fff, #DDD3F2 60%, #C9B4EC);border:1px solid rgba(134,116,212,.4)}
+  .cellviz.bars i{display:block;width:26px;background:var(--grad);border:1px solid rgba(134,116,212,.45)}
+  .cellviz.exp i{display:block;width:44px;border:1px solid rgba(134,116,212,.5);background:#DDD3F2;border-radius:4px}
+  .cellviz.exp .arrow{width:auto;border:none;background:none;color:var(--purple-hot);font-weight:900}
+  .curvelab{font-size:.55rem;font-weight:800;letter-spacing:.14em;color:var(--purple-deep);text-transform:uppercase}
+
+  /* 05 — oversized numbers */
+  .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-top:3.4rem}
+  .numtile{background:var(--panel);border:1px solid var(--line);padding:2rem 1.8rem;box-shadow:0 14px 36px rgba(33,29,43,.07)}
+  .numtile b{
+    display:block;font-size:clamp(2.2rem,3.6vw,3.2rem);font-weight:900;letter-spacing:-.02em;line-height:1;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .numtile .std{display:block;margin-top:.5rem;font-size:.55rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .numtile p{margin-top:.6rem;font-size:.9rem;color:var(--ink);font-weight:600}
+
+  /* 06 — four unlocks */
+  .poss-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:3.4rem}
+  .poss{background:var(--panel);border:1px solid var(--line);padding:1.8rem;transition:transform .25s,border-color .25s}
+  .poss:hover{transform:translateY(-6px);border-color:rgba(134,116,212,.45)}
+  .poss svg{width:44px;height:44px;margin-bottom:1rem}
+  .poss h3{font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}
+  .poss p{color:var(--dim);font-size:.88rem;line-height:1.6}
+
+  /* 07 — stack */
+  .stack-diagram{margin-top:3.4rem;max-width:840px}
+  .layer{
+    display:grid;grid-template-columns:96px 1fr;gap:1.2rem;align-items:center;
+    background:var(--panel);border:1px solid var(--line);padding:1.35rem 1.8rem;margin-bottom:8px;
+    transition:transform .25s,border-color .25s;
+  }
+  .layer:hover{transform:translateX(8px);border-color:rgba(134,116,212,.45)}
+  .layer .lnum{font-size:.58rem;font-weight:800;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
+  .layer h3{font-size:1.02rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+  .layer p{color:var(--dim);font-size:.86rem;margin-top:.25rem;line-height:1.55}
+  .layer.core{border-color:rgba(134,116,212,.6);background:linear-gradient(120deg,rgba(242,184,206,.14),rgba(174,203,242,.14)),var(--panel)}
+  .layer.core .lnum{color:var(--purple-hot)}
+
+  /* 08 — endurance strip */
+  .endure{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .endure-stats{display:flex;flex-wrap:wrap;gap:0;margin-top:3rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .estat{padding:2.2rem 3rem;border-right:1px solid var(--line);min-width:210px}
+  .estat:first-child{border-left:1px solid var(--line)}
+  .estat b{display:block;font-size:2.2rem;font-weight:900;letter-spacing:-.02em;color:var(--purple-deep)}
+  .estat span{display:block;margin-top:.35rem;color:var(--dim);font-size:.82rem;line-height:1.5;max-width:200px}
+
+  /* 09 — why it matters */
+  .matter{text-align:center}
+  .matter .h-serifless{max-width:900px;margin:0 auto}
+  .matter .lead{margin-left:auto;margin-right:auto;text-align:center}
+
+  /* 10 — shop grid */
+  .shop{padding-bottom:10rem}
+  .shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;margin-top:3.4rem}
+  .scard{display:block;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);overflow:hidden;transition:transform .3s,border-color .3s;box-shadow:0 16px 40px rgba(33,29,43,.07)}
+  .scard:hover{transform:translateY(-7px);border-color:rgba(134,116,212,.5)}
+  .scard .ph{aspect-ratio:4/3;overflow:hidden}
+  .scard img{width:100%;height:100%;object-fit:cover;object-position:center 62%;display:block;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+  .scard:hover img{transform:scale(1.045)}
+  .scard .info{padding:1.1rem 1.2rem 1.3rem}
+  .scard h3{font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+  .scard .badge{
+    display:inline-block;margin-top:.55rem;font-size:.5rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--purple-deep);background:rgba(159,143,224,.16);border:1px solid rgba(134,116,212,.4);
+    padding:.22rem .5rem;border-radius:99px;
+  }
+  .cta-line{margin-top:4rem;text-align:center}
+  .cta-line p{font-size:.72rem;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-bottom:1.4rem}
+  .btn-primary{
+    background:var(--purple-hot);color:#fff;font-weight:800;border:none;border-radius:2px;
+    padding:1rem 2.6rem;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
+    transition:background .2s,transform .2s,box-shadow .2s;
+  }
+  .btn-primary:hover{background:var(--purple-deep);transform:translateY(-2px);box-shadow:0 12px 40px rgba(134,116,212,.35)}
+
+  footer{
+    border-top:1px solid var(--line);padding:3rem 5vw;
+    display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;justify-content:space-between;
+    color:var(--dim);font-size:.75rem;letter-spacing:.08em;
+  }
+  footer .logo .prod{font-size:.95rem}
+
+  @media(max-width:820px){
+    nav ul{display:none}
+    section{padding:6rem 6vw}
+    .th-box{aspect-ratio:4/3}
+    .layer{grid-template-columns:1fr;gap:.4rem}
+    .estat{border-left:1px solid var(--line);width:100%}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important}
+    .reveal{opacity:1;transform:none;filter:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav>
+  <a class="logo" href="./">
+    <img src="assets/rovelab-logo-black.png" alt="Rove Lab">
+    <span class="sep"></span>
+    <span class="prod">SmartFoam™ · Technology</span>
+  </a>
+  <ul>
+    <li><a href="#problem">The Problem</a></li>
+    <li><a href="#material">The Material</a></li>
+    <li><a href="#science">The Science</a></li>
+    <li><a href="#numbers">The Numbers</a></li>
+    <li><a href="#system">The System</a></li>
+  </ul>
+  <button class="nav-cta" onclick="location.href='#shop'">Shop</button>
+</nav>
+
+<!-- 01 — THE STATEMENT -->
+<section class="statement">
+  <p class="eyebrow">SmartFoam™ · Proprietary technology</p>
+  <h1>Most sofas are built around <span class="soft">what you can't see.</span><br>Ours is built around <span class="grad">what we invented.</span></h1>
+  <p class="lead">SmartFoam™ — the proprietary material that replaces a century of wood, metal and springs with a single, intelligent system.</p>
+  <div class="cellfield-wrap">
+    <div class="select-frame"></div>
+    <div class="cellfield" aria-hidden="true">
+      <i style="left:12%;top:18%;width:26%;height:26%"></i>
+      <i style="left:44%;top:8%;width:18%;height:18%"></i>
+      <i style="left:66%;top:26%;width:22%;height:22%"></i>
+      <i style="left:8%;top:52%;width:18%;height:18%"></i>
+      <i style="left:32%;top:40%;width:30%;height:30%"></i>
+      <i style="left:66%;top:56%;width:16%;height:16%"></i>
+      <i style="left:26%;top:72%;width:20%;height:20%"></i>
+      <i style="left:52%;top:74%;width:14%;height:14%"></i>
+      <i style="left:78%;top:44%;width:11%;height:11%"></i>
+      <i style="left:47%;top:28%;width:9%;height:9%"></i>
+    </div>
+    <span class="hud">Adaptive Cell Structure · 40× macro</span>
+  </div>
+</section>
+
+<!-- 02 — THE PROBLEM WE STARTED WITH -->
+<section id="problem">
+  <div class="reveal">
+    <p class="eyebrow">The problem we started with</p>
+    <h2 class="h-giant">The frame is <span class="grad">the problem.</span></h2>
+    <p class="lead">For a century, every sofa has shared the same secret: a hidden skeleton of wood, metal and springs. It dictates how the sofa is built, how it ships, how it ages — and what it costs you in space, money, and time. <em>We started Rove Lab to remove it.</em></p>
+  </div>
+  <div class="th-box reveal">
+    <span class="hud tl">Cross-section · X-ray view</span>
+    <span class="hud tr">Zero-Frame Construction</span>
+    <div class="th-compare">
+      <div class="th-pane xbad">
+        <svg class="sofa-svg" viewBox="0 0 200 120" aria-hidden="true">
+          <path d="M28,96 L28,50 Q28,40 38,40 L162,40 Q172,40 172,50 L172,96" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5"/>
+          <g fill="none" stroke="#9FD8FF" stroke-width="1.5">
+            <rect x="36" y="48" width="128" height="6"/><rect x="36" y="82" width="128" height="6"/>
+            <line x1="44" y1="54" x2="44" y2="82"/><line x1="100" y1="54" x2="100" y2="82"/><line x1="156" y1="54" x2="156" y2="82"/>
+          </g>
+          <g fill="none" stroke="#FF9FB0" stroke-width="1.5">
+            <circle cx="72" cy="68" r="7"/><circle cx="72" cy="68" r="2.6"/>
+            <circle cx="128" cy="68" r="7"/><circle cx="128" cy="68" r="2.6"/>
+          </g>
+          <g stroke="#FFD9A0" stroke-width="2"><path d="M54,46 h5 M78,46 h5 M102,46 h5 M126,46 h5 M150,46 h5"/></g>
+          <line x1="14" y1="106" x2="186" y2="106" stroke="rgba(255,255,255,.3)"/>
+        </svg>
+        <span class="th-cap">Traditional — hidden frame</span>
+      </div>
+      <div class="th-pane xgood">
+        <svg class="sofa-svg" viewBox="0 0 200 120" aria-hidden="true">
+          <defs><pattern id="fdots2" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.6" fill="rgba(134,116,212,.35)"/></pattern></defs>
+          <path d="M28,96 L28,50 Q28,40 38,40 L162,40 Q172,40 172,50 L172,96 Z" fill="#DDD3F2" stroke="rgba(134,116,212,.6)" stroke-width="1.5"/>
+          <path d="M28,96 L28,50 Q28,40 38,40 L162,40 Q172,40 172,50 L172,96 Z" fill="url(#fdots2)"/>
+          <line x1="14" y1="106" x2="186" y2="106" stroke="rgba(33,29,43,.28)"/>
+        </svg>
+        <span class="th-cap">SmartFoam™ — the structure itself</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 — INTRODUCING SMARTFOAM -->
+<section id="material" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="reveal">
+    <p class="eyebrow">The reveal</p>
+    <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">to replace the frame.</span></h2>
+    <p class="lead">SmartFoam™ is not memory foam. It is not the cushioning you sit on. It is <em>the structure itself</em> — a proprietary high-density foam system engineered to compress to a fraction of its size, expand back into form on demand, and hold that form for life.</p>
+  </div>
+  <div class="reveal-scene reveal">
+    <span class="hud tl">Expansion Memory · loop</span>
+    <span class="hud tr">Compressed → full form</span>
+    <div class="ground"></div>
+    <div class="exblock" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- 04 — HOW IT WORKS -->
+<section id="science">
+  <div class="reveal">
+    <p class="eyebrow">How it works · real engineering, not marketing</p>
+    <h2 class="h-giant">Engineered at <span class="grad">the cell.</span></h2>
+  </div>
+  <div class="cell3 reveal">
+    <div class="cellcard">
+      <div class="cellviz dots"><i></i><i></i><i></i><i></i><i></i></div>
+      <h3>Adaptive Cell Structure</h3>
+      <p>Open-cell architecture that breathes, responds to load, and recovers fully — sit after sit, year after year.</p>
+    </div>
+    <div class="cellcard">
+      <div class="cellviz bars"><i style="height:30%"></i><i style="height:62%"></i><i style="height:100%"></i></div>
+      <span class="curvelab">231 N · 337 N · 466 N</span>
+      <h3 style="margin-top:.5rem">Progressive Support Curve</h3>
+      <p>Soft at first touch. Firm at full lean. SmartFoam™ adapts its resistance to where your weight goes — measured across the support curve.</p>
+    </div>
+    <div class="cellcard">
+      <div class="cellviz exp"><i style="height:14px;align-self:flex-end"></i><span class="arrow">→</span><i style="height:56px"></i></div>
+      <h3>Expansion Memory</h3>
+      <p>Compressed for shipping. Released on arrival. SmartFoam™ returns to its engineered shape every time — and stays there.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 05 — THE NUMBERS -->
+<section id="numbers" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="reveal">
+    <p class="eyebrow">The numbers · SGS lab testing, March 2026</p>
+    <h2 class="h-giant">Tested where <span class="soft">it counts.</span></h2>
+  </div>
+  <div class="num-grid reveal">
+    <div class="numtile"><b>34.8 kg/m³</b><span class="std">Core density · ASTM D3574-17</span><p>Engineered density, calibrated for adaptive support.</p></div>
+    <div class="numtile"><b>231→466 N</b><span class="std">Progressive support · IFD 25–65%</span><p>Soft to the touch. Firm where it matters.</p></div>
+    <div class="numtile"><b>70,000+</b><span class="std">Abrasion cycles · ASTM D4157 Wyzenbeek</span><p>Contract-grade durability — built for the family, made for life.</p></div>
+    <div class="numtile"><b>100,000+</b><span class="std">Impact cycles · BIFMA certified</span><p>Commercial-grade structure, tested far past home use.</p></div>
+    <div class="numtile"><b>1,088 N</b><span class="std">Seam strength · ISO 13935-1</span><p>Every seam, engineered for the long run.</p></div>
+    <div class="numtile"><b>Zero</b><span class="std">Formaldehyde · ISO 14184-1</span><p>Not detected. Built for the air you breathe.</p></div>
+  </div>
+</section>
+
+<!-- 06 — WHAT SMARTFOAM MAKES POSSIBLE -->
+<section id="possible">
+  <div class="reveal">
+    <p class="eyebrow">What SmartFoam™ makes possible</p>
+    <h2 class="h-serifless">One material. <span class="soft">A new way to live with furniture.</span></h2>
+  </div>
+  <div class="poss-grid reveal">
+    <div class="poss">
+      <svg viewBox="0 0 44 44" fill="none" stroke="#8674D4" stroke-width="2"><rect x="8" y="12" width="28" height="20" rx="3"/><line x1="10" y1="10" x2="34" y2="34" stroke="#F2769F" stroke-width="2.5"/></svg>
+      <h3>Boneless Design™</h3>
+      <p>A sofa with no frame. No wood. No metal. No staples. Built without bones — built to outlast them.</p>
+    </div>
+    <div class="poss">
+      <svg viewBox="0 0 44 44" fill="none" stroke="#8674D4" stroke-width="2"><rect x="8" y="16" width="28" height="18" rx="2"/><path d="M8,22 L22,28 L36,22 M22,28 L22,34"/><path d="M18,10 L22,5 L26,10" stroke="#6FCFC9"/></svg>
+      <h3>Compression Technology</h3>
+      <p>Six times less carbon per shipment. A sectional that arrives at your door and fits in your elevator.</p>
+    </div>
+    <div class="poss">
+      <svg viewBox="0 0 44 44" fill="none" stroke="#8674D4" stroke-width="2"><circle cx="22" cy="22" r="15"/><path d="M15,22 L20,27 L30,16" stroke="#6FCFC9" stroke-width="2.5"/></svg>
+      <h3>Tool-Free Assembly</h3>
+      <p>Ten minutes. No instructions. No frustration. Just unbox, zip, and live.</p>
+    </div>
+    <div class="poss">
+      <svg viewBox="0 0 44 44" fill="none" stroke="#8674D4" stroke-width="2"><rect x="7" y="7" width="13" height="13" rx="2"/><rect x="24" y="7" width="13" height="13" rx="2"/><rect x="7" y="24" width="13" height="13" rx="2"/><rect x="24" y="24" width="13" height="13" rx="2" stroke="#F2B8CE"/></svg>
+      <h3>Modular Architecture</h3>
+      <p>Reconfigure your sofa as often as your life reconfigures itself.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 07 — THE LAB SYSTEM -->
+<section id="system" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="reveal">
+    <p class="eyebrow">The Lab System™</p>
+    <h2 class="h-serifless">SmartFoam™ is the beginning. <span class="soft">The Lab System™ is what it becomes.</span></h2>
+    <p class="lead">Every Rove Lab product is built on the same architecture: SmartFoam™ at its core, Boneless Design™ as its structure, the Lab System™ as its experience. From the box on your doorstep to the sofa in your living room — it's one continuous innovation.</p>
+  </div>
+  <div class="stack-diagram reveal">
+    <div class="layer">
+      <span class="lnum">Layer 04 · The product</span>
+      <div><h3>Lab Boneless Couch</h3><p>The expression of the system. What the customer buys.</p></div>
+    </div>
+    <div class="layer">
+      <span class="lnum">Layer 03 · The system</span>
+      <div><h3>Lab System™</h3><p>The end-to-end experience the technology enables.</p></div>
+    </div>
+    <div class="layer">
+      <span class="lnum">Layer 02 · The structure</span>
+      <div><h3>Boneless Design™</h3><p>The structural breakthrough the material allows.</p></div>
+    </div>
+    <div class="layer core">
+      <span class="lnum">Layer 01 · The material</span>
+      <div><h3>SmartFoam™</h3><p>The foundational technology. Everything starts here.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 — PERFORMANCE OVER TIME -->
+<section class="endure">
+  <div class="reveal">
+    <p class="eyebrow">Performance over time</p>
+    <h2 class="h-serifless">Built for the next ten years. <span class="soft">Guaranteed for life.</span></h2>
+    <p class="lead">SmartFoam™ is tested to outperform every category it touches. And every Rove Lab product is backed by our <em>Lifetime Guarantee</em> — because we don't believe a sofa should be a five-year purchase.</p>
+  </div>
+  <div class="endure-stats reveal">
+    <div class="estat"><b>70,000+</b><span>abrasion cycles — contract-grade fabric endurance</span></div>
+    <div class="estat"><b>100,000+</b><span>BIFMA impact tests — structure that doesn't quit</span></div>
+    <div class="estat"><b>1,088 N</b><span>seam strength — engineered for the long run</span></div>
+    <div class="estat"><b>0</b><span>detectable formaldehyde — built for the air you breathe</span></div>
+  </div>
+</section>
+
+<!-- 09 — WHY IT MATTERS -->
+<section class="matter">
+  <div class="reveal">
+    <p class="eyebrow">Why it matters</p>
+    <h2 class="h-serifless">Furniture, finally built <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">for the way you live now.</span></h2>
+    <p class="lead">Lighter. Modular. Resilient. Delivered without the freight, the wait, the waste. SmartFoam™ doesn't just replace a frame — it replaces an industry that hasn't asked the right questions in a hundred years. This is what Rove Lab was built to do. <em>And we're just getting started.</em></p>
+  </div>
+</section>
+
+<!-- 10 — EXPLORE THE LAB BONELESS COUCH -->
+<section class="shop" id="shop" style="background:var(--bg-2);border-top:1px solid var(--line)">
+  <div class="reveal">
+    <p class="eyebrow">Explore the Lab Boneless Couch</p>
+    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Ready <span class="grad">in a box.</span></h2>
+  </div>
+  <div class="shop-grid reveal">
+    <a class="scard" href="https://rovelab.ca/products/m1-sofa-sectional?variant=49514719084844" target="_blank" rel="noopener">
+      <div class="ph"><img src="assets/products/m1-sectional-helium-cloud.webp" alt="M1 Sofa Sectional" loading="lazy"></div>
+      <div class="info"><h3>M1 Sofa</h3><span class="badge">Powered by SmartFoam™</span></div>
+    </a>
+    <a class="scard" href="https://rovelab.ca/products/m1-outdoor-three-seater-sofa?variant=52722712838444" target="_blank" rel="noopener">
+      <div class="ph"><img src="assets/products/m1-outdoor-orbit-groove.webp" alt="M1 Outdoor" loading="lazy"></div>
+      <div class="info"><h3>M1 Outdoor</h3><span class="badge">Powered by SmartFoam™</span></div>
+    </a>
+    <a class="scard" href="https://rovelab.ca/products/marshbello-loveseat?variant=50759907180844" target="_blank" rel="noopener">
+      <div class="ph"><img src="assets/products/marshbello-carbon-black.webp" alt="Marshbello" loading="lazy"></div>
+      <div class="info"><h3>Marshbello</h3><span class="badge">Powered by SmartFoam™</span></div>
+    </a>
+    <a class="scard" href="https://rovelab.ca/products/s8-sleeper-sofa-bed?variant=51880710799660" target="_blank" rel="noopener">
+      <div class="ph"><img src="assets/products/s8-comet-ivory.webp" alt="S8 Sleeper" loading="lazy"></div>
+      <div class="info"><h3>S8 Sleeper</h3><span class="badge">Powered by SmartFoam™</span></div>
+    </a>
+  </div>
+  <div class="cta-line reveal">
+    <p>Built on SmartFoam™ · Engineered into the Lab System™ · Ready in a box</p>
+    <button class="btn-primary" onclick="location.href='https://rovelab.ca/collections/modular-sofa'">Shop the Lab Boneless Couch</button>
+  </div>
+</section>
+
+<footer>
+  <a class="logo" href="./">
+    <img src="assets/rovelab-logo-black.png" alt="Rove Lab">
+    <span class="sep"></span>
+    <span class="prod">SmartFoam™</span>
+  </a>
+  <div>© 2026 Rove Lab Inc. · Not foam. SmartFoam™ — the structure you can't see, the comfort you can.</div>
+</footer>
+
+<script>
+  // superscript every ™ in visible text
+  (function () {
+    const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const hits = [];
+    while (tw.nextNode()) {
+      const n = tw.currentNode;
+      if (n.nodeValue.includes('™') && n.parentElement.tagName !== 'SUP') hits.push(n);
+    }
+    hits.forEach(n => {
+      const frag = document.createDocumentFragment();
+      const parts = n.nodeValue.split('™');
+      parts.forEach((p, i) => {
+        frag.appendChild(document.createTextNode(p));
+        if (i < parts.length - 1) {
+          const s = document.createElement('sup');
+          s.className = 'tm2';
+          s.textContent = '™';
+          frag.appendChild(s);
+        }
+      });
+      n.parentNode.replaceChild(frag, n);
+    });
+  })();
+
+  // one-shot reveals
+  const reveals = [...document.querySelectorAll('.reveal')];
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    reveals.forEach(el => el.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => io.observe(el));
+  }
+</script>
+</body>
+</html>
