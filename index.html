@@ -27,12 +27,12 @@
   }
   button{font-family:inherit}
   ::selection{background:var(--purple);color:#0D0A13}
-  sup.tm2{font-size:.42em;line-height:0;vertical-align:super;letter-spacing:.02em}
+  sup.tm2{font-size:max(7px,.42em);line-height:0;vertical-align:super;letter-spacing:.02em}
 
   .grain{
-    position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:999;
+    position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:90;
     background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity:.06;mix-blend-mode:screen;animation:grain 8s steps(10) infinite;
+    opacity:.06;mix-blend-mode:screen;
   }
   @keyframes grain{
     0%,100%{transform:translate(0,0)}10%{transform:translate(-2%,-3%)}20%{transform:translate(3%,2%)}
@@ -49,7 +49,7 @@
   .logo{display:flex;align-items:center;gap:.9rem;text-decoration:none;color:inherit}
   .logo img{height:14px;width:auto;display:block}
   .logo .sep{width:1px;height:18px;background:var(--line)}
-  .logo .prod{font-weight:900;font-size:1.02rem;letter-spacing:.08em;text-transform:uppercase}
+  .logo .prod{font-weight:900;font-size:.92rem;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center}
   nav ul{display:flex;gap:clamp(.9rem,2vw,1.6rem);list-style:none;align-items:center;margin:0 1rem}
   nav ul a{color:var(--dim);text-decoration:none;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;transition:color .25s}
   nav ul a:hover{color:var(--ink)}
@@ -58,11 +58,11 @@
   /* shared */
   section{position:relative;padding:8rem 5vw}
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
-  .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase}
-  .h-giant .soft{color:var(--dim)}
+  .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
+  .h-giant .soft,.h-serifless .soft,.tagline-editorial .soft{color:var(--dim)}
   .h-giant .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .h-serifless{font-size:clamp(1.9rem,4.4vw,3.6rem);font-weight:900;line-height:1.12;letter-spacing:-.02em}
-  .lead{margin-top:1.5rem;font-size:1.05rem;color:var(--dim);max-width:620px;line-height:1.7}
+  .h-serifless{font-size:clamp(1.9rem,4.4vw,3.6rem);font-weight:900;line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
+  .lead{margin-top:1.5rem;font-size:1.05rem;color:var(--dim);max-width:64ch;line-height:1.7;text-wrap:pretty}
   .lead em{color:var(--purple-deep);font-style:normal;font-weight:600}
   .reveal{
     opacity:0;transform:translateY(40px);filter:blur(12px);
@@ -70,7 +70,7 @@
   }
   .reveal.in{opacity:1;transform:none;filter:blur(0)}
   .hud{
-    position:absolute;z-index:2;font-size:.6rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
+    position:absolute;z-index:2;font-size:max(10px,.6rem);font-weight:800;letter-spacing:.22em;text-transform:uppercase;
     color:#CFC6E8;background:rgba(23,18,33,.82);padding:.35rem .6rem;border:1px solid rgba(167,148,240,.4);
   }
   .hud.tl{top:12px;left:12px}.hud.tr{top:12px;right:12px}
@@ -92,8 +92,8 @@
   }
   .hero-content{position:relative;z-index:2;max-width:1000px}
   .statement h1{
-    font-size:clamp(2.6rem,7.4vw,6.4rem);font-weight:900;line-height:.98;letter-spacing:-.02em;
-    text-transform:uppercase;
+    font-size:clamp(2.6rem,7.4vw,6rem);font-weight:900;line-height:.98;letter-spacing:-.02em;
+    text-transform:uppercase;text-wrap:balance;
   }
   .statement h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   /* the hero lead sits over video, not flat background: muted grey loses contrast there */
@@ -161,7 +161,7 @@
   .th-cap{
     position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:2;
     width:max-content;max-width:92%;text-align:center;
-    font-size:.53rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#EDE9F8;
+    font-size:max(10px,.53rem);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#EDE9F8;
     background:rgba(23,18,33,.85);padding:.3rem .55rem;border:1px solid rgba(167,148,240,.4);
   }
 
@@ -180,7 +180,7 @@
       #DDD3F2;
     border:1px solid rgba(190,170,255,.55);border-radius:14px;
     box-shadow:0 0 50px rgba(150,125,240,.3);
-    animation:expand 7s cubic-bezier(.34,1.4,.4,1) infinite;
+    animation:expand 7s cubic-bezier(.16,1,.3,1) infinite;
   }
   @keyframes expand{
     0%{transform:translateX(-50%) scaleY(.12)}
@@ -211,7 +211,7 @@
   .cellviz.bars i{display:block;width:26px;background:var(--grad);border:1px solid rgba(190,170,255,.5)}
   .cellviz.exp i{display:block;width:44px;border:1px solid rgba(190,170,255,.55);background:#DDD3F2;border-radius:4px}
   .cellviz.exp .arrow{width:auto;border:none;background:none;color:var(--purple-deep);font-weight:900}
-  .curvelab{font-size:.55rem;font-weight:800;letter-spacing:.14em;color:var(--purple-deep);text-transform:uppercase}
+  .curvelab{font-size:max(10px,.55rem);font-weight:800;letter-spacing:.14em;color:var(--purple-deep);text-transform:uppercase}
 
   /* capability list — what SmartFoam does (section 02) */
   .caps{margin-top:2.8rem;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);max-width:880px}
@@ -266,7 +266,7 @@
   }
   .faq details[open] summary::after{content:"–"}
   .faq details[open] summary{border-bottom:1px solid var(--line)}
-  .faq details p{padding:1.2rem 1.6rem;color:var(--dim);font-size:.95rem;line-height:1.7}
+  .faq details p{padding:1.2rem 1.6rem;color:var(--dim);font-size:.95rem;line-height:1.7;max-width:68ch;text-wrap:pretty}
 
   /* 05 — oversized numbers */
   .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-top:3.4rem}
@@ -275,7 +275,7 @@
     display:block;font-size:clamp(2.2rem,3.6vw,3.2rem);font-weight:900;letter-spacing:-.02em;line-height:1;
     background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  .numtile .std{display:block;margin-top:.5rem;font-size:.55rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .numtile .std{display:block;margin-top:.5rem;font-size:max(10px,.55rem);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
   .numtile p{margin-top:.6rem;font-size:.9rem;color:var(--ink);font-weight:600}
 
   /* 06 — four unlocks */
@@ -300,7 +300,7 @@
   .layer:hover{transform:translateX(8px);border-color:rgba(167,148,240,.5)}
   .layer .lnum{font-size:.58rem;font-weight:800;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
   .layer h3{font-size:1.02rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
-  .layer p{color:var(--dim);font-size:.86rem;margin-top:.25rem;line-height:1.55}
+  .layer p{color:var(--dim);font-size:.86rem;margin-top:.25rem;line-height:1.55;max-width:70ch}
   .layer.core{
     border-color:rgba(167,148,240,.65);
     background:linear-gradient(120deg,rgba(247,168,196,.16),rgba(143,195,247,.16)),var(--panel);
@@ -336,7 +336,7 @@
   .scard .info{padding:1.1rem 1.2rem 1.3rem}
   .scard h3{font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
   .scard .badge{
-    display:inline-block;margin-top:.55rem;font-size:.5rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+    display:inline-block;margin-top:.55rem;font-size:max(10px,.5rem);font-weight:800;letter-spacing:.18em;text-transform:uppercase;
     color:#CFC1F5;background:rgba(167,148,240,.14);border:1px solid rgba(167,148,240,.4);
     padding:.22rem .5rem;border-radius:99px;
   }
@@ -451,16 +451,16 @@
   }
   .boxD .face{
     background:#3E5C7E;border:1px solid rgba(38,57,78,.7);border-radius:0 0 6px 6px;
-    padding:.7rem .9rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.26rem;color:#8FD8D5;
+    padding:.7rem .9rem .75rem;display:flex;flex-direction:column;align-items:center;gap:.26rem;color:#CFEFED;
   }
-  .boxD .face .k{font-size:.5rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;opacity:.92}
+  .boxD .face .k{font-size:max(10px,.5rem);font-weight:800;letter-spacing:.3em;text-transform:uppercase;opacity:.92}
   .boxD .face .name{font-size:1.05rem;font-weight:700;line-height:1}
   .boxD .diagram{display:flex;gap:3px;align-items:center;margin:.28rem 0 .3rem}
   .boxD .diagram i{display:block;border:1px solid rgba(143,216,213,.85);border-radius:3px;width:26px;height:14px}
   .boxD .diagram i.arm{width:8px;height:18px}
   .boxD .diagram i.fill{background:#6FCFC9;border-color:#6FCFC9}
   .boxD .rl{height:11px;width:auto;display:block;margin-top:.12rem;opacity:.9}
-  .boxD .dc{font-size:.4rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;opacity:.85}
+  .boxD .dc{font-size:max(10px,.4rem);font-weight:700;letter-spacing:.28em;text-transform:uppercase;opacity:.85}
   /* holographic SmartFoam seal */
   .seal{
     position:absolute;left:50%;bottom:64px;z-index:6;width:152px;height:94px;border-radius:50%;
@@ -534,20 +534,55 @@
   }
   footer .logo .prod{font-size:.95rem}
 
+  /* mobile buy bar: below 820px the nav list is hidden, and the only CTA is ~18,000px down.
+     it appears once the hero is behind you (toggled by IntersectionObserver). */
+  .mobile-cta{display:none}
+  @media(max-width:820px){
+    .mobile-cta{
+      display:block;position:fixed;left:0;right:0;bottom:0;z-index:95;
+      padding:.7rem 4vw calc(.7rem + env(safe-area-inset-bottom));
+      background:linear-gradient(180deg,rgba(13,10,19,0),rgba(13,10,19,.94) 42%);
+      transform:translateY(120%);transition:transform .35s cubic-bezier(.16,1,.3,1);
+    }
+    .mobile-cta.in{transform:none}
+    .mobile-cta a{
+      display:block;text-align:center;text-decoration:none;
+      background:#6F56CB;color:#fff;font-weight:800;border-radius:2px;
+      padding:1rem 1.2rem;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+    }
+  }
+
   @media(max-width:820px){
     nav ul{display:none}
     section{padding:6rem 6vw}
     .th-box{aspect-ratio:16/9}
     .layer{grid-template-columns:1fr;gap:.4rem}
-    .estat{border-left:1px solid var(--line);width:100%}
     .press-track,.car-track{padding:0}
     .press-scene{height:clamp(200px,29vh,340px)}
     .presser{width:20px}
     .presser::after{width:66vw;height:20px;font-size:.44rem}
     .seal{width:118px;height:74px}
     .cslide,.car-center{height:min(44vh,420px)}
+    .logo .prod-suffix{display:none}
+    .shop{padding-bottom:12rem}
+
+    /* the comparison table was 660px wide inside a 330px scroller: the SmartFoam column,
+       the one that matters, was simply off-screen. restack it as one card per row. */
+    .cmp{border:none;overflow-x:visible}
+    .cmp table{min-width:0;width:100%}
+    .cmp thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+    .cmp tbody tr{display:block;border:1px solid var(--line);margin-bottom:.6rem;background:var(--panel)}
+    .cmp tbody th{display:block;width:auto;border-bottom:1px solid var(--line);font-size:.8rem}
+    .cmp tbody td{display:block;border-bottom:none;padding-top:.7rem;padding-bottom:.7rem}
+    .cmp tbody td::before{
+      content:attr(data-col);display:block;margin-bottom:.2rem;
+      font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+    }
+    .cmp tbody td.sf::before{color:var(--purple-deep)}
   }
   @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .mobile-cta{transform:none}
     *{animation:none !important;transition:none !important}
     .reveal{opacity:1;transform:none;filter:none}
     /* scroll-scrubbed scenes collapse into static layouts */
@@ -621,7 +656,7 @@
   <a class="logo" href="./">
     <img src="assets/rovelab-logo-white.png" alt="Rove Lab">
     <span class="sep"></span>
-    <span class="prod"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>SmartFoam™ · Technology</span>
+    <span class="prod"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>SmartFoam™<span class="prod-suffix"> · Technology</span></span>
   </a>
   <ul>
     <li><a href="#problem">The Problem</a></li>
@@ -651,7 +686,7 @@
 <!-- 02 — WHAT IS SMARTFOAM (moved up: define the material before the problem) -->
 <section id="material" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="reveal">
-    <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">to replace the frame.</span></h2>
+    <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span class="soft">to replace the frame.</span></h2>
     <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em>, a proprietary high-density foam system designed to:</p>
   </div>
   <div class="caps reveal">
@@ -678,7 +713,7 @@
 <!-- COMPRESSION TECHNOLOGY — the packing story, scrubbed by scroll -->
 <section class="press-track" id="compression">
   <div class="press-sticky">
-    <h2 class="h-serifless">A full sofa. <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Into a single box.</span></h2>
+    <h2 class="h-serifless">A full sofa. <span class="soft">Into a single box.</span></h2>
     <p class="lead">Compression Technology in four moves: wrap, press, roll, pack. SmartFoam™ takes the load, then gives the form back.</p>
 
     <div class="foam-wrap">
@@ -734,7 +769,7 @@
 <!-- 03 — THE PROBLEM WE STARTED WITH -->
 <section id="problem">
   <div class="reveal">
-    <h2 class="h-giant">The frame is <span class="grad">the problem.</span></h2>
+    <h2 class="h-giant">The frame is <span class="soft">the problem.</span></h2>
     <p class="lead">For over a century, furniture has relied on the same hidden structure: wood, metal and springs.</p>
     <p class="limits-intro">A system built around limitations</p>
     <ul class="limits">
@@ -781,7 +816,7 @@
 <!-- 04 — HOW IT WORKS -->
 <section id="science">
   <div class="reveal">
-    <h2 class="h-giant">Engineered at <span class="grad">the cell.</span></h2>
+    <h2 class="h-giant">Engineered at <span class="soft">the cell.</span></h2>
   </div>
   <div class="cell3 reveal">
     <div class="cellcard">
@@ -829,14 +864,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr><th scope="row">Internal structure</th><td class="trad">Wood, metal and spring frame</td><td class="sf">No frame. The foam is the structure</td></tr>
-        <tr><th scope="row">Core density</th><td class="trad">18-28 kg/m³ (typical sofa foam)</td><td class="sf">34.8 kg/m³, engineered for structural support</td></tr>
-        <tr><th scope="row">Delivery</th><td class="trad">Bulky freight, delivery appointment</td><td class="sf">Couch-in-a-box: compressed, carried on your own</td></tr>
-        <tr><th scope="row">Assembly</th><td class="trad">Tools, screws and instructions</td><td class="sf">Tool-free: unbox and let it expand</td></tr>
-        <tr><th scope="row">Moving and fit</th><td class="trad">Heavy; hard through doorways and elevators</td><td class="sf">Lightweight; fits tight spaces</td></tr>
-        <tr><th scope="row">Reconfiguration</th><td class="trad">Fixed shape</td><td class="sf">Modular: rearrange anytime</td></tr>
-        <tr><th scope="row">Durability</th><td class="trad">Frames crack; foam sags over time</td><td class="sf">100,000+ BIFMA impact cycles; holds its shape</td></tr>
-        <tr><th scope="row">Carbon per shipment</th><td class="trad">Standard freight volume</td><td class="sf">Up to six times less</td></tr>
+        <tr><th scope="row">Internal structure</th><td class="trad" data-col="Traditional">Wood, metal and spring frame</td><td class="sf" data-col="SmartFoam">No frame. The foam is the structure</td></tr>
+        <tr><th scope="row">Core density</th><td class="trad" data-col="Traditional">18-28 kg/m³ (typical sofa foam)</td><td class="sf" data-col="SmartFoam">34.8 kg/m³, engineered for structural support</td></tr>
+        <tr><th scope="row">Delivery</th><td class="trad" data-col="Traditional">Bulky freight, delivery appointment</td><td class="sf" data-col="SmartFoam">Couch-in-a-box: compressed, carried on your own</td></tr>
+        <tr><th scope="row">Assembly</th><td class="trad" data-col="Traditional">Tools, screws and instructions</td><td class="sf" data-col="SmartFoam">Tool-free: unbox and let it expand</td></tr>
+        <tr><th scope="row">Moving and fit</th><td class="trad" data-col="Traditional">Heavy; hard through doorways and elevators</td><td class="sf" data-col="SmartFoam">Lightweight; fits tight spaces</td></tr>
+        <tr><th scope="row">Reconfiguration</th><td class="trad" data-col="Traditional">Fixed shape</td><td class="sf" data-col="SmartFoam">Modular: rearrange anytime</td></tr>
+        <tr><th scope="row">Durability</th><td class="trad" data-col="Traditional">Frames crack; foam sags over time</td><td class="sf" data-col="SmartFoam">100,000+ BIFMA impact cycles; holds its shape</td></tr>
+        <tr><th scope="row">Carbon per shipment</th><td class="trad" data-col="Traditional">Standard freight volume</td><td class="sf" data-col="SmartFoam">Up to six times less</td></tr>
       </tbody>
     </table>
   </div>
@@ -870,6 +905,7 @@
       <p>Rearrange your sofa however you want. Lightweight, flexible and easy to reconfigure as your space and lifestyle change.</p>
     </div>
   </div>
+  <p class="lead reveal" style="max-width:70ch;margin-top:3.2rem">SmartFoam™ doesn't just replace a frame. It replaces an industry that hasn't asked the right questions in a hundred years. <em>And we're just getting started.</em></p>
 </section>
 
 <!-- 07 — THE LAB SYSTEM -->
@@ -904,12 +940,6 @@
     <h2 class="h-serifless">Built for the next ten years. <span class="soft">Guaranteed for life.</span></h2>
     <p class="lead">SmartFoam™ is built for long-term performance and tested to exceed industry durability standards.</p>
   </div>
-  <div class="endure-stats reveal">
-    <div class="estat"><b>70,000+</b><span>Abrasion cycles</span></div>
-    <div class="estat"><b>100,000+</b><span>BIFMA impact tests</span></div>
-    <div class="estat"><b>1,088 N</b><span>Seam strength</span></div>
-    <div class="estat"><b>Zero</b><span>Detectable formaldehyde</span></div>
-  </div>
   <p class="lead reveal" style="margin-top:2.6rem">Every Rove Lab product is backed by our <em>Lifetime Guarantee</em>.</p>
 </section>
 
@@ -930,54 +960,8 @@
       </svg>
       <span class="hud">Read outward it expands. Read inward it compresses.</span>
     </div>
-    <p class="tagline-editorial">The structure you can't see. <span class="grad">The comfort you can feel.</span></p>
+    <p class="tagline-editorial"><span class="soft">The structure you can't see.</span> The comfort you can feel.</p>
   </div>
-</section>
-
-<!-- 09 — WHY IT MATTERS -->
-<section class="matter">
-  <div class="reveal">
-    <h2 class="h-serifless">Furniture, finally built <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">for the way you live now.</span></h2>
-  </div>
-  <!-- icons: Phosphor Icons (MIT), regular weight -->
-  <div class="why-list reveal">
-    <div class="why-item">
-      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.28,34.75a64,64,0,0,0-90.49,0L60.69,104A15.9,15.9,0,0,0,56,115.31v73.38L26.34,218.34a8,8,0,0,0,11.32,11.32L67.32,200H140.7A15.92,15.92,0,0,0,152,195.32l0,0,69.23-70A64,64,0,0,0,221.28,34.75ZM142.07,46.06A48,48,0,0,1,211.79,112H155.33l34.35-34.34a8,8,0,0,0-11.32-11.32L120,124.69V67.87ZM72,115.35l32-31.67v57l-32,32ZM140.7,184H83.32l56-56h56.74Z"/></svg>
-      <div>
-        <h3>Lightweight structure</h3>
-        <p>Designed to be lighter and easier to move than traditional framed furniture.</p>
-      </div>
-    </div>
-    <div class="why-item">
-      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"/></svg>
-      <div>
-        <h3>Couch-in-a-box experience</h3>
-        <p>Compresses for compact delivery and expands after unboxing within minutes.</p>
-      </div>
-    </div>
-    <div class="why-item">
-      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
-      <div>
-        <h3>Easy assembly</h3>
-        <p>No tools or complicated setup required. Just let it expand.</p>
-      </div>
-    </div>
-    <div class="why-item">
-      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg>
-      <div>
-        <h3>Modular design</h3>
-        <p>Easily rearrange and adapt your modular couch to your space.</p>
-      </div>
-    </div>
-    <div class="why-item">
-      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M223.45,40.07a8,8,0,0,0-7.52-7.52C139.8,28.08,78.82,51,52.82,94a87.09,87.09,0,0,0-12.76,49c.57,15.92,5.21,32,13.79,47.85l-19.51,19.5a8,8,0,0,0,11.32,11.32l19.5-19.51C81,210.73,97.09,215.37,113,215.94q1.67.06,3.33.06A86.93,86.93,0,0,0,162,203.18C205,177.18,227.93,116.21,223.45,40.07ZM153.75,189.5c-22.75,13.78-49.68,14-76.71.77l88.63-88.62a8,8,0,0,0-11.32-11.32L65.73,179c-13.19-27-13-54,.77-76.71,22.09-36.47,74.6-56.44,141.31-54.06C210.2,114.89,190.22,167.41,153.75,189.5Z"/></svg>
-      <div>
-        <h3>Sustainable shipping</h3>
-        <p>Reduced packaging volume helps lower carbon emissions.</p>
-      </div>
-    </div>
-  </div>
-  <p class="lead reveal" style="margin-left:auto;margin-right:auto;text-align:center;margin-top:3.2rem">SmartFoam™ doesn't just replace a frame. It replaces an industry that hasn't asked the right questions in a hundred years. <em>And we're just getting started.</em></p>
 </section>
 
 <!-- SCROLL CAROUSEL — the modules rotate through as you move down the page -->
@@ -1010,11 +994,12 @@
 <!-- THE FILM -->
 <section id="film">
   <div class="reveal">
-    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Watch <span class="grad">the film.</span></h2>
+    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Watch <span class="soft">the film.</span></h2>
   </div>
   <div class="film-frame reveal">
     <span class="hud tl">SmartFoam™ · the film</span>
-    <video id="filmVideo" src="assets/smartfoam-film.mp4" muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <video id="filmVideo" src="assets/smartfoam-film.mp4" poster="assets/film-poster.jpg"
+           muted loop playsinline preload="metadata" aria-label="The SmartFoam film"></video>
   </div>
 </section>
 
@@ -1022,7 +1007,7 @@
 <section class="shop" id="shop" style="background:var(--bg-2);border-top:1px solid var(--line)">
   <div class="reveal">
     <p class="eyebrow">Explore the Lab Boneless Couch</p>
-    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Ready <span class="grad">in a box.</span></h2>
+    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Ready <span class="soft">in a box.</span></h2>
   </div>
   <div class="shop-grid reveal">
     <a class="scard" href="https://rovelab.ca/products/m1-sofa-sectional?variant=49514719084844" target="_blank" rel="noopener">
@@ -1051,7 +1036,7 @@
 <!-- 11 — FAQ (GEO / AI search visibility) -->
 <section id="faq">
   <div class="reveal">
-    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Questions, <span class="grad">answered.</span></h2>
+    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Questions, <span class="soft">answered.</span></h2>
   </div>
   <div class="faq reveal">
     <details>
@@ -1085,6 +1070,11 @@
   </a>
   <div>© 2026 Rove Lab Inc. · Not foam. SmartFoam™.</div>
 </footer>
+
+<!-- mobile only: the nav list is hidden below 820px, so this is the one way out of a long scroll -->
+<div class="mobile-cta" id="mobileCta">
+  <a href="https://rovelab.ca/collections/modular-sofa" target="_blank" rel="noopener">Shop the Lab Boneless Couch</a>
+</div>
 
 <script>
   // superscript every ™ in visible text
@@ -1122,6 +1112,16 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => io.observe(el));
   }
+
+  // mobile buy bar: slides in once the hero is behind you, so the long scroll always has an exit.
+  (function () {
+    const bar = document.getElementById('mobileCta');
+    const hero = document.querySelector('.statement');
+    if (!bar || !hero) return;
+    new IntersectionObserver(([en]) => {
+      bar.classList.toggle('in', !en.isIntersecting);
+    }, { threshold: 0 }).observe(hero);
+  })();
 
   // the film plays itself when it scrolls into view, and pauses when it leaves.
   // no chrome: the frame is the player.
