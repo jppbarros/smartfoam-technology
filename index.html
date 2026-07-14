@@ -137,7 +137,7 @@
   .sfm ellipse{fill:none;stroke:currentColor;stroke-width:10}
 
   /* 02 — x-ray */
-  .th-box{position:relative;aspect-ratio:16/9;max-width:960px;overflow:hidden;border:1px solid rgba(167,148,240,.35);background:var(--panel);margin-top:3.2rem}
+  .th-box{position:relative;aspect-ratio:5/2;max-width:960px;overflow:hidden;border:1px solid rgba(167,148,240,.35);background:var(--panel);margin-top:3.2rem}
   .th-box::after{
     content:"";position:absolute;inset:0;pointer-events:none;
     background:repeating-linear-gradient(0deg,transparent 0 42px,rgba(244,241,250,.06) 42px 43px),
@@ -147,7 +147,7 @@
   .th-pane{position:relative;overflow:hidden}
   .th-pane.xbad{border-right:1px dashed rgba(244,241,250,.22);background:#1B1526}
   .th-pane.xgood{background:#F1EEFA}
-  .sofa-svg{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);width:82%;height:auto}
+  .sofa-svg{position:absolute;left:50%;bottom:20%;transform:translateX(-50%);width:88%;height:auto;max-height:58%}
   .th-cap{
     position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:2;
     width:max-content;max-width:92%;text-align:center;
@@ -334,7 +334,7 @@
   @media(max-width:820px){
     nav ul{display:none}
     section{padding:6rem 6vw}
-    .th-box{aspect-ratio:4/3}
+    .th-box{aspect-ratio:16/9}
     .layer{grid-template-columns:1fr;gap:.4rem}
     .estat{border-left:1px solid var(--line);width:100%}
   }
