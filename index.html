@@ -239,16 +239,6 @@
   .cmp td.sf{color:var(--ink);font-weight:600;background:rgba(167,148,240,.07)}
   .cmp tbody tr:last-child th,.cmp tbody tr:last-child td{border-bottom:none}
 
-  /* why it matters — icon + title + description (section 09) */
-  /* why it matters: borderless icon+text rows (distinct layout family from the card grids) */
-  .why-list{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:2rem 3.5rem;margin:3.2rem auto 0;text-align:left;max-width:980px;
-  }
-  .why-item{display:grid;grid-template-columns:34px 1fr;gap:1rem;align-items:start}
-  .why-item svg{width:24px;height:24px;color:var(--purple);margin-top:2px}
-  .why-item h3{font-size:.95rem;font-weight:800;margin-bottom:.3rem}
-  .why-item p{color:var(--dim);font-size:.88rem;line-height:1.6}
 
   /* FAQ (GEO / AI search visibility) */
   .faq{max-width:900px;margin-top:3rem}
@@ -310,20 +300,7 @@
 
   /* 08 — endurance strip */
   .endure{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .endure-stats{display:flex;flex-wrap:wrap;gap:0;margin-top:3rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .estat{padding:2.2rem 3rem;border-right:1px solid var(--line);min-width:210px}
-  .estat:first-child{border-left:1px solid var(--line)}
-  .estat b{display:block;font-size:2.2rem;font-weight:900;letter-spacing:-.02em;color:var(--purple-deep)}
-  .estat span{display:block;margin-top:.35rem;color:var(--dim);font-size:.82rem;line-height:1.5;max-width:200px}
 
-  /* 09 — why it matters */
-  .matter{text-align:center;overflow:hidden}
-  .matter::before{
-    content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(ellipse 50% 55% at 50% 60%, rgba(140,110,230,.18), transparent 70%);
-  }
-  .matter .h-serifless{max-width:900px;margin:0 auto;position:relative}
-  .matter .lead{margin-left:auto;margin-right:auto;text-align:center;position:relative}
 
   /* 10 — shop grid */
   .shop{padding-bottom:10rem}
