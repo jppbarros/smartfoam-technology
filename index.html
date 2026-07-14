@@ -253,12 +253,17 @@
   /* FAQ (GEO / AI search visibility) */
   .faq{max-width:900px;margin-top:3rem}
   .faq details{background:var(--panel);border:1px solid var(--line);margin-bottom:8px}
+  /* block, not flex: the ™ superscript is its own element, and a flex summary would
+     treat it as a separate item and space-between would fling it across the row */
   .faq summary{
-    padding:1.2rem 1.6rem;cursor:pointer;font-weight:700;font-size:1rem;list-style:none;
-    display:flex;justify-content:space-between;gap:1rem;align-items:center;
+    position:relative;padding:1.2rem 3.2rem 1.2rem 1.6rem;cursor:pointer;
+    font-weight:700;font-size:1rem;list-style:none;
   }
   .faq summary::-webkit-details-marker{display:none}
-  .faq summary::after{content:"+";color:var(--purple-deep);font-weight:900;font-size:1.25rem;flex:none;line-height:1}
+  .faq summary::after{
+    content:"+";position:absolute;right:1.6rem;top:50%;transform:translateY(-50%);
+    color:var(--purple-deep);font-weight:900;font-size:1.25rem;line-height:1;
+  }
   .faq details[open] summary::after{content:"–"}
   .faq details[open] summary{border-bottom:1px solid var(--line)}
   .faq details p{padding:1.2rem 1.6rem;color:var(--dim);font-size:.95rem;line-height:1.7}
