@@ -1009,7 +1009,7 @@
   </div>
   <div class="film-frame reveal">
     <span class="hud tl">SmartFoam™ · the film</span>
-    <video src="assets/smartfoam-film.mp4" controls muted loop playsinline preload="metadata"></video>
+    <video id="filmVideo" src="assets/smartfoam-film.mp4" muted loop playsinline preload="metadata" aria-hidden="true"></video>
   </div>
 </section>
 
@@ -1117,6 +1117,26 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => io.observe(el));
   }
+
+  // the film plays itself when it scrolls into view, and pauses when it leaves.
+  // no chrome: the frame is the player.
+  (function () {
+    const film = document.getElementById('filmVideo');
+    if (!film) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // without autoplay these users would have no way to watch it at all
+      film.controls = true;
+      film.removeAttribute('aria-hidden');
+      return;
+    }
+    const fio = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) film.play().catch(() => { film.controls = true; });
+        else film.pause();
+      });
+    }, { threshold: 0.35 });
+    fio.observe(film);
+  })();
 
   // scroll-scrubbed scenes: press story, wordmark marquee, rotating carousel.
   // driven by rAF while a scene is on screen (started/stopped by IntersectionObserver),
