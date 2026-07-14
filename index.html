@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SmartFoam™ Technology — Rove Lab</title>
+<title>SmartFoam™ Technology by Rove Lab</title>
 <meta name="description" content="SmartFoam™ is the proprietary material that replaces a century of wood, metal and springs with a single, intelligent system. The technology behind every Lab Boneless Couch.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,12 +53,7 @@
   nav ul{display:flex;gap:clamp(.9rem,2vw,1.6rem);list-style:none;align-items:center;margin:0 1rem}
   nav ul a{color:var(--dim);text-decoration:none;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;transition:color .25s}
   nav ul a:hover{color:var(--ink)}
-  .nav-cta{
-    background:var(--purple-hot);color:#fff;border:none;border-radius:2px;
-    padding:.55rem 1.3rem;font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;
-    transition:background .2s,transform .2s,box-shadow .2s;
-  }
-  .nav-cta:hover{background:#9A88E8;transform:translateY(-1px);box-shadow:0 8px 30px rgba(134,116,212,.45)}
+  a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid #B4A3F5;outline-offset:3px}
 
   /* shared */
   section{position:relative;padding:8rem 5vw}
@@ -82,8 +77,8 @@
 
   /* 01 — statement hero (full-bleed structural-scan video) */
   .statement{
-    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-    text-align:center;padding:calc(64px + 8vh) 5vw 9vh;overflow:hidden;position:relative;
+    min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+    text-align:center;padding:calc(64px + 6vh) 5vw 9vh;overflow:hidden;position:relative;
     background:#0D0A13 url("assets/hero-scan-poster.jpg") center/cover no-repeat;
   }
   .hero-video{
@@ -102,7 +97,6 @@
   }
   .statement h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .statement .lead{text-align:center;margin-left:auto;margin-right:auto;max-width:660px}
-  .hero-hud{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);top:auto;z-index:2;white-space:nowrap}
   @media (prefers-reduced-motion: reduce){ .hero-video{display:none} }
   .cellfield-wrap{position:relative;margin-top:3.2rem;width:min(430px,72vw);aspect-ratio:1}
   .cellfield{
@@ -203,6 +197,10 @@
   .cellcard{background:var(--panel);border:1px solid var(--line);padding:1.8rem;box-shadow:0 14px 36px rgba(0,0,0,.35)}
   .cellcard h3{font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem}
   .cellcard p{color:var(--dim);font-size:.9rem;line-height:1.65}
+  .cellcard.feature{
+    border-color:rgba(167,148,240,.6);
+    background:linear-gradient(120deg,rgba(247,168,196,.12),rgba(143,195,247,.12)),var(--panel);
+  }
   .cellviz{height:64px;margin-bottom:1.1rem;display:flex;align-items:flex-end;gap:7px}
   .cellviz.dots{align-items:center}
   .cellviz.dots i{width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #fff, #CDBDF2 60%, #9F8BE0);border:1px solid rgba(190,170,255,.5)}
@@ -213,8 +211,7 @@
 
   /* capability list — what SmartFoam does (section 02) */
   .caps{margin-top:2.8rem;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);max-width:880px}
-  .cap{background:var(--panel);padding:1.5rem 1.8rem;display:grid;grid-template-columns:56px 1fr;gap:1rem;align-items:start}
-  .cap .n{font-size:.58rem;font-weight:800;letter-spacing:.2em;color:var(--purple-deep);padding-top:.3rem;text-transform:uppercase}
+  .cap{background:var(--panel);padding:1.5rem 1.8rem}
   .cap h3{font-size:1rem;font-weight:800;margin-bottom:.32rem}
   .cap p{color:var(--dim);font-size:.9rem;line-height:1.6}
 
@@ -239,12 +236,15 @@
   .cmp tbody tr:last-child th,.cmp tbody tr:last-child td{border-bottom:none}
 
   /* why it matters — icon + title + description (section 09) */
-  .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1.1rem;margin-top:3.2rem;text-align:left}
-  .why{background:var(--panel);border:1px solid var(--line);padding:1.6rem;transition:transform .25s,border-color .25s}
-  .why:hover{transform:translateY(-5px);border-color:rgba(167,148,240,.5)}
-  .why svg{width:34px;height:34px;margin-bottom:.9rem}
-  .why h3{font-size:.92rem;font-weight:800;margin-bottom:.4rem}
-  .why p{color:var(--dim);font-size:.86rem;line-height:1.6}
+  /* why it matters: borderless icon+text rows (distinct layout family from the card grids) */
+  .why-list{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:2rem 3.5rem;margin:3.2rem auto 0;text-align:left;max-width:980px;
+  }
+  .why-item{display:grid;grid-template-columns:34px 1fr;gap:1rem;align-items:start}
+  .why-item svg{width:24px;height:24px;color:var(--purple);margin-top:2px}
+  .why-item h3{font-size:.95rem;font-weight:800;margin-bottom:.3rem}
+  .why-item p{color:var(--dim);font-size:.88rem;line-height:1.6}
 
   /* FAQ (GEO / AI search visibility) */
   .faq{max-width:900px;margin-top:3rem}
@@ -273,7 +273,11 @@
   .poss-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:3.4rem}
   .poss{background:var(--panel);border:1px solid var(--line);padding:1.8rem;transition:transform .25s,border-color .25s,box-shadow .25s}
   .poss:hover{transform:translateY(-6px);border-color:rgba(167,148,240,.5);box-shadow:0 20px 50px rgba(0,0,0,.45)}
-  .poss svg{width:44px;height:44px;margin-bottom:1rem}
+  .poss svg{width:36px;height:36px;margin-bottom:1rem;color:var(--purple)}
+  .poss.feature{
+    border-color:rgba(167,148,240,.6);
+    background:linear-gradient(120deg,rgba(247,168,196,.12),rgba(143,195,247,.12)),var(--panel);
+  }
   .poss h3{font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem}
   .poss p{color:var(--dim);font-size:.88rem;line-height:1.6}
 
@@ -330,11 +334,11 @@
   .cta-line{margin-top:4rem;text-align:center}
   .cta-line p{font-size:.72rem;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-bottom:1.4rem}
   .btn-primary{
-    background:var(--purple-hot);color:#fff;font-weight:800;border:none;border-radius:2px;
+    background:#6F56CB;color:#fff;font-weight:800;border:none;border-radius:2px;
     padding:1rem 2.6rem;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
     transition:background .2s,transform .2s,box-shadow .2s;
   }
-  .btn-primary:hover{background:#9A88E8;transform:translateY(-2px);box-shadow:0 12px 44px rgba(140,110,230,.5)}
+  .btn-primary:hover{background:#5E48C8;transform:translateY(-2px);box-shadow:0 12px 44px rgba(140,110,230,.5)}
 
   footer{
     border-top:1px solid var(--line);padding:3rem 5vw;
@@ -421,8 +425,8 @@
     <li><a href="#numbers">The Numbers</a></li>
     <li><a href="#system">The System</a></li>
     <li><a href="#faq">FAQ</a></li>
+    <li><a href="#shop">Shop</a></li>
   </ul>
-  <button class="nav-cta" onclick="location.href='#shop'">Shop</button>
 </nav>
 
 <!-- 01 — THE STATEMENT -->
@@ -433,44 +437,33 @@
   <div class="hero-content">
     <p class="eyebrow">SmartFoam™ · Proprietary technology</p>
     <h1>No bones. <span class="grad">All comfort.</span></h1>
-    <p class="lead">SmartFoam™ — the proprietary foam system that replaces traditional wood, metal and spring frames. The only foam engineered to <em>compress into a box</em>, expand into full form within minutes, and hold that form for years.</p>
+    <p class="lead">The proprietary foam that replaces the frame: compresses into a box, expands in minutes, holds its form for years.</p>
+    <button class="btn-primary" style="margin-top:1.9rem" onclick="location.href='#material'">Explore the technology</button>
   </div>
-  <span class="hud hero-hud">Structural scan · SmartFoam™ revealed</span>
 </section>
 
 <!-- 02 — WHAT IS SMARTFOAM (moved up: define the material before the problem) -->
 <section id="material" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="reveal">
-    <p class="eyebrow">What is SmartFoam™</p>
     <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">to replace the frame.</span></h2>
-    <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em> — a proprietary high-density foam system designed to:</p>
+    <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em>, a proprietary high-density foam system designed to:</p>
   </div>
   <div class="caps reveal">
     <div class="cap">
-      <span class="n">01</span>
-      <div>
-        <h3>Compress for the couch-in-a-box experience</h3>
-        <p>Designed for compact shipping and easier moving.</p>
-      </div>
+      <h3>Compress for the couch-in-a-box experience</h3>
+      <p>Designed for compact shipping and easier moving.</p>
     </div>
     <div class="cap">
-      <span class="n">02</span>
-      <div>
-        <h3>Expand into full form in minutes</h3>
-        <p>Expands rapidly after unboxing, with tool-free assembly.</p>
-      </div>
+      <h3>Expand into full form in minutes</h3>
+      <p>Expands rapidly after unboxing, with tool-free assembly.</p>
     </div>
     <div class="cap">
-      <span class="n">03</span>
-      <div>
-        <h3>Hold that form for years</h3>
-        <p>Delivers long-term comfort, support and durability.</p>
-      </div>
+      <h3>Hold that form for years</h3>
+      <p>Delivers long-term comfort, support and durability.</p>
     </div>
   </div>
   <div class="reveal-scene reveal">
-    <span class="hud tl">Expansion Memory · loop</span>
-    <span class="hud tr">Compressed → full form</span>
+    <span class="hud tl">Expansion Memory</span>
     <div class="ground"></div>
     <div class="exblock" aria-hidden="true"></div>
   </div>
@@ -479,7 +472,6 @@
 <!-- 03 — THE PROBLEM WE STARTED WITH -->
 <section id="problem">
   <div class="reveal">
-    <p class="eyebrow">The problem we started with</p>
     <h2 class="h-giant">The frame is <span class="grad">the problem.</span></h2>
     <p class="lead">For over a century, furniture has relied on the same hidden structure: wood, metal and springs.</p>
     <p class="limits-intro">A system built around limitations</p>
@@ -494,8 +486,6 @@
     <p class="lead"><em>We started Rove Lab to rebuild it.</em></p>
   </div>
   <div class="th-box reveal">
-    <span class="hud tl">Cross-section · X-ray view</span>
-    <span class="hud tr">Zero-Frame Construction</span>
     <div class="th-compare">
       <div class="th-pane xbad">
         <svg class="sofa-svg" viewBox="0 0 200 120" aria-hidden="true">
@@ -511,7 +501,7 @@
           <g stroke="#FFD9A0" stroke-width="2"><path d="M54,46 h5 M78,46 h5 M102,46 h5 M126,46 h5 M150,46 h5"/></g>
           <line x1="14" y1="106" x2="186" y2="106" stroke="rgba(255,255,255,.3)"/>
         </svg>
-        <span class="th-cap">Traditional — hidden frame</span>
+        <span class="th-cap">Traditional: hidden frame</span>
       </div>
       <div class="th-pane xgood">
         <svg class="sofa-svg" viewBox="0 0 200 120" aria-hidden="true">
@@ -520,7 +510,7 @@
           <path d="M28,96 L28,50 Q28,40 38,40 L162,40 Q172,40 172,50 L172,96 Z" fill="url(#fdots2)"/>
           <line x1="14" y1="106" x2="186" y2="106" stroke="rgba(33,29,43,.28)"/>
         </svg>
-        <span class="th-cap">SmartFoam™ — the structure itself</span>
+        <span class="th-cap">SmartFoam™: the structure itself</span>
       </div>
     </div>
   </div>
@@ -529,16 +519,15 @@
 <!-- 04 — HOW IT WORKS -->
 <section id="science">
   <div class="reveal">
-    <p class="eyebrow">How it works · real engineering, not marketing</p>
     <h2 class="h-giant">Engineered at <span class="grad">the cell.</span></h2>
   </div>
   <div class="cell3 reveal">
     <div class="cellcard">
       <div class="cellviz dots"><i></i><i></i><i></i><i></i><i></i></div>
       <h3>Adaptive Cell Structure</h3>
-      <p>Open-cell architecture that breathes, responds to load, and recovers fully — sit after sit, year after year.</p>
+      <p>Open-cell architecture that breathes, responds to load, and recovers fully, sit after sit, year after year.</p>
     </div>
-    <div class="cellcard">
+    <div class="cellcard feature">
       <div class="cellviz bars"><i style="height:30%"></i><i style="height:62%"></i><i style="height:100%"></i></div>
       <span class="curvelab">Soft · Balanced · Firm</span>
       <h3 style="margin-top:.5rem">Progressive Support Curve</h3>
@@ -560,8 +549,8 @@
   </div>
   <div class="num-grid reveal">
     <div class="numtile"><b>34.8 kg/m³</b><span class="std">Core density · ASTM D3574-17</span><p>Engineered density, calibrated for adaptive support.</p></div>
-    <div class="numtile"><b>231→466 N</b><span class="std">Progressive support · IFD 25–65%</span><p>Soft to the touch. Firm where it matters.</p></div>
-    <div class="numtile"><b>70,000+</b><span class="std">Abrasion cycles · ASTM D4157 Wyzenbeek</span><p>Contract-grade durability — built for the family, made for life.</p></div>
+    <div class="numtile"><b>231→466 N</b><span class="std">Progressive support · IFD 25-65%</span><p>Soft to the touch. Firm where it matters.</p></div>
+    <div class="numtile"><b>70,000+</b><span class="std">Abrasion cycles · ASTM D4157 Wyzenbeek</span><p>Contract-grade durability. Built for the family, made for life.</p></div>
     <div class="numtile"><b>100,000+</b><span class="std">Impact cycles · BIFMA certified</span><p>Commercial-grade structure, tested far past home use.</p></div>
     <div class="numtile"><b>1,088 N</b><span class="std">Seam strength · ISO 13935-1</span><p>Every seam, engineered for the long run.</p></div>
     <div class="numtile"><b>Zero</b><span class="std">Formaldehyde · ISO 14184-1</span><p>Not detected. Built for the air you breathe.</p></div>
@@ -578,12 +567,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr><th scope="row">Internal structure</th><td class="trad">Wood, metal and spring frame</td><td class="sf">No frame — the foam is the structure</td></tr>
-        <tr><th scope="row">Core density</th><td class="trad">18–28 kg/m³ (typical sofa foam)</td><td class="sf">34.8 kg/m³, engineered for structural support</td></tr>
-        <tr><th scope="row">Delivery</th><td class="trad">Bulky freight, delivery appointment</td><td class="sf">Couch-in-a-box — compressed, carried on your own</td></tr>
-        <tr><th scope="row">Assembly</th><td class="trad">Tools, screws and instructions</td><td class="sf">Tool-free — unbox and let it expand</td></tr>
+        <tr><th scope="row">Internal structure</th><td class="trad">Wood, metal and spring frame</td><td class="sf">No frame. The foam is the structure</td></tr>
+        <tr><th scope="row">Core density</th><td class="trad">18-28 kg/m³ (typical sofa foam)</td><td class="sf">34.8 kg/m³, engineered for structural support</td></tr>
+        <tr><th scope="row">Delivery</th><td class="trad">Bulky freight, delivery appointment</td><td class="sf">Couch-in-a-box: compressed, carried on your own</td></tr>
+        <tr><th scope="row">Assembly</th><td class="trad">Tools, screws and instructions</td><td class="sf">Tool-free: unbox and let it expand</td></tr>
         <tr><th scope="row">Moving and fit</th><td class="trad">Heavy; hard through doorways and elevators</td><td class="sf">Lightweight; fits tight spaces</td></tr>
-        <tr><th scope="row">Reconfiguration</th><td class="trad">Fixed shape</td><td class="sf">Modular — rearrange anytime</td></tr>
+        <tr><th scope="row">Reconfiguration</th><td class="trad">Fixed shape</td><td class="sf">Modular: rearrange anytime</td></tr>
         <tr><th scope="row">Durability</th><td class="trad">Frames crack; foam sags over time</td><td class="sf">100,000+ BIFMA impact cycles; holds its shape</td></tr>
         <tr><th scope="row">Carbon per shipment</th><td class="trad">Standard freight volume</td><td class="sf">Up to six times less</td></tr>
       </tbody>
@@ -594,27 +583,27 @@
 <!-- 06 — WHAT SMARTFOAM MAKES POSSIBLE -->
 <section id="possible">
   <div class="reveal">
-    <p class="eyebrow">What SmartFoam™ makes possible</p>
     <h2 class="h-serifless">One material. <span class="soft">A new way to live with furniture.</span></h2>
   </div>
+  <!-- icons: Phosphor Icons (MIT), regular weight -->
   <div class="poss-grid reveal">
-    <div class="poss">
-      <svg viewBox="0 0 44 44" fill="none" stroke="#A794F0" stroke-width="2"><rect x="8" y="12" width="28" height="20" rx="3"/><line x1="10" y1="10" x2="34" y2="34" stroke="#F2769F" stroke-width="2.5"/></svg>
+    <div class="poss feature">
+      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.56,87.56,0,0,1-20.41,56.28L71.72,60.4A88,88,0,0,1,216,128ZM40,128A87.56,87.56,0,0,1,60.41,71.72L184.28,195.6A88,88,0,0,1,40,128Z"/></svg>
       <h3>Boneless Design™</h3>
-      <p>A sofa with no frame. No wood. No metal. No staples. Built without bones — built to outlast them.</p>
+      <p>A sofa with no frame. No wood. No metal. No staples. Built without bones, built to outlast them.</p>
     </div>
     <div class="poss">
-      <svg viewBox="0 0 44 44" fill="none" stroke="#A794F0" stroke-width="2"><rect x="8" y="16" width="28" height="18" rx="2"/><path d="M8,22 L22,28 L36,22 M22,28 L22,34"/><path d="M18,10 L22,5 L26,10" stroke="#6FCFC9"/></svg>
+      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"/></svg>
       <h3>Compression Technology</h3>
       <p>A sectional furniture that arrives at your door and fits in your elevator. By reducing shipping volume, SmartFoam™ also helps generate up to six times less carbon per shipment.</p>
     </div>
     <div class="poss">
-      <svg viewBox="0 0 44 44" fill="none" stroke="#A794F0" stroke-width="2"><circle cx="22" cy="22" r="15"/><path d="M15,22 L20,27 L30,16" stroke="#6FCFC9" stroke-width="2.5"/></svg>
+      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
       <h3>Tool-Free Assembly</h3>
       <p>No tools. No instructions. Just unbox your furniture and let it expand within minutes.</p>
     </div>
     <div class="poss">
-      <svg viewBox="0 0 44 44" fill="none" stroke="#A794F0" stroke-width="2"><rect x="7" y="7" width="13" height="13" rx="2"/><rect x="24" y="7" width="13" height="13" rx="2"/><rect x="7" y="24" width="13" height="13" rx="2"/><rect x="24" y="24" width="13" height="13" rx="2" stroke="#F2B8CE"/></svg>
+      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg>
       <h3>Modular Architecture</h3>
       <p>Rearrange your sofa however you want. Lightweight, flexible and easy to reconfigure as your space and lifestyle change.</p>
     </div>
@@ -624,7 +613,6 @@
 <!-- 07 — THE LAB SYSTEM -->
 <section id="system" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="reveal">
-    <p class="eyebrow">The Lab System™</p>
     <h2 class="h-serifless">SmartFoam™ is the beginning. <span class="soft">The Lab System™ is what it becomes.</span></h2>
     <p class="lead">The Lab System™ is where the entire Rove Lab experience comes together. It combines SmartFoam™ at its core and Boneless Design™ as its structure. It's what customers actually experience: <em>a couch in a box</em>, a sofa expanding, and an easier way to move, rearrange and adapt your living space.</p>
   </div>
@@ -651,7 +639,6 @@
 <!-- 08 — PERFORMANCE OVER TIME -->
 <section class="endure">
   <div class="reveal">
-    <p class="eyebrow">Performance over time</p>
     <h2 class="h-serifless">Built for the next ten years. <span class="soft">Guaranteed for life.</span></h2>
     <p class="lead">SmartFoam™ is built for long-term performance and tested to exceed industry durability standards.</p>
   </div>
@@ -679,7 +666,7 @@
         <ellipse class="r3" cx="120" cy="60" rx="76" ry="15"/>
         <ellipse class="r4" cx="120" cy="60" rx="104" ry="15"/>
       </svg>
-      <span class="hud">The SmartFoam™ mark · read outward it expands, inward it compresses</span>
+      <span class="hud">Read outward it expands. Read inward it compresses.</span>
     </div>
     <p class="tagline-editorial">The structure you can't see. <span class="grad">The comfort you can feel.</span></p>
   </div>
@@ -688,37 +675,47 @@
 <!-- 09 — WHY IT MATTERS -->
 <section class="matter">
   <div class="reveal">
-    <p class="eyebrow">Why it matters</p>
     <h2 class="h-serifless">Furniture, finally built <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">for the way you live now.</span></h2>
   </div>
-  <div class="why-grid reveal">
-    <div class="why">
-      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 24V7"/><path d="M11 13l6-6 6 6"/><path d="M6 28h22"/></svg>
-      <h3>Lightweight structure</h3>
-      <p>Designed to be lighter and easier to move than traditional framed furniture.</p>
+  <!-- icons: Phosphor Icons (MIT), regular weight -->
+  <div class="why-list reveal">
+    <div class="why-item">
+      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.28,34.75a64,64,0,0,0-90.49,0L60.69,104A15.9,15.9,0,0,0,56,115.31v73.38L26.34,218.34a8,8,0,0,0,11.32,11.32L67.32,200H140.7A15.92,15.92,0,0,0,152,195.32l0,0,69.23-70A64,64,0,0,0,221.28,34.75ZM142.07,46.06A48,48,0,0,1,211.79,112H155.33l34.35-34.34a8,8,0,0,0-11.32-11.32L120,124.69V67.87ZM72,115.35l32-31.67v57l-32,32ZM140.7,184H83.32l56-56h56.74Z"/></svg>
+      <div>
+        <h3>Lightweight structure</h3>
+        <p>Designed to be lighter and easier to move than traditional framed furniture.</p>
+      </div>
     </div>
-    <div class="why">
-      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="13" width="22" height="14" rx="2"/><path d="M6 18h22"/><path d="M14 9l3-3 3 3" stroke="#6FCFC9"/></svg>
-      <h3>Couch-in-a-box experience</h3>
-      <p>Compresses for compact delivery and expands after unboxing within minutes.</p>
+    <div class="why-item">
+      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"/></svg>
+      <div>
+        <h3>Couch-in-a-box experience</h3>
+        <p>Compresses for compact delivery and expands after unboxing within minutes.</p>
+      </div>
     </div>
-    <div class="why">
-      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="17" r="11"/><path d="M12 17.5l3.5 3.5L23 13" stroke="#6FCFC9" stroke-width="2.2"/></svg>
-      <h3>Easy assembly</h3>
-      <p>No tools or complicated setup required. Just let it expand.</p>
+    <div class="why-item">
+      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+      <div>
+        <h3>Easy assembly</h3>
+        <p>No tools or complicated setup required. Just let it expand.</p>
+      </div>
     </div>
-    <div class="why">
-      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linejoin="round"><rect x="5" y="5" width="10" height="10" rx="2"/><rect x="19" y="5" width="10" height="10" rx="2"/><rect x="5" y="19" width="10" height="10" rx="2"/><rect x="19" y="19" width="10" height="10" rx="2" stroke="#F2B8CE"/></svg>
-      <h3>Modular design</h3>
-      <p>Easily rearrange and adapt your modular couch to your space.</p>
+    <div class="why-item">
+      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg>
+      <div>
+        <h3>Modular design</h3>
+        <p>Easily rearrange and adapt your modular couch to your space.</p>
+      </div>
     </div>
-    <div class="why">
-      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M27 7c0 0 1 9-3 14-5 6-15 5-15 5s-1-2-1-4c0-9 7-15 19-15z"/><path d="M9 27c4-6 9-10 14-12" stroke="#6FCFC9"/></svg>
-      <h3>Sustainable shipping</h3>
-      <p>Reduced packaging volume helps lower carbon emissions.</p>
+    <div class="why-item">
+      <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M223.45,40.07a8,8,0,0,0-7.52-7.52C139.8,28.08,78.82,51,52.82,94a87.09,87.09,0,0,0-12.76,49c.57,15.92,5.21,32,13.79,47.85l-19.51,19.5a8,8,0,0,0,11.32,11.32l19.5-19.51C81,210.73,97.09,215.37,113,215.94q1.67.06,3.33.06A86.93,86.93,0,0,0,162,203.18C205,177.18,227.93,116.21,223.45,40.07ZM153.75,189.5c-22.75,13.78-49.68,14-76.71.77l88.63-88.62a8,8,0,0,0-11.32-11.32L65.73,179c-13.19-27-13-54,.77-76.71,22.09-36.47,74.6-56.44,141.31-54.06C210.2,114.89,190.22,167.41,153.75,189.5Z"/></svg>
+      <div>
+        <h3>Sustainable shipping</h3>
+        <p>Reduced packaging volume helps lower carbon emissions.</p>
+      </div>
     </div>
   </div>
-  <p class="lead reveal" style="margin-left:auto;margin-right:auto;text-align:center;margin-top:3.2rem">SmartFoam™ doesn't just replace a frame — it replaces an industry that hasn't asked the right questions in a hundred years. <em>And we're just getting started.</em></p>
+  <p class="lead reveal" style="margin-left:auto;margin-right:auto;text-align:center;margin-top:3.2rem">SmartFoam™ doesn't just replace a frame. It replaces an industry that hasn't asked the right questions in a hundred years. <em>And we're just getting started.</em></p>
 </section>
 
 <!-- 10 — EXPLORE THE LAB BONELESS COUCH -->
@@ -746,7 +743,7 @@
     </a>
   </div>
   <div class="cta-line reveal">
-    <p>Built on SmartFoam™ · Engineered into the Lab System™ · Ready in a box</p>
+    <p>Built on SmartFoam™. Engineered into the Lab System™. Ready in a box.</p>
     <button class="btn-primary" onclick="location.href='https://rovelab.ca/collections/modular-sofa'">Shop the Lab Boneless Couch</button>
   </div>
 </section>
@@ -754,13 +751,12 @@
 <!-- 11 — FAQ (GEO / AI search visibility) -->
 <section id="faq">
   <div class="reveal">
-    <p class="eyebrow">FAQ</p>
     <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Questions, <span class="grad">answered.</span></h2>
   </div>
   <div class="faq reveal">
     <details>
       <summary>Memory foam vs SmartFoam™: what is the difference?</summary>
-      <p>Memory foam is a slow-recovery cushioning material (typically 50–90 kg/m³) designed to sink and mould around your body. SmartFoam™ is a structural foam: at 34.8 kg/m³ it is engineered to replace the sofa frame itself — to compress into a box, expand back into full form and hold that shape for years. Memory foam sits on top of a frame; SmartFoam™ <em>is</em> the structure.</p>
+      <p>Memory foam is a slow-recovery cushioning material (typically 50-90 kg/m³) designed to sink and mould around your body. SmartFoam™ is a structural foam. At 34.8 kg/m³ it is engineered to replace the sofa frame itself: built to compress into a box, expand back into full form and hold that shape for years. Memory foam sits on top of a frame; SmartFoam™ <em>is</em> the structure.</p>
     </details>
     <details>
       <summary>What is a couch-in-a-box?</summary>
@@ -768,7 +764,7 @@
     </details>
     <details>
       <summary>What is a boneless couch?</summary>
-      <p>A boneless couch is a sofa built without a rigid internal frame — no wood, no metal, no springs. In a Rove Lab Lab Boneless Couch, SmartFoam™ performs the structural role the frame used to perform. We call this architecture Boneless Design™.</p>
+      <p>A boneless couch is a sofa built without a rigid internal frame: no wood, no metal, no springs. In a Rove Lab Lab Boneless Couch, SmartFoam™ performs the structural role the frame used to perform. We call this architecture Boneless Design™.</p>
     </details>
     <details>
       <summary>Is SmartFoam™ durable?</summary>
@@ -776,7 +772,7 @@
     </details>
     <details>
       <summary>Does SmartFoam™ replace traditional sofa frames?</summary>
-      <p>Yes. SmartFoam™ is engineered to deliver the support, shape and durability that wood, metal and springs provide in traditional furniture. That is why Rove Lab sofas have no internal frame at all — an approach we call Zero-Frame Construction.</p>
+      <p>Yes. SmartFoam™ is engineered to deliver the support, shape and durability that wood, metal and springs provide in traditional furniture. That is why Rove Lab sofas have no internal frame at all, an approach we call Zero-Frame Construction.</p>
     </details>
   </div>
 </section>
