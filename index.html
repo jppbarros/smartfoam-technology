@@ -193,6 +193,54 @@
   .cellviz.exp .arrow{width:auto;border:none;background:none;color:var(--purple-deep);font-weight:900}
   .curvelab{font-size:.55rem;font-weight:800;letter-spacing:.14em;color:var(--purple-deep);text-transform:uppercase}
 
+  /* capability list — what SmartFoam does (section 02) */
+  .caps{margin-top:2.8rem;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);max-width:880px}
+  .cap{background:var(--panel);padding:1.5rem 1.8rem;display:grid;grid-template-columns:56px 1fr;gap:1rem;align-items:start}
+  .cap .n{font-size:.58rem;font-weight:800;letter-spacing:.2em;color:var(--purple-deep);padding-top:.3rem;text-transform:uppercase}
+  .cap h3{font-size:1rem;font-weight:800;margin-bottom:.32rem}
+  .cap p{color:var(--dim);font-size:.9rem;line-height:1.6}
+
+  /* limitations — the problem, as scannable bullets (section 03) */
+  .limits-intro{margin-top:1.8rem;font-size:.72rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--purple-deep)}
+  .limits{margin-top:1rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:.6rem;max-width:920px;list-style:none}
+  .limits li{
+    display:flex;align-items:center;gap:.75rem;color:var(--ink);font-size:.94rem;font-weight:600;
+    background:var(--panel);border:1px solid var(--line);padding:.85rem 1rem;
+  }
+  .limits li::before{content:"✕";color:#FF6B7E;font-weight:900;font-size:.9rem;flex:none}
+
+  /* comparison table — traditional foam vs SmartFoam (GEO) */
+  .cmp{margin-top:3rem;border:1px solid var(--line);overflow-x:auto}
+  .cmp table{width:100%;border-collapse:collapse;min-width:660px}
+  .cmp th,.cmp td{padding:1rem 1.4rem;text-align:left;border-bottom:1px solid var(--line);font-size:.92rem;vertical-align:top}
+  .cmp thead th{background:var(--panel);font-size:.62rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .cmp thead th.sf{color:var(--purple-deep)}
+  .cmp tbody th{font-weight:700;color:var(--ink);width:24%}
+  .cmp td.trad{color:var(--dim)}
+  .cmp td.sf{color:var(--ink);font-weight:600;background:rgba(167,148,240,.07)}
+  .cmp tbody tr:last-child th,.cmp tbody tr:last-child td{border-bottom:none}
+
+  /* why it matters — icon + title + description (section 09) */
+  .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1.1rem;margin-top:3.2rem;text-align:left}
+  .why{background:var(--panel);border:1px solid var(--line);padding:1.6rem;transition:transform .25s,border-color .25s}
+  .why:hover{transform:translateY(-5px);border-color:rgba(167,148,240,.5)}
+  .why svg{width:34px;height:34px;margin-bottom:.9rem}
+  .why h3{font-size:.92rem;font-weight:800;margin-bottom:.4rem}
+  .why p{color:var(--dim);font-size:.86rem;line-height:1.6}
+
+  /* FAQ (GEO / AI search visibility) */
+  .faq{max-width:900px;margin-top:3rem}
+  .faq details{background:var(--panel);border:1px solid var(--line);margin-bottom:8px}
+  .faq summary{
+    padding:1.2rem 1.6rem;cursor:pointer;font-weight:700;font-size:1rem;list-style:none;
+    display:flex;justify-content:space-between;gap:1rem;align-items:center;
+  }
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";color:var(--purple-deep);font-weight:900;font-size:1.25rem;flex:none;line-height:1}
+  .faq details[open] summary::after{content:"–"}
+  .faq details[open] summary{border-bottom:1px solid var(--line)}
+  .faq details p{padding:1.2rem 1.6rem;color:var(--dim);font-size:.95rem;line-height:1.7}
+
   /* 05 — oversized numbers */
   .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-top:3.4rem}
   .numtile{background:var(--panel);border:1px solid var(--line);padding:2rem 1.8rem;box-shadow:0 14px 36px rgba(0,0,0,.35)}
@@ -289,6 +337,54 @@
     .reveal{opacity:1;transform:none;filter:none}
   }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Memory foam vs SmartFoam: what is the difference?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Memory foam is a slow-recovery cushioning material (typically 50-90 kg/m3) designed to sink and mould around your body. SmartFoam is a structural foam: at 34.8 kg/m3 it is engineered to replace the sofa frame itself - to compress into a box, expand back into full form and hold that shape for years. Memory foam sits on top of a frame; SmartFoam is the structure."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a couch-in-a-box?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A couch-in-a-box is a sofa that ships compressed inside a compact box instead of as bulky freight. Because SmartFoam can be compressed and then expand back into its engineered shape, a full sectional fits through doorways and elevators, needs no delivery appointment, and can be carried and set up on your own."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a boneless couch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A boneless couch is a sofa built without a rigid internal frame - no wood, no metal, no springs. In a Rove Lab Lab Boneless Couch, SmartFoam performs the structural role the frame used to perform. We call this architecture Boneless Design."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is SmartFoam durable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. SmartFoam is tested to contract-grade standards: 70,000+ abrasion cycles (ASTM D4157), 100,000+ BIFMA impact cycles, seam strength up to 1,088 N (ISO 13935-1) and zero detectable formaldehyde (ISO 14184-1). Every Rove Lab product is backed by a Lifetime Guarantee."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does SmartFoam replace traditional sofa frames?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. SmartFoam is engineered to deliver the support, shape and durability that wood, metal and springs provide in traditional furniture. That is why Rove Lab sofas have no internal frame at all - an approach we call Zero-Frame Construction."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -306,6 +402,7 @@
     <li><a href="#science">The Science</a></li>
     <li><a href="#numbers">The Numbers</a></li>
     <li><a href="#system">The System</a></li>
+    <li><a href="#faq">FAQ</a></li>
   </ul>
   <button class="nav-cta" onclick="location.href='#shop'">Shop</button>
 </nav>
@@ -332,12 +429,60 @@
   </div>
 </section>
 
-<!-- 02 — THE PROBLEM WE STARTED WITH -->
+<!-- 02 — WHAT IS SMARTFOAM (moved up: define the material before the problem) -->
+<section id="material" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="reveal">
+    <p class="eyebrow">What is SmartFoam™</p>
+    <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">to replace the frame.</span></h2>
+    <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em> — a proprietary high-density foam system designed to:</p>
+  </div>
+  <div class="caps reveal">
+    <div class="cap">
+      <span class="n">01</span>
+      <div>
+        <h3>Compress for the couch-in-a-box experience</h3>
+        <p>Designed for compact shipping and easier moving.</p>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="n">02</span>
+      <div>
+        <h3>Expand into full form in minutes</h3>
+        <p>Expands rapidly after unboxing, with tool-free assembly.</p>
+      </div>
+    </div>
+    <div class="cap">
+      <span class="n">03</span>
+      <div>
+        <h3>Hold that form for years</h3>
+        <p>Delivers long-term comfort, support and durability.</p>
+      </div>
+    </div>
+  </div>
+  <div class="reveal-scene reveal">
+    <span class="hud tl">Expansion Memory · loop</span>
+    <span class="hud tr">Compressed → full form</span>
+    <div class="ground"></div>
+    <div class="exblock" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- 03 — THE PROBLEM WE STARTED WITH -->
 <section id="problem">
   <div class="reveal">
     <p class="eyebrow">The problem we started with</p>
     <h2 class="h-giant">The frame is <span class="grad">the problem.</span></h2>
-    <p class="lead">For a century, every sofa has shared the same secret: a hidden skeleton of wood, metal and springs. It dictates how the sofa is built, how it ships, how it ages — and what it costs you in space, money, and time. <em>We started Rove Lab to remove it.</em></p>
+    <p class="lead">For over a century, furniture has relied on the same hidden structure: wood, metal and springs.</p>
+    <p class="limits-intro">A system built around limitations</p>
+    <ul class="limits">
+      <li>Heavy to move</li>
+      <li>Difficult to ship</li>
+      <li>Impossible to compress</li>
+      <li>Hard to fit through tight spaces</li>
+      <li>Complicated to assemble</li>
+      <li>Expensive to deliver</li>
+    </ul>
+    <p class="lead"><em>We started Rove Lab to rebuild it.</em></p>
   </div>
   <div class="th-box reveal">
     <span class="hud tl">Cross-section · X-ray view</span>
@@ -372,21 +517,6 @@
   </div>
 </section>
 
-<!-- 03 — INTRODUCING SMARTFOAM -->
-<section id="material" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
-  <div class="reveal">
-    <p class="eyebrow">The reveal</p>
-    <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">to replace the frame.</span></h2>
-    <p class="lead">SmartFoam™ is not memory foam. It is not the cushioning you sit on. It is <em>the structure itself</em> — a proprietary high-density foam system engineered to compress to a fraction of its size, expand back into form on demand, and hold that form for life.</p>
-  </div>
-  <div class="reveal-scene reveal">
-    <span class="hud tl">Expansion Memory · loop</span>
-    <span class="hud tr">Compressed → full form</span>
-    <div class="ground"></div>
-    <div class="exblock" aria-hidden="true"></div>
-  </div>
-</section>
-
 <!-- 04 — HOW IT WORKS -->
 <section id="science">
   <div class="reveal">
@@ -401,14 +531,14 @@
     </div>
     <div class="cellcard">
       <div class="cellviz bars"><i style="height:30%"></i><i style="height:62%"></i><i style="height:100%"></i></div>
-      <span class="curvelab">231 N · 337 N · 466 N</span>
+      <span class="curvelab">Soft · Balanced · Firm</span>
       <h3 style="margin-top:.5rem">Progressive Support Curve</h3>
-      <p>Soft at first touch. Firm at full lean. SmartFoam™ adapts its resistance to where your weight goes — measured across the support curve.</p>
+      <p>Soft at first touch. Firm at full lean. SmartFoam™ adapts pressure and resistance depending on how weight is distributed across the surface.</p>
     </div>
     <div class="cellcard">
       <div class="cellviz exp"><i style="height:14px;align-self:flex-end"></i><span class="arrow">→</span><i style="height:56px"></i></div>
       <h3>Expansion Memory</h3>
-      <p>Compressed for shipping. Released on arrival. SmartFoam™ returns to its engineered shape every time — and stays there.</p>
+      <p>Compressed for shipping and engineered to expand into full form upon arrival. SmartFoam™ returns to its engineered shape every time, and stays there.</p>
     </div>
   </div>
 </section>
@@ -427,6 +557,29 @@
     <div class="numtile"><b>1,088 N</b><span class="std">Seam strength · ISO 13935-1</span><p>Every seam, engineered for the long run.</p></div>
     <div class="numtile"><b>Zero</b><span class="std">Formaldehyde · ISO 14184-1</span><p>Not detected. Built for the air you breathe.</p></div>
   </div>
+
+  <p class="limits-intro reveal">Traditional foam vs SmartFoam™</p>
+  <div class="cmp reveal">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Characteristic</th>
+          <th scope="col">Traditional foam sofa</th>
+          <th scope="col" class="sf">SmartFoam™ · Boneless Design™</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Internal structure</th><td class="trad">Wood, metal and spring frame</td><td class="sf">No frame — the foam is the structure</td></tr>
+        <tr><th scope="row">Core density</th><td class="trad">18–28 kg/m³ (typical sofa foam)</td><td class="sf">34.8 kg/m³, engineered for structural support</td></tr>
+        <tr><th scope="row">Delivery</th><td class="trad">Bulky freight, delivery appointment</td><td class="sf">Couch-in-a-box — compressed, carried on your own</td></tr>
+        <tr><th scope="row">Assembly</th><td class="trad">Tools, screws and instructions</td><td class="sf">Tool-free — unbox and let it expand</td></tr>
+        <tr><th scope="row">Moving and fit</th><td class="trad">Heavy; hard through doorways and elevators</td><td class="sf">Lightweight; fits tight spaces</td></tr>
+        <tr><th scope="row">Reconfiguration</th><td class="trad">Fixed shape</td><td class="sf">Modular — rearrange anytime</td></tr>
+        <tr><th scope="row">Durability</th><td class="trad">Frames crack; foam sags over time</td><td class="sf">100,000+ BIFMA impact cycles; holds its shape</td></tr>
+        <tr><th scope="row">Carbon per shipment</th><td class="trad">Standard freight volume</td><td class="sf">Up to six times less</td></tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
 <!-- 06 — WHAT SMARTFOAM MAKES POSSIBLE -->
@@ -444,17 +597,17 @@
     <div class="poss">
       <svg viewBox="0 0 44 44" fill="none" stroke="#A794F0" stroke-width="2"><rect x="8" y="16" width="28" height="18" rx="2"/><path d="M8,22 L22,28 L36,22 M22,28 L22,34"/><path d="M18,10 L22,5 L26,10" stroke="#6FCFC9"/></svg>
       <h3>Compression Technology</h3>
-      <p>Six times less carbon per shipment. A sectional that arrives at your door and fits in your elevator.</p>
+      <p>A sectional furniture that arrives at your door and fits in your elevator. By reducing shipping volume, SmartFoam™ also helps generate up to six times less carbon per shipment.</p>
     </div>
     <div class="poss">
       <svg viewBox="0 0 44 44" fill="none" stroke="#A794F0" stroke-width="2"><circle cx="22" cy="22" r="15"/><path d="M15,22 L20,27 L30,16" stroke="#6FCFC9" stroke-width="2.5"/></svg>
       <h3>Tool-Free Assembly</h3>
-      <p>Ten minutes. No instructions. No frustration. Just unbox, zip, and live.</p>
+      <p>No tools. No instructions. Just unbox your furniture and let it expand within minutes.</p>
     </div>
     <div class="poss">
       <svg viewBox="0 0 44 44" fill="none" stroke="#A794F0" stroke-width="2"><rect x="7" y="7" width="13" height="13" rx="2"/><rect x="24" y="7" width="13" height="13" rx="2"/><rect x="7" y="24" width="13" height="13" rx="2"/><rect x="24" y="24" width="13" height="13" rx="2" stroke="#F2B8CE"/></svg>
       <h3>Modular Architecture</h3>
-      <p>Reconfigure your sofa as often as your life reconfigures itself.</p>
+      <p>Rearrange your sofa however you want. Lightweight, flexible and easy to reconfigure as your space and lifestyle change.</p>
     </div>
   </div>
 </section>
@@ -464,7 +617,7 @@
   <div class="reveal">
     <p class="eyebrow">The Lab System™</p>
     <h2 class="h-serifless">SmartFoam™ is the beginning. <span class="soft">The Lab System™ is what it becomes.</span></h2>
-    <p class="lead">Every Rove Lab product is built on the same architecture: SmartFoam™ at its core, Boneless Design™ as its structure, the Lab System™ as its experience. From the box on your doorstep to the sofa in your living room — it's one continuous innovation.</p>
+    <p class="lead">The Lab System™ is where the entire Rove Lab experience comes together. It combines SmartFoam™ at its core and Boneless Design™ as its structure. It's what customers actually experience: <em>a couch in a box</em>, a sofa expanding, and an easier way to move, rearrange and adapt your living space.</p>
   </div>
   <div class="stack-diagram reveal">
     <div class="layer">
@@ -491,14 +644,15 @@
   <div class="reveal">
     <p class="eyebrow">Performance over time</p>
     <h2 class="h-serifless">Built for the next ten years. <span class="soft">Guaranteed for life.</span></h2>
-    <p class="lead">SmartFoam™ is tested to outperform every category it touches. And every Rove Lab product is backed by our <em>Lifetime Guarantee</em> — because we don't believe a sofa should be a five-year purchase.</p>
+    <p class="lead">SmartFoam™ is built for long-term performance and tested to exceed industry durability standards.</p>
   </div>
   <div class="endure-stats reveal">
-    <div class="estat"><b>70,000+</b><span>abrasion cycles — contract-grade fabric endurance</span></div>
-    <div class="estat"><b>100,000+</b><span>BIFMA impact tests — structure that doesn't quit</span></div>
-    <div class="estat"><b>1,088 N</b><span>seam strength — engineered for the long run</span></div>
-    <div class="estat"><b>0</b><span>detectable formaldehyde — built for the air you breathe</span></div>
+    <div class="estat"><b>70,000+</b><span>Abrasion cycles</span></div>
+    <div class="estat"><b>100,000+</b><span>BIFMA impact tests</span></div>
+    <div class="estat"><b>1,088 N</b><span>Seam strength</span></div>
+    <div class="estat"><b>Zero</b><span>Detectable formaldehyde</span></div>
   </div>
+  <p class="lead reveal" style="margin-top:2.6rem">Every Rove Lab product is backed by our <em>Lifetime Guarantee</em>.</p>
 </section>
 
 <!-- 09 — WHY IT MATTERS -->
@@ -506,8 +660,35 @@
   <div class="reveal">
     <p class="eyebrow">Why it matters</p>
     <h2 class="h-serifless">Furniture, finally built <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">for the way you live now.</span></h2>
-    <p class="lead">Lighter. Modular. Resilient. Delivered without the freight, the wait, the waste. SmartFoam™ doesn't just replace a frame — it replaces an industry that hasn't asked the right questions in a hundred years. This is what Rove Lab was built to do. <em>And we're just getting started.</em></p>
   </div>
+  <div class="why-grid reveal">
+    <div class="why">
+      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 24V7"/><path d="M11 13l6-6 6 6"/><path d="M6 28h22"/></svg>
+      <h3>Lightweight structure</h3>
+      <p>Designed to be lighter and easier to move than traditional framed furniture.</p>
+    </div>
+    <div class="why">
+      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="13" width="22" height="14" rx="2"/><path d="M6 18h22"/><path d="M14 9l3-3 3 3" stroke="#6FCFC9"/></svg>
+      <h3>Couch-in-a-box experience</h3>
+      <p>Compresses for compact delivery and expands after unboxing within minutes.</p>
+    </div>
+    <div class="why">
+      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="17" r="11"/><path d="M12 17.5l3.5 3.5L23 13" stroke="#6FCFC9" stroke-width="2.2"/></svg>
+      <h3>Easy assembly</h3>
+      <p>No tools or complicated setup required. Just let it expand.</p>
+    </div>
+    <div class="why">
+      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linejoin="round"><rect x="5" y="5" width="10" height="10" rx="2"/><rect x="19" y="5" width="10" height="10" rx="2"/><rect x="5" y="19" width="10" height="10" rx="2"/><rect x="19" y="19" width="10" height="10" rx="2" stroke="#F2B8CE"/></svg>
+      <h3>Modular design</h3>
+      <p>Easily rearrange and adapt your modular couch to your space.</p>
+    </div>
+    <div class="why">
+      <svg viewBox="0 0 34 34" fill="none" stroke="#A794F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M27 7c0 0 1 9-3 14-5 6-15 5-15 5s-1-2-1-4c0-9 7-15 19-15z"/><path d="M9 27c4-6 9-10 14-12" stroke="#6FCFC9"/></svg>
+      <h3>Sustainable shipping</h3>
+      <p>Reduced packaging volume helps lower carbon emissions.</p>
+    </div>
+  </div>
+  <p class="lead reveal" style="margin-left:auto;margin-right:auto;text-align:center;margin-top:3.2rem">SmartFoam™ doesn't just replace a frame — it replaces an industry that hasn't asked the right questions in a hundred years. <em>And we're just getting started.</em></p>
 </section>
 
 <!-- 10 — EXPLORE THE LAB BONELESS COUCH -->
@@ -540,6 +721,36 @@
   </div>
 </section>
 
+<!-- 11 — FAQ (GEO / AI search visibility) -->
+<section id="faq">
+  <div class="reveal">
+    <p class="eyebrow">FAQ</p>
+    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Questions, <span class="grad">answered.</span></h2>
+  </div>
+  <div class="faq reveal">
+    <details>
+      <summary>Memory foam vs SmartFoam™: what is the difference?</summary>
+      <p>Memory foam is a slow-recovery cushioning material (typically 50–90 kg/m³) designed to sink and mould around your body. SmartFoam™ is a structural foam: at 34.8 kg/m³ it is engineered to replace the sofa frame itself — to compress into a box, expand back into full form and hold that shape for years. Memory foam sits on top of a frame; SmartFoam™ <em>is</em> the structure.</p>
+    </details>
+    <details>
+      <summary>What is a couch-in-a-box?</summary>
+      <p>A couch-in-a-box is a sofa that ships compressed inside a compact box instead of as bulky freight. Because SmartFoam™ can be compressed and then expand back into its engineered shape, a full sectional fits through doorways and elevators, needs no delivery appointment, and can be carried and set up on your own.</p>
+    </details>
+    <details>
+      <summary>What is a boneless couch?</summary>
+      <p>A boneless couch is a sofa built without a rigid internal frame — no wood, no metal, no springs. In a Rove Lab Lab Boneless Couch, SmartFoam™ performs the structural role the frame used to perform. We call this architecture Boneless Design™.</p>
+    </details>
+    <details>
+      <summary>Is SmartFoam™ durable?</summary>
+      <p>Yes. SmartFoam™ is tested to contract-grade standards: 70,000+ abrasion cycles (ASTM D4157), 100,000+ BIFMA impact cycles, seam strength up to 1,088 N (ISO 13935-1) and zero detectable formaldehyde (ISO 14184-1). Every Rove Lab product is backed by a Lifetime Guarantee.</p>
+    </details>
+    <details>
+      <summary>Does SmartFoam™ replace traditional sofa frames?</summary>
+      <p>Yes. SmartFoam™ is engineered to deliver the support, shape and durability that wood, metal and springs provide in traditional furniture. That is why Rove Lab sofas have no internal frame at all — an approach we call Zero-Frame Construction.</p>
+    </details>
+  </div>
+</section>
+
 <footer>
   <a class="logo" href="./">
     <img src="assets/rovelab-logo-white.png" alt="Rove Lab">
@@ -556,7 +767,8 @@
     const hits = [];
     while (tw.nextNode()) {
       const n = tw.currentNode;
-      if (n.nodeValue.includes('™') && n.parentElement.tagName !== 'SUP') hits.push(n);
+      const tag = n.parentElement.tagName;
+      if (n.nodeValue.includes('™') && tag !== 'SUP' && tag !== 'SCRIPT' && tag !== 'STYLE') hits.push(n);
     }
     hits.forEach(n => {
       const frag = document.createDocumentFragment();
