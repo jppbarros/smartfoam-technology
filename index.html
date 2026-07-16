@@ -202,11 +202,6 @@
      daylight, then the film drops you back into the dark for good.
      every child of #material already draws from these tokens, so re-pointing them here
      inverts the whole section without touching a single component rule. */
-  /* the seed is positioned, #material's children are not, and a positioned element paints above
-     non-positioned siblings whatever the source order — so the glow would sit on top of the copy.
-     .reveal hides this while it runs (its transform makes a stacking context) and then drops it
-     the moment the animation ends and transform goes back to none. */
-  #material > .reveal,#material > .cap-split{position:relative;z-index:2}
   #material{
     background:#EDE7F8;
     --ink:#1A1226;--dim:#4A3F63;
@@ -249,11 +244,12 @@
     z-index:2;pointer-events:none;
   }
   .curtain img{width:100%;height:100%;object-fit:cover;object-position:center bottom;display:block}
-  /* the seed: the glow already on the page that the curtain grows out of. these are their own
-     exports (…-semente.png) — glows on transparency, alpha bottoming out at 0 — so they need no
-     opacity or mask of their own to read as light. nothing here animates. */
-  .seed-bg{position:absolute;inset:0;z-index:1;pointer-events:none}
-  .seed-bg img{width:100%;height:100%;object-fit:cover;object-position:center bottom;display:block}
+  /* the seed glows (…-semente) are gone. they lived inside sticky sections, so they froze for the
+     whole 180vh hold — measured: top 0 / bottom 900 at every scroll position while the curtain
+     travelled 1341 -> -159. that is not a tuning problem: a pinned section holds the viewport, and
+     with no JS nothing inside it can move, so anything that must emerge has to come from outside
+     the pin. the curtain already is that, and its leading edge is a glow with its own alpha ramp.
+     the assets are still in assets/ if a static seed is ever wanted back. */
   /* each section must outrank the one it covers: hero 1, material 2, film 3. #material both is
      covered and covers, so it carries a pin AND a curtain. */
   #material{z-index:2}
@@ -847,11 +843,6 @@
   <video class="hero-video" src="assets/hero-hud.mp4" poster="assets/hero-hud-poster.jpg"
          autoplay muted loop playsinline aria-hidden="true"></video>
   <div class="hero-scrim"></div>
-  <div class="seed-bg" aria-hidden="true">
-    <img src="assets/primeiro-semente.png" alt=""
-         srcset="assets/primeiro-semente-500w.png 500w, assets/primeiro-semente-800w.png 800w, assets/primeiro-semente.png 3840w"
-         sizes="100vw">
-  </div>
   <div class="hero-content">
     <p class="eyebrow">SmartFoam™ · Proprietary technology</p>
     <h1>No bones. <span class="grad">All comfort.</span></h1>
@@ -869,13 +860,8 @@
 <div class="pin-wrap on-light">
 <section id="material" class="pinned">
   <div class="curtain">
-    <img src="assets/primeiro.png" alt=""
-         srcset="assets/primeiro-500w.png 500w, assets/primeiro-800w.png 800w, assets/primeiro.png 3840w"
-         sizes="100vw">
-  </div>
-  <div class="seed-bg" aria-hidden="true">
-    <img src="assets/segundo-semente.png" alt=""
-         srcset="assets/segundo-semente-500w.png 500w, assets/segundo-semente-800w.png 800w, assets/segundo-semente.png 3840w"
+    <img src="assets/primeiro.avif" alt=""
+         srcset="assets/primeiro-500w.avif 500w, assets/primeiro-800w.avif 800w, assets/primeiro.avif 3840w"
          sizes="100vw">
   </div>
   <div class="reveal">
@@ -912,8 +898,8 @@
 <!-- THE FILM — draws up over the pinned #material on the second curtain -->
 <section id="film">
   <div class="curtain">
-    <img src="assets/segundo.png" alt=""
-         srcset="assets/segundo-500w.png 500w, assets/segundo-800w.png 800w, assets/segundo.png 3840w"
+    <img src="assets/segundo.avif" alt=""
+         srcset="assets/segundo-500w.avif 500w, assets/segundo-800w.avif 800w, assets/segundo.avif 3840w"
          sizes="100vw">
   </div>
   <div class="reveal">
