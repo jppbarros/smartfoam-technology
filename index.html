@@ -331,6 +331,22 @@
   }
   .btn-primary:hover{background:#5E48C8;transform:translateY(-2px);box-shadow:0 12px 44px rgba(140,110,230,.5)}
   .cta-actions{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+  /* final CTA — the 100-day trial close, ported from the main landing page */
+  .cta{text-align:center;padding:11rem 5vw 12rem;position:relative;overflow:hidden}
+  .cta::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(ellipse 72% 58% at 50% 122%, rgba(150,120,235,.22), transparent 66%),
+      radial-gradient(ellipse 44% 42% at 22% 120%, rgba(242,184,206,.09), transparent 72%),
+      radial-gradient(ellipse 44% 42% at 78% 120%, rgba(174,203,242,.09), transparent 72%);
+  }
+  .cta .inner{position:relative}
+  .cta .h-giant{max-width:900px;margin:0 auto}
+  .cta .eyebrow{display:block}
+  .cta .lead{margin-left:auto;margin-right:auto;text-align:center}
+  .cta small{display:block;margin-top:1.6rem;color:var(--dim);font-size:max(10px,.68rem);letter-spacing:.22em;text-transform:uppercase;font-weight:700}
+  .cta small + small{margin-top:.7rem}
+  @media(max-width:820px){ .cta{padding:7rem 6vw 9rem} }
   .btn-ghost{
     background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:2px;
     padding:1rem 2.6rem;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
@@ -994,14 +1010,6 @@
       <div class="info"><h3>S8 Sleeper</h3><span class="badge"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>Powered by SmartFoam™</span></div>
     </a>
   </div>
-  <!-- final CTA ported from the main landing page, per the review -->
-  <div class="cta-line reveal">
-    <p>Built on SmartFoam™. Engineered into the Lab System™. Ready in a box.</p>
-    <div class="cta-actions">
-      <button class="btn-primary" onclick="location.href='https://rovelab.ca/collections/modular-sofa'">Find your SmartFoam™</button>
-      <button class="btn-ghost" onclick="location.href='https://rovelab.ca/'">Explore Rove Lab</button>
-    </div>
-  </div>
 </section>
 
 <!-- 10.5 — COMPARISON (GEO): moved down, directly before the FAQ -->
@@ -1058,6 +1066,21 @@
       <summary>Does SmartFoam™ replace traditional sofa frames?</summary>
       <p>Yes. SmartFoam™ is engineered to deliver the support, shape and durability that wood, metal and springs provide in traditional furniture. That is why Rove Lab sofas have no internal frame at all, an approach we call Zero-Frame Construction.</p>
     </details>
+  </div>
+</section>
+
+<!-- 12 — TRY IT AT HOME (final CTA, ported from the main landing page per the review) -->
+<section class="cta">
+  <div class="inner reveal">
+    <p class="eyebrow">Try it at home</p>
+    <h2 class="h-giant">100 days to <span class="grad">fall in love</span><span class="soft">.</span></h2>
+    <p class="lead">If SmartFoam™ isn't the most comfortable, most livable couch you've ever owned, send it back. That's how sure we are.</p>
+    <div class="cta-actions">
+      <button class="btn-primary" onclick="location.href='https://rovelab.ca/collections/modular-sofa'">Find your SmartFoam™</button>
+      <button class="btn-ghost" onclick="location.href='https://rovelab.ca/'">Explore Rove Lab</button>
+    </div>
+    <small>Built on SmartFoam™ · Engineered into the Lab System™ · Ready in a box</small>
+    <small>Free shipping · 100-day trial · Lifetime guarantee · Tool-free setup</small>
   </div>
 </section>
 
