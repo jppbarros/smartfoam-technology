@@ -207,16 +207,19 @@
     border-color:rgba(167,148,240,.6);
     background:linear-gradient(120deg,rgba(247,168,196,.12),rgba(143,195,247,.12)),var(--panel);
   }
-  /* the three vizzes share one box and are matched for visual weight: the old dot row filled
-     a fifth of the height the bars did, and said nothing about open cells */
-  .cellviz{height:64px;margin-bottom:1.1rem;display:flex;align-items:flex-end;gap:7px}
-  .cellviz.cells{align-items:center}
-  .cellviz.cells svg{height:100%;width:auto;overflow:visible}
-  .cellviz.cells .wall{fill:rgba(190,170,255,.13);stroke:#CDBDF2;stroke-width:1.3}
-  .cellviz.cells .air{fill:none;stroke:rgba(190,170,255,.5);stroke-width:1;stroke-dasharray:2 2}
-  .cellviz.bars i{display:block;width:26px;background:var(--grad);border:1px solid rgba(190,170,255,.5)}
-  .cellviz.exp i{display:block;width:44px;border:1px solid rgba(190,170,255,.55);background:#DDD3F2;border-radius:4px}
-  .cellviz.exp .arrow{width:auto;border:none;background:none;color:var(--purple-deep);font-weight:900}
+  /* one language across the three: flat shapes, the same 1.3 purple outline, the same fill,
+     the same 122x64 box. they were three grammars before (outline / solid gradient bars /
+     filled blocks with a typographic arrow). the gradient survives in one place, the curve,
+     where it carries the meaning: soft to firm. */
+  .cellviz{height:64px;margin-bottom:1.1rem;display:flex;align-items:center}
+  .cellviz svg{height:100%;width:auto;overflow:visible}
+  .cellviz .wall{fill:rgba(190,170,255,.13);stroke:#CDBDF2;stroke-width:1.3}
+  /* the curve carried a fraction of the ink the cell cluster did; the area gives it the same
+     body as the other two without breaking the fill language */
+  .cellviz .area{fill:rgba(190,170,255,.13);stroke:none}
+  .cellviz .curve{fill:none;stroke:url(#cvg);stroke-width:2.8;stroke-linecap:round}
+  .cellviz .node{fill:#171221;stroke:#CDBDF2;stroke-width:1.3}
+  .cellviz .arrow{fill:none;stroke:#CDBDF2;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
   .curvelab{font-size:max(10px,.55rem);font-weight:800;letter-spacing:.14em;color:var(--purple-deep);text-transform:uppercase}
 
   /* what SmartFoam does: real unboxing footage left, expandable points right */
@@ -737,7 +740,7 @@
   <div class="cell3 reveal">
     <div class="cellcard">
       <!-- a foam cross-section: packed cells with walls, and air moving through them -->
-      <div class="cellviz cells" aria-hidden="true">
+      <div class="cellviz" aria-hidden="true">
         <svg viewBox="0 0 122 64">
           <circle class="wall" cx="15" cy="17" r="12"/><circle class="wall" cx="40" cy="13" r="9.5"/>
           <circle class="wall" cx="62" cy="19" r="12.5"/><circle class="wall" cx="86" cy="14" r="10"/>
@@ -747,20 +750,36 @@
           <circle class="wall" cx="107" cy="47" r="10"/>
           <circle class="wall" cx="26" cy="30" r="6"/><circle class="wall" cx="49" cy="33" r="6.5"/>
           <circle class="wall" cx="73" cy="31" r="6"/><circle class="wall" cx="96" cy="32" r="6.5"/>
-          <path class="air" d="M2,32 C18,24 30,40 46,32 C62,24 74,40 90,32 C104,25 112,36 120,32"/>
         </svg>
       </div>
       <h3>Adaptive Cell Structure</h3>
       <p>Open-cell architecture that breathes, responds to load, and recovers fully, sit after sit, year after year.</p>
     </div>
     <div class="cellcard feature">
-      <div class="cellviz bars"><i style="height:30%"></i><i style="height:62%"></i><i style="height:100%"></i></div>
+      <div class="cellviz" aria-hidden="true">
+        <svg viewBox="0 0 122 64">
+          <defs><linearGradient id="cvg" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stop-color="#F7A8C4"/><stop offset=".5" stop-color="#C9B4EC"/><stop offset="1" stop-color="#8FC3F7"/>
+          </linearGradient></defs>
+          <path class="area" d="M6,54 C32,51 48,41 66,30 C84,19 104,10 116,6 L116,58 L6,58 Z"/>
+          <path class="curve" d="M6,54 C32,51 48,41 66,30 C84,19 104,10 116,6"/>
+          <circle class="node" cx="32" cy="51" r="3"/>
+          <circle class="node" cx="66" cy="30" r="3"/>
+          <circle class="node" cx="116" cy="6" r="3"/>
+        </svg>
+      </div>
       <span class="curvelab">Soft · Balanced · Firm</span>
       <h3 style="margin-top:.5rem">Progressive Support Curve</h3>
       <p>Soft at first touch. Firm at full lean. SmartFoam™ adapts pressure and resistance depending on how weight is distributed across the surface.</p>
     </div>
     <div class="cellcard">
-      <div class="cellviz exp"><i style="height:14px;align-self:flex-end"></i><span class="arrow">→</span><i style="height:56px"></i></div>
+      <div class="cellviz" aria-hidden="true">
+        <svg viewBox="0 0 122 64">
+          <rect class="wall" x="6" y="44" width="38" height="14" rx="3"/>
+          <path class="arrow" d="M54,32 h12 M63,27.5 l4.5,4.5 -4.5,4.5"/>
+          <rect class="wall" x="78" y="6" width="38" height="52" rx="3"/>
+        </svg>
+      </div>
       <h3>Expansion Memory</h3>
       <p>Compressed for shipping and engineered to expand into full form upon arrival. SmartFoam™ returns to its engineered shape every time, and stays there.</p>
     </div>
