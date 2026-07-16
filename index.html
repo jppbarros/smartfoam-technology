@@ -193,23 +193,9 @@
   .sfm ellipse{fill:none;stroke:currentColor;stroke-width:10}
 
   /* 02 — x-ray */
-  .th-box{position:relative;aspect-ratio:5/2;max-width:960px;overflow:hidden;border:1px solid rgba(167,148,240,.35);background:var(--panel);margin-top:3.2rem}
-  .th-box::after{
-    content:"";position:absolute;inset:0;pointer-events:none;
-    background:repeating-linear-gradient(0deg,transparent 0 42px,rgba(244,241,250,.06) 42px 43px),
-               repeating-linear-gradient(90deg,transparent 0 42px,rgba(244,241,250,.06) 42px 43px);
-  }
-  .th-compare{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
-  .th-pane{position:relative;overflow:hidden}
-  .th-pane.xbad{border-right:1px dashed rgba(244,241,250,.22);background:#1B1526}
-  .th-pane.xgood{background:#F1EEFA}
-  .sofa-svg{position:absolute;left:50%;bottom:20%;transform:translateX(-50%);width:88%;height:auto;max-height:58%}
-  .th-cap{
-    position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:2;
-    width:max-content;max-width:92%;text-align:center;
-    font-size:max(10px,.53rem);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#EDE9F8;
-    background:rgba(23,18,33,.85);padding:.3rem .55rem;border:1px solid rgba(167,148,240,.4);
-  }
+  /* real footage replaced the x-ray diagram: 16:9, and no grid overlay on top of film */
+  .th-box{position:relative;aspect-ratio:16/9;max-width:960px;overflow:hidden;border:1px solid rgba(167,148,240,.35);background:var(--panel);margin-top:3.2rem}
+  .th-box video{display:block;width:100%;height:100%;object-fit:cover}
 
 
   /* 04 — science columns */
@@ -535,7 +521,6 @@
     .layer-link{padding:.9rem 0}
     .nav-shop{display:block;margin-top:1.8rem;padding:1rem;text-align:center;background:#6F56CB;color:#fff;font-size:.78rem;border-radius:2px}
     section{padding:6rem 6vw}
-    .th-box{aspect-ratio:16/9}
       .car-track{padding:0}
     .cslide,.car-center{height:min(44vh,420px)}
     .logo .prod-suffix{display:none}
@@ -820,34 +805,9 @@
     <p class="lead"><em>We started Rove Lab to rebuild it.</em></p>
    </div>
   <div class="th-box">
-    <div class="th-compare">
-      <div class="th-pane xbad">
-        <svg class="sofa-svg" viewBox="0 0 200 120" aria-hidden="true">
-          <path d="M28,96 L28,50 Q28,40 38,40 L162,40 Q172,40 172,50 L172,96" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.5"/>
-          <g fill="none" stroke="#9FD8FF" stroke-width="1.5">
-            <rect x="36" y="48" width="128" height="6"/><rect x="36" y="82" width="128" height="6"/>
-            <line x1="44" y1="54" x2="44" y2="82"/><line x1="100" y1="54" x2="100" y2="82"/><line x1="156" y1="54" x2="156" y2="82"/>
-          </g>
-          <g fill="none" stroke="#FF9FB0" stroke-width="1.5">
-            <circle cx="72" cy="68" r="7"/><circle cx="72" cy="68" r="2.6"/>
-            <circle cx="128" cy="68" r="7"/><circle cx="128" cy="68" r="2.6"/>
-          </g>
-          <g stroke="#FFD9A0" stroke-width="2"><path d="M54,46 h5 M78,46 h5 M102,46 h5 M126,46 h5 M150,46 h5"/></g>
-          <line x1="14" y1="106" x2="186" y2="106" stroke="rgba(255,255,255,.3)"/>
-        </svg>
-        <span class="th-cap">Traditional: hidden frame</span>
-      </div>
-      <div class="th-pane xgood">
-        <svg class="sofa-svg" viewBox="0 0 200 120" aria-hidden="true">
-          <defs><pattern id="fdots2" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.6" fill="rgba(134,116,212,.35)"/></pattern></defs>
-          <path d="M28,96 L28,50 Q28,40 38,40 L162,40 Q172,40 172,50 L172,96 Z" fill="#DDD3F2" stroke="rgba(134,116,212,.6)" stroke-width="1.5"/>
-          <path d="M28,96 L28,50 Q28,40 38,40 L162,40 Q172,40 172,50 L172,96 Z" fill="url(#fdots2)"/>
-          <line x1="14" y1="106" x2="186" y2="106" stroke="rgba(33,29,43,.28)"/>
-        </svg>
-        <span class="th-cap">SmartFoam™: the structure itself</span>
-      </div>
-    </div>
-  </div>
+    <video src="assets/m1-split-screen.mp4" poster="assets/m1-split-screen-poster.jpg"
+           data-scrollplay muted loop playsinline preload="metadata"
+           aria-label="Split screen: two people wrestle a framed sofa up a stairwell while one person sets up a SmartFoam module alone"></video>
   </div>
 </section>
 
