@@ -29,6 +29,28 @@
   ::selection{background:var(--purple);color:#0D0A13}
   sup.tm2{font-size:max(7px,.42em);line-height:0;vertical-align:super;letter-spacing:.02em}
 
+  /* fluid brand glow (after cinetica.studio): three light-purple radial blobs fixed behind
+     the content, drifting and swelling as --fp (lerped scroll progress, set by JS) runs 0..1.
+     radial falloff is already soft, so no filter:blur and no paint cost; transforms only.
+     the banded sections keep their solid backgrounds, so the glow breathes in the gaps. */
+  .flow{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+  .flow i{position:absolute;display:block;border-radius:50%;will-change:transform}
+  .flow .f1{
+    width:74vmax;height:74vmax;left:-20vmax;top:-10vmax;
+    background:radial-gradient(circle, rgba(183,163,245,.17), transparent 66%);
+    transform:translate3d(calc(var(--fp,0)*11vmax), calc(var(--fp,0)*30vmax), 0) scale(calc(.88 + var(--fp,0)*.55));
+  }
+  .flow .f2{
+    width:60vmax;height:60vmax;right:-24vmax;top:20vmax;
+    background:radial-gradient(circle, rgba(201,180,236,.13), transparent 64%);
+    transform:translate3d(calc(var(--fp,0)*-14vmax), calc(var(--fp,0)*-16vmax), 0) scale(calc(1 + var(--fp,0)*.4));
+  }
+  .flow .f3{
+    width:50vmax;height:50vmax;left:28vw;bottom:-28vmax;
+    background:radial-gradient(circle, rgba(143,195,247,.09), transparent 62%);
+    transform:translate3d(calc(var(--fp,0)*-9vmax), calc(var(--fp,0)*-24vmax), 0) scale(calc(.95 + var(--fp,0)*.3));
+  }
+
   .grain{
     position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:90;
     background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -615,6 +637,7 @@
 </head>
 <body>
 
+<div class="flow" aria-hidden="true"><i class="f1"></i><i class="f2"></i><i class="f3"></i></div>
 <div class="grain"></div>
 
 <nav>
@@ -1099,6 +1122,31 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => io.observe(el));
   }
+
+  // fluid glow: --fp chases scroll progress through a lerp, so the blobs ease into place
+  // the way the reference's Lenis-driven shader does, without hijacking anyone's scroll.
+  // a permanent rAF that only reads scrollY; it writes styles only when the value moves.
+  (function () {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // static glow
+    const flow = document.querySelector('.flow');
+    if (!flow) return;
+    let cur = 0, raf = 0;
+    const tick = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const target = max > 0 ? scrollY / max : 0;
+      const d = target - cur;
+      if (Math.abs(d) > 0.0004) {
+        cur += d * 0.06;
+        flow.style.setProperty('--fp', cur.toFixed(4));
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
+      else if (!raf) raf = requestAnimationFrame(tick);
+    });
+  })();
 
   // navigation: hamburger drawer (mobile) + the Lab System dropdown (desktop)
   (function () {
