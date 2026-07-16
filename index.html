@@ -35,7 +35,10 @@
   body{
     background:var(--bg);color:var(--ink);
     font-family:"Urbanist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+    /* clip, not hidden: overflow-x:hidden forces overflow-y to compute to auto, which makes the
+       body a scroll container and silently kills every position:sticky inside it. measured that
+       exact state here before the pins went in. clip stops the sideways scroll without it. */
+    -webkit-font-smoothing:antialiased;overflow-x:clip;
   }
   button{font-family:inherit}
   ::selection{background:var(--purple);color:#0D0A13}
@@ -186,11 +189,11 @@
   /* shared */
   section{position:relative;padding:8rem 5vw}
 
-  /* the film is where the page goes dark again, so it has to open on the exact colour the band
-     lands on (#26202E, the artwork's foot) and fall from there to the page's own black. it ends
-     in transparent, not #0D0A13, so the fluid glow behind the page carries on through into
-     #science instead of stopping at a flat edge. */
-  #film{background:linear-gradient(180deg,#26202E 0%, rgba(38,32,46,0) 62%)}
+  /* opens on #1D1A24 — the exact fill of segundo.svg's dark path, so the curtain's last row and
+     the section's first row are one colour and the join cannot show. it then falls to transparent
+     so the page's own black and its glow carry on into #science: #1D1A24 is 16 points of luminance
+     above #0D0A13, and left flat it would end in a visible step. */
+  #film{background:linear-gradient(180deg,#1D1A24 0%,#1D1A24 28%, rgba(29,26,36,0) 100%)}
 
   /* THE LIGHT SECTION — after o-scs.com, which runs a white expertise section between two
      dark ones. #material is the only light stop on the page: the material gets explained in
@@ -208,38 +211,39 @@
     color:var(--ink);
   }
 
-  /* THE TWO BOUNDARIES — the page runs dark, goes light through #material, and drops dark again
-     at the film. each boundary is a band holding the artwork, scaled by the scroll, after
-     o-scs.com: their transition is an image whose wrapper is scroll-scaled (measured on their
-     team boundary: scaleX 2 -> 6.68, scaleY 1 -> 4.24). transform only, so it is compositor
-     work — no repaint, no layout.
-     clipped both ways: the art is an opaque file being scaled up, so whatever it overflows it
-     would paint over. */
-  /* .xfade is a scroll runway, not the visible band: 150vh of height whose only job is to give
-     the pin something to travel through. this is the piece the reference has and a plain
-     scrolling band cannot fake — .home-expert over there is position:sticky with an 1820px
-     empty block beside it. the section PINS, and the scale runs while it is pinned. that is what
-     makes the gradient take the screen instead of merely sliding past it. */
-  .xfade{--s:1;position:relative;height:150vh;pointer-events:none}
-  .xfade-pin{position:sticky;top:0;height:100vh;min-height:320px;overflow:hidden}
-  .xfade-pin i{position:absolute;inset:0;display:block;will-change:transform}
-  /* the art is the supplied bg_site.svg, untouched but for preserveAspectRatio (it ships with the
-     default xMidYMid meet, which letterboxes it into a narrow column instead of filling the pin).
-     xfade-up.svg is the same file mirrored in-file for the boundary that runs dark -> light.
-     the scale is UNIFORM. an earlier pass drove X alone to 3.5 to force more motion and simply
-     erased the artwork: this asset is portrait (886x1855), the pin is landscape, and X-only scale
-     multiplied a squash that was already there — the pink ellipse read 7.8 wide-to-tall against
-     0.69 in the file. scaling both axes together magnifies instead of distorting.
-     transform-origin sits on the EXIT edge (bottom of both files: the film's #26202E foot going
-     down, the light head going up). that edge is the one still touching a section when the scale
-     is at its largest, so it is the one that has to stay put. the entry edge is safe by timing:
-     the scale is still ~1 while the band is entering. */
-  .xfade-pin i{
-    background:url("assets/xfade.svg") center/100% 100% no-repeat;
-    transform-origin:50% 100%;
-    transform:scale(var(--s));
+  /* THE TWO BOUNDARIES — a section holds still while the next one draws itself up over it on a
+     curtain. no JS: sticky for the hold, one hanging image for the reveal.
+     the curtain's base colour IS the incoming section's background, which is what makes the join
+     invisible — the artwork stops being a gradient laid over a seam and becomes the section's own
+     edge, arriving. */
+  .pin-wrap{position:relative}
+  .pinned{position:sticky;top:0;height:100vh;z-index:1}
+  /* .statement sets position:relative on its own and is declared later in this sheet, so at equal
+     specificity it was quietly winning and the hero never pinned. two classes outrank one. */
+  .statement.pinned{position:sticky}
+  /* the spacer is the hold: the distance the page scrolls while the pinned section stays put.
+     it must be TALLER than the curtain, never shorter. the curtain hangs 90vh above its section,
+     so a 60vh spacer would leave it hanging 30vh into the first viewport — the light dome sitting
+     over the hero at page load. at exactly 90vh it clears by 1px, which rounding can eat; 100vh
+     buys the margin. it is also the empty run the curtain sweeps over instead of live content. */
+  .spacer{height:100vh}
+  .curtain{
+    position:absolute;left:0;width:100%;height:90vh;
+    top:calc(-90vh + 1px);   /* the 1px overlap: without it the seam shows a hairline */
+    z-index:2;pointer-events:none;
   }
-  .xfade.to-light .xfade-pin i{background-image:url("assets/xfade-up.svg")}
+  .curtain img{width:100%;height:100%;object-fit:cover;object-position:center bottom;display:block}
+  /* each section must outrank the one it covers: hero 1, material 2, film 3. #material both is
+     covered and covers, so it carries a pin AND a curtain. */
+  #material{z-index:2}
+  #film{z-index:3}
+  /* #material's content stacks below 821px and runs to 1236px against an 812px viewport —
+     424px over. a pinned section taller than the viewport strands that overflow: the pin locks
+     at top:0 and the rest can never be scrolled to. so it only pins where it actually fits.
+     unpinned it still scrolls under the film's curtain; it just doesn't hold. */
+  @media (max-width:820px), (max-height:860px){
+    #material.pinned{position:static;height:auto}
+  }
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
   .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
   .h-giant .soft,.h-serifless .soft,.tagline-editorial .soft{color:var(--dim)}
@@ -270,10 +274,7 @@
   .hero-scrim{
     position:absolute;inset:0;z-index:1;pointer-events:none;
     background:
-      /* lands opaque on #26202E, not on a translucent black: the hero's last row is what the
-         flipped band's foot butts against, and that foot is the artwork's #26202E. any video
-         bleeding through, or the page black instead of the artwork's plum, puts a line there. */
-      linear-gradient(180deg, rgba(13,10,19,.95) 0%, rgba(13,10,19,.74) 28%, rgba(13,10,19,.28) 54%, rgba(13,10,19,.10) 70%, rgba(38,32,46,1) 100%),
+      linear-gradient(180deg, rgba(13,10,19,.95) 0%, rgba(13,10,19,.74) 28%, rgba(13,10,19,.28) 54%, rgba(13,10,19,.10) 70%, rgba(13,10,19,.94) 100%),
       radial-gradient(ellipse 74% 52% at 50% 42%, transparent 42%, rgba(13,10,19,.45) 100%);
   }
   .hero-content{position:relative;z-index:2;max-width:1000px}
@@ -819,8 +820,9 @@
 </nav>
 <div class="nav-scrim" id="navScrim" hidden></div>
 
-<!-- 01 — THE STATEMENT -->
-<section class="statement">
+<!-- 01 — THE STATEMENT. pinned: #material's curtain draws up over it. -->
+<div class="pin-wrap">
+<section class="statement pinned">
   <video class="hero-video" src="assets/hero-hud.mp4" poster="assets/hero-hud-poster.jpg"
          autoplay muted loop playsinline aria-hidden="true"></video>
   <div class="hero-scrim"></div>
@@ -833,11 +835,14 @@
     <button class="btn-primary" onclick="location.href='#material'">Explore the technology</button>
   </div>
 </section>
+<div class="spacer"></div>
+</div>
 
-<div class="xfade to-light" aria-hidden="true"><div class="xfade-pin"><i></i></div></div>
-
-<!-- 02 — WHAT IS SMARTFOAM (moved up: define the material before the problem) -->
-<section id="material">
+<!-- 02 — WHAT IS SMARTFOAM (moved up: define the material before the problem).
+     covered by the film, and covers the hero: it carries both a pin and a curtain. -->
+<div class="pin-wrap">
+<section id="material" class="pinned">
+  <div class="curtain"><img src="assets/primeiro.svg" alt=""></div>
   <div class="reveal">
     <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span class="soft">to replace the frame.</span></h2>
     <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em>, a proprietary high-density foam system designed to:</p>
@@ -866,11 +871,12 @@
     </div>
   </div>
 </section>
+<div class="spacer"></div>
+</div>
 
-<div class="xfade to-dark" aria-hidden="true"><div class="xfade-pin"><i></i></div></div>
-
-<!-- THE FILM -->
+<!-- THE FILM — draws up over the pinned #material on the second curtain -->
 <section id="film">
+  <div class="curtain"><img src="assets/segundo.svg" alt=""></div>
   <div class="reveal">
     <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Watch <span class="soft">the film.</span></h2>
   </div>
@@ -1272,43 +1278,6 @@
       if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
       else if (!raf) raf = requestAnimationFrame(tick);
     });
-  })();
-
-  // the theme boundaries: the scroll scales the art up, the way o-scs.com scales its transition
-  // wrapper (measured there: scaleX 2 -> 6.68, scaleY 1 -> 4.24 as the band climbs the viewport).
-  // rides one rAF and only reads geometry; IntersectionObserver keeps it idle off-screen,
-  // so the loop costs nothing for the ~90% of the page that has no band in view.
-  (function () {
-    const bands = [...document.querySelectorAll('.xfade')];
-    if (!bands.length) return;
-    // reduced motion keeps --s at its CSS rest value: the boundary is still the finished artwork,
-    // it just doesn't grow. the transition is never hidden behind the animation.
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    // 1 -> 2.4, uniform, spent entirely inside the pinned stretch. the reference reaches 6.68 on
-    // its own art; ours is a portrait file filling a landscape pin, so the same number would push
-    // the pink ellipse clean off screen. 2.4 grows the artwork's dark foot from 11% of the pin to
-    // ~26% — the dark visibly swelling is what reads as the next section being pulled in.
-    const S = [1, 2.4];
-    const live = new Set();
-    let raf = 0;
-    const tick = () => {
-      live.forEach(b => {
-        const r = b.getBoundingClientRect();
-        // progress across the PINNED travel only: 0 the moment the pin locks (band top hits 0),
-        // 1 as it releases. measured on the runway, not on entry — while the band is still
-        // sliding in, p stays 0 and the scale stays 1, which is what keeps the entry seam exact.
-        const travel = r.height - innerHeight;
-        const p = travel > 0 ? Math.min(1, Math.max(0, -r.top / travel)) : 0;
-        b.style.setProperty('--s', (S[0] + (S[1] - S[0]) * p).toFixed(4));
-      });
-      raf = live.size ? requestAnimationFrame(tick) : 0;
-    };
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(en => en.isIntersecting ? live.add(en.target) : live.delete(en.target));
-      if (live.size && !raf) raf = requestAnimationFrame(tick);
-    }, { rootMargin: '20% 0px 20% 0px' });
-    bands.forEach(b => io.observe(b));
   })();
 
   // navigation: hamburger drawer (mobile) + the Lab System dropdown (desktop)
