@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartFoam™ — Layer 01, the material | Rove Lab</title>
+<meta name="description" content="SmartFoam™ is the structural foam that replaces the sofa frame: 34.8 kg/m³, engineered to compress into a box, expand back into form and hold it for years. Layer 01 of the Lab System™.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D0A13;--bg-2:#120E1B;--panel:#171221;
+    --ink:#F4F1FA;--dim:#A49CB6;--faint:#968DA8;
+    --purple:#A794F0;--purple-deep:#B4A3F5;
+    --grad:linear-gradient(120deg,#F7A8C4 0%,#C9B4EC 42%,#8FC3F7 100%);
+    --line:rgba(244,241,250,.13);
+    font-size:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Urbanist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6;
+  }
+  ::selection{background:var(--purple);color:#0D0A13}
+  sup.tm2{font-size:.42em;line-height:0;vertical-align:super;letter-spacing:.02em}
+  a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid #B4A3F5;outline-offset:3px}
+  .read{font-variant-numeric:tabular-nums lining-nums}
+
+  /* ---- nav (same system as the technology page) ---- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;height:64px;
+    display:flex;align-items:center;justify-content:space-between;padding:0 5vw;
+    background:linear-gradient(180deg,rgba(13,10,19,.94),rgba(13,10,19,.72));backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{display:flex;align-items:center;gap:.9rem;text-decoration:none;color:inherit}
+  .logo img{height:14px;width:auto;display:block}
+  .logo .sep{width:1px;height:18px;background:var(--line)}
+  .logo .prod{font-weight:900;font-size:.92rem;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center}
+  .sfm{height:14px;width:auto;vertical-align:-2px;margin-right:.45rem;overflow:visible}
+  .sfm ellipse{fill:none;stroke:currentColor;stroke-width:10}
+  .nav-panel{display:flex;align-items:center;gap:clamp(.8rem,1.6vw,1.4rem)}
+  .nav-group-label{display:none}
+  .nav-sections{display:flex;gap:clamp(.8rem,1.7vw,1.5rem);list-style:none;align-items:center}
+  .nav-sections a,.nav-shop,.drop-btn{
+    color:var(--dim);text-decoration:none;font-size:.68rem;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;white-space:nowrap;transition:color .25s;background:none;border:none;cursor:pointer;
+  }
+  .nav-sections a:hover,.nav-shop:hover,.drop-btn:hover{color:var(--ink)}
+  .nav-div{width:1px;height:16px;background:var(--line);flex:none}
+  .nav-shop{color:var(--purple-deep)}
+  .nav-drop{position:relative}
+  .drop-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 0}
+  .drop-btn svg{width:12px;height:12px;transition:transform .25s}
+  .drop-btn[aria-expanded="true"]{color:var(--ink)}
+  .drop-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+  .drop-panel{
+    position:absolute;top:calc(100% + 14px);right:0;width:340px;z-index:120;
+    background:#171221;border:1px solid rgba(167,148,240,.34);box-shadow:0 24px 60px rgba(0,0,0,.6);display:none;
+  }
+  .drop-panel.open{display:block}
+  .layer-link{display:block;padding:1rem 1.2rem;text-decoration:none;border-bottom:1px solid var(--line);transition:background .2s}
+  .layer-link:last-child{border-bottom:none}
+  a.layer-link:hover{background:rgba(167,148,240,.1)}
+  .layer-link .ln{display:block;font-size:max(10px,.55rem);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--purple-deep)}
+  .layer-link b{display:block;margin-top:.3rem;font-size:.92rem;font-weight:800;color:var(--ink);letter-spacing:.01em}
+  .layer-link em{display:block;margin-top:.2rem;font-size:.78rem;font-style:normal;color:var(--dim);line-height:1.45}
+  .layer-link.is-soon{opacity:.55;cursor:default}
+  .layer-link.is-soon b{color:var(--dim)}
+  .layer-link.is-current{background:rgba(167,148,240,.12)}
+  .layer-link.is-current b::after{content:"You are here";margin-left:.5rem;font-size:max(9px,.5rem);font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--purple-deep)}
+  .layer-link i{
+    font-style:normal;font-size:max(9px,.5rem);font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--purple-deep);border:1px solid rgba(167,148,240,.4);padding:.1rem .3rem;margin-left:.4rem;vertical-align:2px;
+  }
+  .burger{display:none;background:none;border:none;cursor:pointer;padding:11px;margin-right:-11px;min-width:44px;min-height:44px}
+  .burger span{display:block;width:22px;height:2px;background:var(--ink);transition:transform .3s,opacity .2s}
+  .burger span + span{margin-top:5px}
+  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav-scrim{position:fixed;inset:0;z-index:98;background:rgba(6,4,10,.6);backdrop-filter:blur(2px)}
+
+  /* ---- shared page furniture ---- */
+  main{padding-top:64px}
+  section{position:relative;padding:7rem 5vw}
+  .wrap{max-width:1120px;margin:0 auto}
+  .eyebrow{font-size:max(10px,.7rem);font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.2rem}
+  .h-giant{font-size:clamp(2.2rem,5.5vw,4.4rem);font-weight:900;line-height:1;letter-spacing:-.02em;text-transform:uppercase;text-wrap:balance}
+  .h2{font-size:clamp(1.7rem,3.6vw,2.8rem);font-weight:900;line-height:1.1;letter-spacing:-.02em;text-wrap:balance}
+  .h3{font-size:1.05rem;font-weight:800;letter-spacing:-.005em}
+  .soft{color:var(--dim)}
+  .lead{margin-top:1.4rem;font-size:1.05rem;color:var(--dim);max-width:64ch;line-height:1.75;text-wrap:pretty}
+  .lead em{color:var(--purple-deep);font-style:normal;font-weight:600}
+  p.body{color:var(--dim);line-height:1.75;max-width:68ch;text-wrap:pretty}
+  p.body + p.body{margin-top:1rem}
+  p.body em{color:var(--purple-deep);font-style:normal;font-weight:600}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+  .btn-primary{
+    display:inline-block;background:#6F56CB;color:#fff;font-weight:800;border:none;border-radius:2px;
+    padding:1rem 2.4rem;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;
+    transition:background .2s,transform .2s;
+  }
+  .btn-primary:hover{background:#5E48C8;transform:translateY(-2px)}
+
+  /* ---- hero ---- */
+  .hero{padding-top:9rem;padding-bottom:5rem;border-bottom:1px solid var(--line);background:
+    radial-gradient(ellipse 70% 60% at 15% 0%, rgba(120,96,210,.16), transparent 70%),var(--bg)}
+  .crumb{display:flex;align-items:center;gap:.5rem;font-size:max(10px,.62rem);font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-bottom:1.6rem}
+  .crumb a{color:var(--faint);text-decoration:none}
+  .crumb a:hover{color:var(--ink)}
+  .hero h1{margin-bottom:1.4rem}
+  .hero .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-split{display:grid;grid-template-columns:1.25fr .75fr;gap:3rem;align-items:end;margin-top:2.6rem}
+  .keyfacts{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+  .keyfact{background:var(--panel);padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:baseline;gap:1rem}
+  .keyfact span{font-size:max(10px,.62rem);font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .keyfact b{font-size:1.05rem;font-weight:800;color:var(--ink)}
+
+  /* ---- mechanism blocks ---- */
+  .mech{border-top:1px solid var(--line);padding-top:3rem;margin-top:3rem}
+  .mech:first-of-type{border-top:none;padding-top:0;margin-top:0}
+  .mech-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+  .mech-head .k{font-size:max(10px,.6rem);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--purple-deep)}
+  .mech-grid{display:grid;grid-template-columns:1fr 300px;gap:3rem;align-items:center}
+  .viz{background:var(--panel);border:1px solid var(--line);padding:1.6rem;min-height:170px;display:flex;align-items:center;justify-content:center}
+  /* cell field */
+  .cells{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;width:100%}
+  .cells i{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 34% 30%,#fff,#CDBDF2 60%,#9F8BE0);border:1px solid rgba(190,170,255,.5)}
+  /* the support curve: the one place the signature gradient earns its keep */
+  .curvewrap{width:100%}
+  .curvewrap svg{width:100%;height:auto;overflow:visible}
+  .curve-line{fill:none;stroke:url(#cg);stroke-width:3;stroke-linecap:round}
+  .curve-ax{stroke:var(--line);stroke-width:1}
+  .curve-t{font-size:8px;fill:var(--faint);font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+  .curve-d{fill:#fff;stroke:var(--purple-deep);stroke-width:2}
+  /* compression bar */
+  .comp{display:flex;align-items:flex-end;gap:1rem;width:100%;justify-content:center}
+  .comp i{display:block;width:52px;background:#DDD3F2;border:1px solid rgba(190,170,255,.55);border-radius:4px}
+  .comp .arrow{color:var(--purple-deep);font-weight:900;font-size:1.4rem;align-self:center}
+
+  /* ---- data table ---- */
+  .data{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .cmp{margin-top:2.6rem;border:1px solid var(--line);overflow-x:auto}
+  .cmp table{width:100%;border-collapse:collapse;min-width:640px}
+  .cmp th,.cmp td{padding:1rem 1.3rem;text-align:left;border-bottom:1px solid var(--line);font-size:.92rem;vertical-align:top}
+  .cmp thead th{background:var(--panel);font-size:max(10px,.62rem);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .cmp thead th.sf{color:var(--purple-deep)}
+  .cmp tbody th{font-weight:700;color:var(--ink);width:26%}
+  .cmp td.trad{color:var(--dim)}
+  .cmp td.sf{color:var(--ink);font-weight:600;background:rgba(167,148,240,.07)}
+  .cmp tbody tr:last-child th,.cmp tbody tr:last-child td{border-bottom:none}
+  .certs{display:flex;flex-wrap:wrap;gap:1rem 2.2rem;margin-top:2rem}
+  .certs span{color:var(--dim);font-size:.88rem;font-weight:600}
+  .certs b{color:var(--ink);font-weight:800}
+
+  /* ---- next layer ---- */
+  .next{border-top:1px solid var(--line)}
+  .next-card{
+    display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;
+    background:var(--panel);border:1px solid rgba(167,148,240,.34);padding:2.2rem;margin-top:2rem;
+  }
+  .next-card .ln{font-size:max(10px,.6rem);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--purple-deep)}
+  .next-card h3{font-size:1.5rem;font-weight:900;margin:.4rem 0 .3rem}
+  .next-card p{color:var(--dim);font-size:.92rem;max-width:52ch}
+  .next-card .soon{font-size:max(10px,.58rem);font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--purple-deep);border:1px solid rgba(167,148,240,.4);padding:.4rem .7rem;white-space:nowrap}
+
+  footer{
+    border-top:1px solid var(--line);padding:3rem 5vw;display:flex;flex-wrap:wrap;gap:1.5rem;
+    align-items:center;justify-content:space-between;color:var(--faint);font-size:.75rem;letter-spacing:.08em;
+  }
+  footer .logo .prod{font-size:.9rem}
+
+  @media(max-width:900px){
+    .hero-split{grid-template-columns:1fr;gap:2rem}
+    .mech-grid{grid-template-columns:1fr;gap:1.6rem}
+  }
+  @media(max-width:820px){
+    section{padding:5rem 6vw}
+    .burger{display:flex;flex-direction:column;justify-content:center;align-items:center}
+    .nav-panel{
+      position:fixed;top:64px;left:0;right:0;z-index:99;display:block;
+      background:#120E1B;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+      padding:1.4rem 6vw 2rem;max-height:calc(100dvh - 64px);overflow-y:auto;
+      transform:translateY(-108%);transition:transform .35s cubic-bezier(.16,1,.3,1);
+    }
+    .nav-panel.open{transform:none}
+    .nav-group-label{display:block;font-size:max(10px,.58rem);font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-bottom:.9rem}
+    .nav-sections{display:block}
+    .nav-sections a{display:block;padding:.85rem 0;font-size:.82rem;color:var(--ink)}
+    .nav-div{display:none}
+    .nav-drop{margin-top:1.8rem;padding-top:1.6rem;border-top:1px solid var(--line)}
+    .drop-btn{display:none}
+    .drop-panel{position:static;width:auto;display:block;background:none;border:none;box-shadow:none}
+    .layer-link{padding:.9rem 0}
+    .nav-shop{display:block;margin-top:1.8rem;padding:1rem;text-align:center;background:#6F56CB;color:#fff;font-size:.78rem;border-radius:2px}
+    .logo .prod-suffix{display:none}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *{animation:none !important;transition:none !important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="./" aria-label="Rove Lab — SmartFoam Technology">
+    <img src="assets/rovelab-logo-white.png" alt="Rove Lab">
+    <span class="sep"></span>
+    <span class="prod"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>SmartFoam™<span class="prod-suffix"> · Technology</span></span>
+  </a>
+
+  <button class="burger" id="burger" aria-expanded="false" aria-controls="navPanel" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="nav-panel" id="navPanel">
+    <p class="nav-group-label">On this page</p>
+    <ul class="nav-sections">
+      <li><a href="#what">What it is</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#data">Test data</a></li>
+      <li><a href="#vs">Vs memory foam</a></li>
+      <li><a href="./#faq">FAQ</a></li>
+    </ul>
+    <span class="nav-div" aria-hidden="true"></span>
+    <div class="nav-drop">
+      <p class="nav-group-label">The Lab System™</p>
+      <button class="drop-btn" id="dropBtn" aria-expanded="false" aria-controls="dropPanel">
+        The Lab System™
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="drop-panel" id="dropPanel">
+        <span class="layer-link is-current" aria-current="page">
+          <span class="ln">Layer 01 · The material</span>
+          <b>SmartFoam™</b>
+          <em>The foundational technology. Everything starts here.</em>
+        </span>
+        <span class="layer-link is-soon" aria-disabled="true">
+          <span class="ln">Layer 02 · The structure</span>
+          <b>Boneless Design™ <i>Soon</i></b>
+          <em>The structural breakthrough the material allows.</em>
+        </span>
+        <span class="layer-link is-soon" aria-disabled="true">
+          <span class="ln">Layer 03 · The system</span>
+          <b>Lab System™ <i>Soon</i></b>
+          <em>The end-to-end experience the technology enables.</em>
+        </span>
+        <span class="layer-link is-soon" aria-disabled="true">
+          <span class="ln">Layer 04 · The product</span>
+          <b>Lab Boneless Couch <i>Soon</i></b>
+          <em>The expression of the system. What the customer buys.</em>
+        </span>
+      </div>
+    </div>
+    <a class="nav-shop" href="https://rovelab.ca/collections/modular-sofa" target="_blank" rel="noopener">Shop →</a>
+  </div>
+</nav>
+<div class="nav-scrim" id="navScrim" hidden></div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="crumb"><a href="./">SmartFoam™ Technology</a> <span aria-hidden="true">/</span> <span>The Lab System™</span> <span aria-hidden="true">/</span> <span>Layer 01</span></p>
+      <p class="eyebrow">Layer 01 · The material</p>
+      <h1 class="h-giant">SmartFoam<span class="grad">™</span></h1>
+      <p class="lead">The foundational technology. Everything starts here: a proprietary high-density foam engineered to do the job a wooden frame used to do, and to survive being squeezed into a box on the way to your door.</p>
+      <div class="hero-split">
+        <p class="body"><em>Not foam. SmartFoam™.</em> Ordinary sofa foam is cushioning: it sits on top of a structure someone else built. SmartFoam™ <em>is</em> the structure. It carries load, holds geometry, and returns to its engineered shape after being compressed to a fraction of its size. That single difference is what makes a couch-in-a-box possible, and it is why every other layer of the Lab System™ exists.</p>
+        <div class="keyfacts">
+          <div class="keyfact"><span>Core density</span><b class="read">34.8 kg/m³</b></div>
+          <div class="keyfact"><span>Support range</span><b class="read">231→466 N</b></div>
+          <div class="keyfact"><span>Internal frame</span><b>None</b></div>
+          <div class="keyfact"><span>Guarantee</span><b>Lifetime</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT IT IS -->
+  <section id="what">
+    <div class="wrap reveal">
+      <p class="eyebrow">The definition</p>
+      <h2 class="h2">A structural foam, not a comfort layer.</h2>
+      <p class="body" style="margin-top:1.4rem">Foam in furniture has always been the soft part. It goes on top of the wood, the metal and the springs, and its only job is to feel nice for a few years until it flattens. The frame underneath does the real work, and the frame is also what makes a sofa heavy, awkward through a doorway, expensive to ship and impossible to compress.</p>
+      <p class="body">SmartFoam™ was engineered to take that job away from the frame. At <span class="read">34.8 kg/m³</span> (ASTM D3574-17) it is dense enough to be structural, and tuned so the density is doing work rather than simply making the sofa hard. It holds the seat height, the back angle and the arm geometry with nothing rigid inside. We call the architecture it enables <em>Boneless Design™</em>: zero-frame construction, where the material and the structure are the same object.</p>
+      <p class="body">This is also why "memory foam" is the wrong comparison, and why we never use the term for our own material. Memory foam is a slow-recovery cushioning material, typically 50 to 90 kg/m³, designed to sink and mould around a body and stay sunk for a moment. SmartFoam™ is designed to do the opposite: respond, carry and <em>come back</em>, immediately and repeatedly.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">How it works</p>
+        <h2 class="h2">Three behaviours, engineered at the cell.</h2>
+        <p class="lead">SmartFoam™ is not one trick. It is three engineered behaviours that have to hold at the same time, in the same material, for a decade.</p>
+      </div>
+
+      <div style="margin-top:3.4rem">
+        <div class="mech reveal">
+          <div class="mech-head"><span class="k">Behaviour 01</span><h3 class="h3">Adaptive Cell Structure</h3></div>
+          <div class="mech-grid">
+            <div>
+              <p class="body">An open-cell architecture: every cell is a tiny structural member with air in it, connected to its neighbours. Open cells let air move through the material instead of trapping it, which is why the foam breathes rather than holding heat the way a closed-cell block does.</p>
+              <p class="body">Load applied at any point is not absorbed by that point alone. It is distributed across the cells around it, which is what lets a soft-feeling material behave like a structure. Take the load away and the cell walls return the geometry they started with. The cell is the smallest part of the sofa, and every one of them is doing its share.</p>
+            </div>
+            <div class="viz">
+              <div class="cells" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mech reveal">
+          <div class="mech-head"><span class="k">Behaviour 02</span><h3 class="h3">Progressive Support Curve</h3></div>
+          <div class="mech-grid">
+            <div>
+              <p class="body">Comfort and support usually pull against each other: soft foam feels good and gives up, firm foam supports and feels like a bench. SmartFoam™ resolves it by making resistance <em>rise with load</em> instead of staying flat.</p>
+              <p class="body">Measured by indentation force deflection, the same block reads <span class="read">231 N</span> at 25% compression, <span class="read">337 N</span> at 50%, and <span class="read">466 N</span> at 65%. In practice: soft at first touch, balanced when you sit, firm when you lean all the way back. The material meets you with more the further in you go, which is why it can be both the cushion and the frame.</p>
+            </div>
+            <div class="viz">
+              <div class="curvewrap" aria-hidden="true">
+                <svg viewBox="0 0 260 130" preserveAspectRatio="none">
+                  <defs><linearGradient id="cg" x1="0" y1="1" x2="1" y2="0">
+                    <stop offset="0" stop-color="#F7A8C4"/><stop offset=".5" stop-color="#C9B4EC"/><stop offset="1" stop-color="#8FC3F7"/>
+                  </linearGradient></defs>
+                  <line class="curve-ax" x1="26" y1="8" x2="26" y2="106"/>
+                  <line class="curve-ax" x1="26" y1="106" x2="252" y2="106"/>
+                  <path class="curve-line" d="M26,96 C86,90 116,66 146,48 C182,26 222,14 250,8"/>
+                  <circle class="curve-d" cx="86" cy="90" r="3.5"/>
+                  <circle class="curve-d" cx="146" cy="48" r="3.5"/>
+                  <circle class="curve-d" cx="250" cy="8" r="3.5"/>
+                  <text class="curve-t" x="30" y="120">231 N</text>
+                  <text class="curve-t" x="124" y="120">337 N</text>
+                  <text class="curve-t" x="216" y="120">466 N</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mech reveal">
+          <div class="mech-head"><span class="k">Behaviour 03</span><h3 class="h3">Expansion Memory</h3></div>
+          <div class="mech-grid">
+            <div>
+              <p class="body">A sofa that ships in a box has to survive an insult no traditional sofa is asked to survive: being compressed to a fraction of its volume, held there for weeks in transit, and then asked to be furniture again.</p>
+              <p class="body">Expansion Memory is the engineered ability to do exactly that. The material takes the compression without the cell walls taking permanent damage, and on release it returns to the shape it was built to hold, not an approximation of it. This is what Compression Technology depends on, and it is the reason a full sectional can arrive as a box one person carries upstairs with no appointment, no tools and no freight truck.</p>
+            </div>
+            <div class="viz">
+              <div class="comp" aria-hidden="true">
+                <i style="height:22px"></i>
+                <span class="arrow">→</span>
+                <i style="height:110px"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEST DATA -->
+  <section class="data" id="data">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">SGS laboratory testing · March 2026</p>
+        <h2 class="h2">Every claim on this page, measured.</h2>
+        <p class="lead">SmartFoam™ is tested to contract-grade standards, the ones written for furniture that lives in airports and hotel lobbies, not living rooms.</p>
+      </div>
+      <div class="cmp reveal">
+        <table>
+          <thead>
+            <tr><th scope="col">Standard</th><th scope="col">What it measures</th><th scope="col" class="sf">SmartFoam™ result</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">ASTM D3574-17</th><td class="trad">Core density</td><td class="sf read">34.8 kg/m³</td></tr>
+            <tr><th scope="row">IFD 25 / 50 / 65%</th><td class="trad">Progressive support under load</td><td class="sf read">231 → 337 → 466 N</td></tr>
+            <tr><th scope="row">ASTM D4157 · Wyzenbeek</th><td class="trad">Abrasion resistance of the cover</td><td class="sf read">70,000+ cycles</td></tr>
+            <tr><th scope="row">BIFMA certified</th><td class="trad">Impact cycles, commercial grade</td><td class="sf read">100,000+ cycles</td></tr>
+            <tr><th scope="row">ISO 13935-1</th><td class="trad">Seam strength</td><td class="sf read">1,088 N</td></tr>
+            <tr><th scope="row">ISO 14184-1</th><td class="trad">Formaldehyde content</td><td class="sf">Zero detected</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="certs reveal">
+        <span><b>OEKO-TEX®</b> certified</span>
+        <span><b>100%</b> vegan</span>
+        <span><b>Up to 6×</b> less carbon per shipment</span>
+        <span><b>Lifetime</b> Guarantee</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- VS MEMORY FOAM -->
+  <section id="vs">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">The comparison people actually ask for</p>
+        <h2 class="h2">Memory foam vs SmartFoam™.</h2>
+        <p class="lead">They are both foam in the way a rope and a cable are both fibres. The job is different, so the engineering is different.</p>
+      </div>
+      <div class="cmp reveal">
+        <table>
+          <thead>
+            <tr><th scope="col">Characteristics</th><th scope="col">Memory foam</th><th scope="col" class="sf">SmartFoam™</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Job on the sofa</th><td class="trad">Cushioning, on top of a frame</td><td class="sf">Structure. It replaces the frame</td></tr>
+            <tr><th scope="row">Typical density</th><td class="trad read">50-90 kg/m³</td><td class="sf read">34.8 kg/m³, engineered for structural support</td></tr>
+            <tr><th scope="row">Response to load</th><td class="trad">Slow recovery: sinks and holds the impression</td><td class="sf">Progressive: resistance rises with load, returns immediately</td></tr>
+            <tr><th scope="row">Compressible for shipping</th><td class="trad">Not as a structural sofa</td><td class="sf">Yes. Expansion Memory returns the engineered shape</td></tr>
+            <tr><th scope="row">Airflow</th><td class="trad">Traps heat by design</td><td class="sf">Open-cell: air moves through the material</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT LAYER -->
+  <section class="next">
+    <div class="wrap reveal">
+      <p class="eyebrow">Next layer</p>
+      <h2 class="h2">The material makes a structure possible.</h2>
+      <p class="lead">SmartFoam™ is Layer 01. What it unlocks is a sofa with nothing rigid inside it at all.</p>
+      <div class="next-card">
+        <div>
+          <span class="ln">Layer 02 · The structure</span>
+          <h3>Boneless Design™</h3>
+          <p>The structural breakthrough the material allows: no wood, no metal, no springs. Zero-Frame Construction.</p>
+        </div>
+        <span class="soon">Page coming soon</span>
+      </div>
+      <div style="margin-top:2.6rem">
+        <a class="btn-primary" href="https://rovelab.ca/collections/modular-sofa" target="_blank" rel="noopener">Find your SmartFoam™</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <a class="logo" href="./">
+    <img src="assets/rovelab-logo-white.png" alt="Rove Lab">
+    <span class="sep"></span>
+    <span class="prod">SmartFoam™</span>
+  </a>
+  <div>© 2026 Rove Lab Inc. · Not foam. SmartFoam™.</div>
+</footer>
+
+<script>
+  // superscript every trademark sign in visible text
+  (function () {
+    var tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), hits = [], n;
+    while ((n = tw.nextNode())) {
+      var tag = n.parentElement.tagName;
+      if (n.nodeValue.indexOf('™') > -1 && tag !== 'SUP' && tag !== 'SCRIPT' && tag !== 'STYLE') hits.push(n);
+    }
+    hits.forEach(function (node) {
+      var frag = document.createDocumentFragment(), parts = node.nodeValue.split('™');
+      parts.forEach(function (p, i) {
+        frag.appendChild(document.createTextNode(p));
+        if (i < parts.length - 1) {
+          var s = document.createElement('sup'); s.className = 'tm2'; s.textContent = '™'; frag.appendChild(s);
+        }
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+  })();
+
+  // reveals
+  (function () {
+    var reveals = [].slice.call(document.querySelectorAll('.reveal'));
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      reveals.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(function (el) { io.observe(el); });
+  })();
+
+  // navigation: hamburger drawer (mobile) + the Lab System dropdown (desktop)
+  (function () {
+    var burger = document.getElementById('burger'),
+        panel = document.getElementById('navPanel'),
+        scrim = document.getElementById('navScrim'),
+        dropBtn = document.getElementById('dropBtn'),
+        dropPanel = document.getElementById('dropPanel');
+    if (!burger || !panel) return;
+
+    function setDrawer(open) {
+      panel.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      scrim.hidden = !open;
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    function setDrop(open) {
+      if (!dropPanel) return;
+      dropPanel.classList.toggle('open', open);
+      dropBtn.setAttribute('aria-expanded', String(open));
+    }
+
+    burger.addEventListener('click', function () { setDrawer(burger.getAttribute('aria-expanded') !== 'true'); });
+    scrim.addEventListener('click', function () { setDrawer(false); });
+    panel.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { setDrawer(false); }); });
+
+    if (dropBtn) {
+      dropBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setDrop(dropPanel.className.indexOf('open') === -1);
+      });
+      document.addEventListener('click', function (e) {
+        if (!dropPanel.contains(e.target) && e.target !== dropBtn) setDrop(false);
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      setDrop(false);
+      if (burger.getAttribute('aria-expanded') === 'true') { setDrawer(false); burger.focus(); }
+    });
+    matchMedia('(min-width: 821px)').addEventListener('change', function (e) { if (e.matches) setDrawer(false); });
+  })();
+</script>
+</body>
+</html>
