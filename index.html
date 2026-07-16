@@ -221,12 +221,14 @@
   /* .statement sets position:relative on its own and is declared later in this sheet, so at equal
      specificity it was quietly winning and the hero never pinned. two classes outrank one. */
   .statement.pinned{position:sticky}
-  /* the spacer is the hold: the distance the page scrolls while the pinned section stays put.
+  /* the spacer is the hold: the distance the page scrolls while the pinned section stays put,
+     and the run-up before the curtain appears at all.
      it must be TALLER than the curtain, never shorter. the curtain hangs 90vh above its section,
      so a 60vh spacer would leave it hanging 30vh into the first viewport — the light dome sitting
-     over the hero at page load. at exactly 90vh it clears by 1px, which rounding can eat; 100vh
-     buys the margin. it is also the empty run the curtain sweeps over instead of live content. */
-  .spacer{height:100vh}
+     over the hero at page load. at 100vh it cleared the fold by only 91px, so the takeover began
+     after ~91px of scroll: the hero was gone before it had been read. 180vh gives 90vh of hero
+     before the curtain shows an edge, and 180vh of hold once it does. */
+  .spacer{height:180vh}
   .curtain{
     position:absolute;left:0;width:100%;height:90vh;
     top:calc(-90vh + 1px);   /* the 1px overlap: without it the seam shows a hairline */
