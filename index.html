@@ -165,36 +165,6 @@
     background:rgba(23,18,33,.85);padding:.3rem .55rem;border:1px solid rgba(167,148,240,.4);
   }
 
-  /* 03 — expanding block loop */
-  .reveal-scene{
-    position:relative;margin-top:3.2rem;max-width:760px;height:300px;overflow:hidden;
-    background:radial-gradient(ellipse 70% 90% at 50% 0%, #251C3B, var(--panel) 72%);
-    border:1px solid rgba(167,148,240,.3);box-shadow:0 24px 60px rgba(0,0,0,.5);
-  }
-  .exblock{
-    position:absolute;left:50%;bottom:44px;width:min(340px,60%);height:170px;
-    transform:translateX(-50%) scaleY(.12);transform-origin:50% 100%;
-    background:
-      radial-gradient(circle, rgba(134,116,212,.35) 0 2.5px, transparent 3.5px) 0 0/18px 18px,
-      radial-gradient(circle, rgba(134,116,212,.22) 0 2px, transparent 3px) 9px 9px/18px 18px,
-      #DDD3F2;
-    border:1px solid rgba(190,170,255,.55);border-radius:14px;
-    box-shadow:0 0 50px rgba(150,125,240,.3);
-    animation:expand 7s cubic-bezier(.16,1,.3,1) infinite;
-  }
-  @keyframes expand{
-    0%{transform:translateX(-50%) scaleY(.12)}
-    6%{transform:translateX(-50%) scaleY(.12)}
-    16%{transform:translateX(-50%) scaleY(1.05)}
-    22%{transform:translateX(-50%) scaleY(.985)}
-    27%{transform:translateX(-50%) scaleY(1)}
-    76%{transform:translateX(-50%) scaleY(1);opacity:1}
-    82%{opacity:0;transform:translateX(-50%) scaleY(1)}
-    83%{opacity:0;transform:translateX(-50%) scaleY(.12)}
-    90%{opacity:1;transform:translateX(-50%) scaleY(.12)}
-    100%{transform:translateX(-50%) scaleY(.12)}
-  }
-  .reveal-scene .ground{position:absolute;bottom:44px;left:8%;right:8%;height:1px;background:rgba(244,241,250,.22)}
 
   /* 04 — science columns */
   .cell3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:3.4rem}
@@ -213,11 +183,28 @@
   .cellviz.exp .arrow{width:auto;border:none;background:none;color:var(--purple-deep);font-weight:900}
   .curvelab{font-size:max(10px,.55rem);font-weight:800;letter-spacing:.14em;color:var(--purple-deep);text-transform:uppercase}
 
-  /* capability list — what SmartFoam does (section 02) */
-  .caps{margin-top:2.8rem;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);max-width:880px}
-  .cap{background:var(--panel);padding:1.5rem 1.8rem}
-  .cap h3{font-size:1rem;font-weight:800;margin-bottom:.32rem}
-  .cap p{color:var(--dim);font-size:.9rem;line-height:1.6}
+  /* what SmartFoam does: real unboxing footage left, expandable points right */
+  .cap-split{
+    margin-top:3rem;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+    gap:clamp(1.5rem,4vw,3.5rem);align-items:center;
+  }
+  .cap-video{position:relative;border:1px solid rgba(167,148,240,.3);overflow:hidden;background:var(--panel);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+  .cap-video video{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
+  .caps{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+  .cap{background:var(--panel)}
+  .cap summary{
+    list-style:none;cursor:pointer;padding:1.3rem 3.2rem 1.3rem 1.6rem;position:relative;
+  }
+  .cap summary::-webkit-details-marker{display:none}
+  .cap summary h3{font-size:1rem;font-weight:800;display:inline}
+  .cap summary::after{
+    content:"+";position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);
+    color:var(--purple-deep);font-weight:900;font-size:1.25rem;line-height:1;
+  }
+  .cap[open] summary::after{content:"–"}
+  .cap[open] summary{padding-bottom:.5rem}
+  .cap p{color:var(--dim);font-size:.9rem;line-height:1.65;padding:0 1.6rem 1.4rem;max-width:62ch}
+  @media(max-width:820px){ .cap-split{grid-template-columns:1fr} }
 
   /* limitations — the problem, as scannable bullets (section 03) */
   .limits-intro{margin-top:1.8rem;font-size:.72rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--purple-deep)}
@@ -694,24 +681,28 @@
     <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span class="soft">to replace the frame.</span></h2>
     <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em>, a proprietary high-density foam system designed to:</p>
   </div>
-  <div class="caps reveal">
-    <div class="cap">
-      <h3>Compress for the couch-in-a-box experience</h3>
-      <p>Designed for compact shipping and easier moving.</p>
+  <!-- video left, title + expandable explanation right (per the review) -->
+  <div class="cap-split reveal">
+    <div class="cap-video">
+      <video src="assets/unboxing.mp4" poster="assets/unboxing-poster.jpg"
+             data-scrollplay muted loop playsinline preload="metadata"
+             aria-label="Unboxing a Rove Lab couch: the module expands into full form"></video>
+      <span class="hud tl">Unboxing · real time</span>
     </div>
-    <div class="cap">
-      <h3>Expand into full form in minutes</h3>
-      <p>Expands rapidly after unboxing, with tool-free assembly.</p>
+    <div class="caps">
+      <details class="cap" open>
+        <summary><h3>Compress for the couch-in-a-box experience</h3></summary>
+        <p>Designed for compact shipping and easier moving. A full sectional leaves the lab as a box one person can carry.</p>
+      </details>
+      <details class="cap">
+        <summary><h3>Expand into full form in minutes</h3></summary>
+        <p>Expands rapidly after unboxing, with tool-free assembly. No screws, no hardware, no instructions to decode.</p>
+      </details>
+      <details class="cap">
+        <summary><h3>Hold that form for years</h3></summary>
+        <p>Delivers long-term comfort, support and durability. Expansion Memory returns SmartFoam™ to its engineered shape, sit after sit.</p>
+      </details>
     </div>
-    <div class="cap">
-      <h3>Hold that form for years</h3>
-      <p>Delivers long-term comfort, support and durability.</p>
-    </div>
-  </div>
-  <div class="reveal-scene reveal">
-    <span class="hud tl">Expansion Memory</span>
-    <div class="ground"></div>
-    <div class="exblock" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -1145,25 +1136,26 @@
     }, { threshold: 0 }).observe(hero);
   })();
 
-  // the film plays itself when it scrolls into view, and pauses when it leaves.
-  // no chrome: the frame is the player.
+  // videos play themselves when scrolled into view and pause when they leave.
+  // no chrome: the frame is the player. covers the film and the unboxing footage.
   (function () {
-    const film = document.getElementById('filmVideo');
-    if (!film) return;
+    const vids = [...document.querySelectorAll('#filmVideo, video[data-scrollplay]')];
+    if (!vids.length) return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      // without autoplay these users would have no way to watch it at all
-      film.controls = true;
-      film.removeAttribute('aria-hidden');
+      // without autoplay these users would have no way to watch them at all
+      vids.forEach(v => { v.controls = true; v.removeAttribute('aria-hidden'); });
       return;
     }
-    const fio = new IntersectionObserver(entries => {
+    const vio = new IntersectionObserver(entries => {
       entries.forEach(en => {
-        if (en.isIntersecting) film.play().catch(() => { film.controls = true; });
-        else film.pause();
+        const v = en.target;
+        if (en.isIntersecting) v.play().catch(() => { v.controls = true; });
+        else v.pause();
       });
     }, { threshold: 0.35 });
-    fio.observe(film);
+    vids.forEach(v => vio.observe(v));
   })();
+
 
   // scroll-scrubbed scenes: press story, wordmark marquee, rotating carousel.
   // driven by rAF while a scene is on screen (started/stopped by IntersectionObserver),
