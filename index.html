@@ -29,27 +29,42 @@
   ::selection{background:var(--purple);color:#0D0A13}
   sup.tm2{font-size:max(7px,.42em);line-height:0;vertical-align:super;letter-spacing:.02em}
 
-  /* fluid brand glow (after cinetica.studio): three light-purple radial blobs fixed behind
-     the content, drifting and swelling as --fp (lerped scroll progress, set by JS) runs 0..1.
-     radial falloff is already soft, so no filter:blur and no paint cost; transforms only.
-     the banded sections keep their solid backgrounds, so the glow breathes in the gaps. */
+  /* fluid brand glow (after cinetica.studio's clients band, where a sticky viewport-sized
+     shader fills the screen behind the content). three light-purple fields fixed behind the
+     page: the outer <i> carries the scroll-driven travel + expansion (--fp, lerped by JS),
+     its ::before carries a slow idle drift, so the field moves even while the page rests,
+     the way the reference's shader does. radial falloff is soft by nature: no filter:blur,
+     transforms only. */
   .flow{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-  .flow i{position:absolute;display:block;border-radius:50%;will-change:transform}
+  .flow i{position:absolute;display:block;will-change:transform}
+  .flow i::before{content:"";position:absolute;inset:0;border-radius:50%}
   .flow .f1{
-    width:74vmax;height:74vmax;left:-20vmax;top:-10vmax;
-    background:radial-gradient(circle, rgba(183,163,245,.17), transparent 66%);
-    transform:translate3d(calc(var(--fp,0)*11vmax), calc(var(--fp,0)*30vmax), 0) scale(calc(.88 + var(--fp,0)*.55));
+    width:96vmax;height:96vmax;left:-28vmax;top:-16vmax;
+    transform:translate3d(calc(var(--fp,0)*20vmax), calc(var(--fp,0)*34vmax), 0) scale(calc(.72 + var(--fp,0)*.85));
+  }
+  .flow .f1::before{
+    background:radial-gradient(circle, rgba(195,174,247,.19), transparent 64%);
+    animation:flowdrift1 19s ease-in-out infinite alternate;
   }
   .flow .f2{
-    width:60vmax;height:60vmax;right:-24vmax;top:20vmax;
-    background:radial-gradient(circle, rgba(201,180,236,.13), transparent 64%);
-    transform:translate3d(calc(var(--fp,0)*-14vmax), calc(var(--fp,0)*-16vmax), 0) scale(calc(1 + var(--fp,0)*.4));
+    width:78vmax;height:78vmax;right:-30vmax;top:6vmax;
+    transform:translate3d(calc(var(--fp,0)*-24vmax), calc(var(--fp,0)*-10vmax), 0) scale(calc(.9 + var(--fp,0)*.55));
+  }
+  .flow .f2::before{
+    background:radial-gradient(circle, rgba(205,185,240,.13), transparent 62%);
+    animation:flowdrift2 23s ease-in-out infinite alternate;
   }
   .flow .f3{
-    width:50vmax;height:50vmax;left:28vw;bottom:-28vmax;
-    background:radial-gradient(circle, rgba(143,195,247,.09), transparent 62%);
-    transform:translate3d(calc(var(--fp,0)*-9vmax), calc(var(--fp,0)*-24vmax), 0) scale(calc(.95 + var(--fp,0)*.3));
+    width:64vmax;height:64vmax;left:22vw;bottom:-34vmax;
+    transform:translate3d(calc(var(--fp,0)*-10vmax), calc(var(--fp,0)*-30vmax), 0) scale(calc(.85 + var(--fp,0)*.6));
   }
+  .flow .f3::before{
+    background:radial-gradient(circle, rgba(143,195,247,.10), transparent 60%);
+    animation:flowdrift3 27s ease-in-out infinite alternate;
+  }
+  @keyframes flowdrift1{from{transform:translate(-4%,-3%) scale(1)}to{transform:translate(5%,4%) scale(1.1)}}
+  @keyframes flowdrift2{from{transform:translate(4%,-4%) scale(1.06)}to{transform:translate(-5%,3%) scale(.96)}}
+  @keyframes flowdrift3{from{transform:translate(-3%,4%) scale(.98)}to{transform:translate(4%,-5%) scale(1.08)}}
 
   .grain{
     position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:90;
