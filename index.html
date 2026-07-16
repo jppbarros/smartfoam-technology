@@ -261,12 +261,17 @@
   /* 05 — oversized numbers */
   .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.1rem;margin-top:3.4rem}
   .numtile{background:var(--panel);border:1px solid var(--line);padding:2rem 1.8rem;box-shadow:0 14px 36px rgba(0,0,0,.35)}
-  .numtile b{
-    display:block;font-size:clamp(2.2rem,3.6vw,3.2rem);font-weight:900;letter-spacing:-.02em;line-height:1;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  /* test name leads, the figure supports it (per the GEO review) */
+  .numtile .std{
+    display:block;font-size:1.28rem;font-weight:800;letter-spacing:.01em;color:var(--ink);
+    font-variant-numeric:tabular-nums;line-height:1.2;
   }
-  .numtile .std{display:block;margin-top:.5rem;font-size:max(10px,.55rem);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
-  .numtile p{margin-top:.6rem;font-size:.9rem;color:var(--ink);font-weight:600}
+  .numtile .what{display:block;margin-top:.3rem;font-size:max(10px,.6rem);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--purple-deep)}
+  .numtile b{
+    display:block;margin-top:1rem;font-size:1.1rem;font-weight:800;letter-spacing:0;line-height:1;
+    color:var(--purple-deep);font-variant-numeric:tabular-nums;
+  }
+  .numtile p{margin-top:.6rem;font-size:.9rem;color:var(--dim);font-weight:500;line-height:1.55}
 
   /* 06 — four unlocks */
   .poss-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:3.4rem}
@@ -325,6 +330,13 @@
     transition:background .2s,transform .2s,box-shadow .2s;
   }
   .btn-primary:hover{background:#5E48C8;transform:translateY(-2px);box-shadow:0 12px 44px rgba(140,110,230,.5)}
+  .cta-actions{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+  .btn-ghost{
+    background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:2px;
+    padding:1rem 2.6rem;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;
+    cursor:pointer;transition:border-color .2s,color .2s;
+  }
+  .btn-ghost:hover{border-color:var(--purple);color:var(--purple-deep)}
 
   /* ---------- COMPRESSION TECHNOLOGY (scroll-scrubbed packing story) ---------- */
   .press-track{height:320vh;position:relative;padding:0}
@@ -758,7 +770,7 @@
 <!-- 03 — THE PROBLEM WE STARTED WITH -->
 <section id="problem">
   <div class="reveal">
-    <h2 class="h-giant">The frame is <span class="soft">the problem.</span></h2>
+    <h2 class="h-giant">The future of furniture <span class="soft">starts without a frame.</span></h2>
     <p class="lead">For over a century, furniture has relied on the same hidden structure: wood, metal and springs.</p>
     <p class="limits-intro">A system built around limitations</p>
     <ul class="limits">
@@ -834,36 +846,14 @@
     <h2 class="h-giant">Tested where <span class="soft">it counts.</span></h2>
   </div>
   <div class="num-grid reveal">
-    <div class="numtile"><b>34.8 kg/m³</b><span class="std">Core density · ASTM D3574-17</span><p>Engineered density, calibrated for adaptive support.</p></div>
-    <div class="numtile"><b>231→466 N</b><span class="std">Progressive support · IFD 25-65%</span><p>Soft to the touch. Firm where it matters.</p></div>
-    <div class="numtile"><b>70,000+</b><span class="std">Abrasion cycles · ASTM D4157 Wyzenbeek</span><p>Contract-grade durability. Built for the family, made for life.</p></div>
-    <div class="numtile"><b>100,000+</b><span class="std">Impact cycles · BIFMA certified</span><p>Commercial-grade structure, tested far past home use.</p></div>
-    <div class="numtile"><b>1,088 N</b><span class="std">Seam strength · ISO 13935-1</span><p>Every seam, engineered for the long run.</p></div>
-    <div class="numtile"><b>Zero</b><span class="std">Formaldehyde · ISO 14184-1</span><p>Not detected. Built for the air you breathe.</p></div>
+    <div class="numtile"><span class="std">ASTM D3574-17</span><span class="what">Core density</span><b>34.8 kg/m³</b><p>Engineered density, calibrated for adaptive support.</p></div>
+    <div class="numtile"><span class="std">IFD 25-65%</span><span class="what">Progressive support</span><b>231→466 N</b><p>Soft to the touch. Firm where it matters.</p></div>
+    <div class="numtile"><span class="std">ASTM D4157 · Wyzenbeek</span><span class="what">Abrasion cycles</span><b>70,000+</b><p>Contract-grade durability. Built for the family, made for life.</p></div>
+    <div class="numtile"><span class="std">BIFMA certified</span><span class="what">Impact cycles</span><b>100,000+</b><p>Commercial-grade structure, tested far past home use.</p></div>
+    <div class="numtile"><span class="std">ISO 13935-1</span><span class="what">Seam strength</span><b>1,088 N</b><p>Every seam, engineered for the long run.</p></div>
+    <div class="numtile"><span class="std">ISO 14184-1</span><span class="what">Formaldehyde</span><b>Zero detected</b><p>Not detected. Built for the air you breathe.</p></div>
   </div>
 
-  <p class="limits-intro reveal">Traditional foam vs SmartFoam™</p>
-  <div class="cmp reveal">
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Characteristic</th>
-          <th scope="col">Traditional foam sofa</th>
-          <th scope="col" class="sf">SmartFoam™ · Boneless Design™</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><th scope="row">Internal structure</th><td class="trad" data-col="Traditional">Wood, metal and spring frame</td><td class="sf" data-col="SmartFoam">No frame. The foam is the structure</td></tr>
-        <tr><th scope="row">Core density</th><td class="trad" data-col="Traditional">18-28 kg/m³ (typical sofa foam)</td><td class="sf" data-col="SmartFoam">34.8 kg/m³, engineered for structural support</td></tr>
-        <tr><th scope="row">Delivery</th><td class="trad" data-col="Traditional">Bulky freight, delivery appointment</td><td class="sf" data-col="SmartFoam">Couch-in-a-box: compressed, carried on your own</td></tr>
-        <tr><th scope="row">Assembly</th><td class="trad" data-col="Traditional">Tools, screws and instructions</td><td class="sf" data-col="SmartFoam">Tool-free: unbox and let it expand</td></tr>
-        <tr><th scope="row">Moving and fit</th><td class="trad" data-col="Traditional">Heavy; hard through doorways and elevators</td><td class="sf" data-col="SmartFoam">Lightweight; fits tight spaces</td></tr>
-        <tr><th scope="row">Reconfiguration</th><td class="trad" data-col="Traditional">Fixed shape</td><td class="sf" data-col="SmartFoam">Modular: rearrange anytime</td></tr>
-        <tr><th scope="row">Durability</th><td class="trad" data-col="Traditional">Frames crack; foam sags over time</td><td class="sf" data-col="SmartFoam">100,000+ BIFMA impact cycles; holds its shape</td></tr>
-        <tr><th scope="row">Carbon per shipment</th><td class="trad" data-col="Traditional">Standard freight volume</td><td class="sf" data-col="SmartFoam">Up to six times less</td></tr>
-      </tbody>
-    </table>
-  </div>
 </section>
 
 <!-- 06 — WHAT SMARTFOAM MAKES POSSIBLE -->
@@ -890,7 +880,7 @@
     </div>
     <div class="poss">
       <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg>
-      <h3>Modular Architecture</h3>
+      <h3>Modular Design</h3>
       <p>Rearrange your sofa however you want. Lightweight, flexible and easy to reconfigure as your space and lifestyle change.</p>
     </div>
   </div>
@@ -1004,9 +994,41 @@
       <div class="info"><h3>S8 Sleeper</h3><span class="badge"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>Powered by SmartFoam™</span></div>
     </a>
   </div>
+  <!-- final CTA ported from the main landing page, per the review -->
   <div class="cta-line reveal">
     <p>Built on SmartFoam™. Engineered into the Lab System™. Ready in a box.</p>
-    <button class="btn-primary" onclick="location.href='https://rovelab.ca/collections/modular-sofa'">Shop the Lab Boneless Couch</button>
+    <div class="cta-actions">
+      <button class="btn-primary" onclick="location.href='https://rovelab.ca/collections/modular-sofa'">Find your SmartFoam™</button>
+      <button class="btn-ghost" onclick="location.href='https://rovelab.ca/'">Explore Rove Lab</button>
+    </div>
+  </div>
+</section>
+
+<!-- 10.5 — COMPARISON (GEO): moved down, directly before the FAQ -->
+<section id="compare">
+  <div class="reveal">
+    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Traditional foam <span class="soft">vs SmartFoam™.</span></h2>
+  </div>
+  <div class="cmp reveal">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Characteristics</th>
+          <th scope="col">Traditional foam sofa</th>
+          <th scope="col" class="sf">SmartFoam™ · Boneless Design™</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">Support system</th><td class="trad" data-col="Traditional">Wood, metal and spring frame provide structure</td><td class="sf" data-col="SmartFoam">No frame. SmartFoam™ is the structural core</td></tr>
+        <tr><th scope="row">Foam density</th><td class="trad" data-col="Traditional">Standard cushioning foam varies by manufacturer</td><td class="sf" data-col="SmartFoam">34.8 kg/m³ engineered for structural support</td></tr>
+        <tr><th scope="row">Delivery</th><td class="trad" data-col="Traditional">Bulky freight with scheduled delivery</td><td class="sf" data-col="SmartFoam">Couch-in-a-box: compressed, shipped compactly and carried by one person</td></tr>
+        <tr><th scope="row">Assembly</th><td class="trad" data-col="Traditional">Requires tools, hardware and instructions</td><td class="sf" data-col="SmartFoam">Tool-free: unbox, connect modules and let it expand</td></tr>
+        <tr><th scope="row">Moving &amp; fit</th><td class="trad" data-col="Traditional">Heavy and difficult through tight spaces</td><td class="sf" data-col="SmartFoam">Lightweight design fits through doorways, elevators and smaller spaces</td></tr>
+        <tr><th scope="row">Reconfiguration</th><td class="trad" data-col="Traditional">Fixed layout</td><td class="sf" data-col="SmartFoam">Modular design allows you to rearrange anytime</td></tr>
+        <tr><th scope="row">Durability</th><td class="trad" data-col="Traditional">Frames and cushions can lose performance over time</td><td class="sf" data-col="SmartFoam">Tested to 100,000+ BIFMA impact cycles and designed to maintain shape</td></tr>
+        <tr><th scope="row">Shipping footprint</th><td class="trad" data-col="Traditional">Larger freight volume</td><td class="sf" data-col="SmartFoam">Compact packaging reduces shipping volume, with up to 6× less carbon emissions per shipment</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
@@ -1050,7 +1072,7 @@
 
 <!-- mobile only: the nav list is hidden below 820px, so this is the one way out of a long scroll -->
 <div class="mobile-cta" id="mobileCta">
-  <a href="https://rovelab.ca/collections/modular-sofa" target="_blank" rel="noopener">Shop the Lab Boneless Couch</a>
+  <a href="https://rovelab.ca/collections/modular-sofa" target="_blank" rel="noopener">Find your SmartFoam™</a>
 </div>
 
 <script>
