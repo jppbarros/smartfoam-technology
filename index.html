@@ -189,18 +189,18 @@
   /* shared */
   section{position:relative;padding:8rem 5vw}
 
-  /* flat #1D1A24, exactly segundo.png's base and never transparent: the curtain's last row and the
-     section's first row are one colour, so the join cannot show.
-     that leaves the OTHER end open — #1D1A24 sits 16 points of luminance above the page's #0D0A13,
-     so #film ending flat would hand a hard step to #science. #science picks the plum up and fades
-     it out instead, far from the curtain, where a ramp costs nothing. */
-  /* thin the top padding to ~1.5rem (default is 8rem). the curtain's dark base is welded to the
-     film's top, so section content that starts 128px below that base only clears the fold well
-     after the curtain has covered the screen — you sit on a full dark dome with nothing behind
-     it. pulling the content up to just under the base means it rides in the instant the curtain
-     starts lifting. bottom padding stays as-is. */
-  #film{background:#1D1A24;padding-top:1.5rem}
-  #science{background:linear-gradient(180deg,#1D1A24 0%, rgba(29,26,36,0) 55%)}
+  /* #1C1B23 is the AVIF's ACTUAL base, not segundo's intended #1D1A24: lossy AVIF shifted it one
+     unit, and across the full-width hard curtain edge that one unit read as a visible line. I had
+     called it invisible from the luminance delta; on a straight horizontal seam it is not. chase
+     what the file renders, not what it was drawn as.
+     #film falls to transparent through #science so the page black carries on — #1C1B23 sits ~15
+     points of luminance above #0D0A13 and flat would end in a step.
+     padding-top 0 (default 8rem): the curtain base is welded to the film top, so any top padding
+     is dead space the curtain covers before content arrives. content now sits right under the
+     base and rides in as the curtain lifts. */
+  #film{background:#1C1B23;padding-top:0}
+  #film .film-frame{margin-top:1.6rem}   /* was 3.4rem — pulls the video up under the title */
+  #science{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
 
   /* THE LIGHT SECTION — after o-scs.com, which runs a white expertise section between two
      dark ones. #material is the only light stop on the page: the material gets explained in
@@ -208,7 +208,8 @@
      every child of #material already draws from these tokens, so re-pointing them here
      inverts the whole section without touching a single component rule. */
   #material{
-    background:#EDE7F8;
+    background:#ECE8F7;   /* primeiro.avif's actual base, not the intended #EDE7F8 — same 1-unit
+                             AVIF shift as #film, same reason: a seamless curtain edge. */
     --ink:#1A1226;--dim:#4A3F63;
     --purple-deep:#5A46A8;          /* #B4A3F5 is a dark-bg colour; it disappears on light */
     --line:rgba(26,18,38,.14);
