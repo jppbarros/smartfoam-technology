@@ -326,15 +326,12 @@
        per transition, invisible in a headless test where all three units equal). all svh here. */
     .statement{min-height:100svh}
     .statement.pinned{height:100svh}
-    /* the LIGHT curtain (transition 1) stays unscaled on phones: origin-bottom scale magnifies its
-       opaque region, and at 1.8x that was 0.72 screen of flat lavender over the dark hero — a
-       foreign colour sitting still, the void in the report. */
-    .curtain img{animation:none;transform:none}
-    /* but the FILM curtain (transition 2) DOES scale on phones. it's dark and flows into the dark
-       #film, so a growing dark dome over the light spacer reads as engulf, not a foreign flat
-       fill. 2.0 here, not the desktop 2.6 — the mobile curtain is shorter and content sits at the
-       base, so a gentler grow keeps the dark from covering too long before #film arrives. */
-    #film .curtain img{
+    /* both curtains scale on phones now, to engulf the screen. what once made the light curtain a
+       void wasn't the scale itself — it was big spacers plus content that lagged behind. tight now:
+       each curtain's section content arrives just as the scale maxes, so the dome is always growing
+       while it covers (dynamic engulf) and never sits as a flat static fill. 2.0, gentler than the
+       desktop 1.8/2.6 pair, because the mobile curtain is shorter and content sits at the base. */
+    .curtain img{
       animation:curtain-grow-mob linear both;animation-timeline:view();
       animation-range:cover 0% cover 45%;transform-origin:50% 100%;
     }
