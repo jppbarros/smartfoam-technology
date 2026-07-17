@@ -194,7 +194,12 @@
      that leaves the OTHER end open — #1D1A24 sits 16 points of luminance above the page's #0D0A13,
      so #film ending flat would hand a hard step to #science. #science picks the plum up and fades
      it out instead, far from the curtain, where a ramp costs nothing. */
-  #film{background:#1D1A24}
+  /* thin the top padding to ~1.5rem (default is 8rem). the curtain's dark base is welded to the
+     film's top, so section content that starts 128px below that base only clears the fold well
+     after the curtain has covered the screen — you sit on a full dark dome with nothing behind
+     it. pulling the content up to just under the base means it rides in the instant the curtain
+     starts lifting. bottom padding stays as-is. */
+  #film{background:#1D1A24;padding-top:1.5rem}
   #science{background:linear-gradient(180deg,#1D1A24 0%, rgba(29,26,36,0) 55%)}
 
   /* THE LIGHT SECTION — after o-scs.com, which runs a white expertise section between two
@@ -230,14 +235,12 @@
   /* .statement sets position:relative on its own and is declared later in this sheet, so at equal
      specificity it was quietly winning and the hero never pinned. two classes outrank one. */
   .statement.pinned{position:sticky}
-  /* the spacer is the hold: the distance the page scrolls while the pinned section stays put,
-     and the run-up before the curtain appears at all.
-     it must be TALLER than the curtain, never shorter. the curtain hangs 90vh above its section,
-     so a 60vh spacer would leave it hanging 30vh into the first viewport — the light dome sitting
-     over the hero at page load. at 100vh it cleared the fold by only 91px, so the takeover began
-     after ~91px of scroll: the hero was gone before it had been read. 180vh gives 90vh of hero
-     before the curtain shows an edge, and 180vh of hold once it does. */
-  .spacer{height:180vh}
+  /* the spacer is the hold: the distance the page scrolls while the pinned section stays put.
+     floor is the curtain height (120vh) — any shorter and the curtain hangs into the first
+     viewport, sitting over the section at rest. above the floor, (spacer - curtain) is dead
+     screen: the section is pinned and nothing moves yet. at 180vh that dead run was 60vh, the
+     empty stretch in the report. 130vh keeps a 10vh breath before the curtain and no more. */
+  .spacer{height:130vh}
   .curtain{
     position:absolute;left:0;width:100%;height:120vh;
     top:calc(-120vh + 1px);  /* the 1px overlap: without it the seam shows a hairline */
@@ -279,6 +282,12 @@
      unpinned it still scrolls under the film's curtain; it just doesn't hold. */
   @media (max-width:820px), (max-height:860px){
     #material.pinned{position:static;height:auto}
+    /* a spacer only earns its height while its section is pinned in front of it. this breakpoint
+       unpins #material (and only #material — the hero still pins here), so its spacer is no
+       longer covered and becomes bare section colour: 1183px of empty #EDE7F8, the void in the
+       report. collapse THAT spacer only. scoping to .on-light is what keeps the hero's runway
+       (.on-dark) intact — zeroing both would strip the hero->material transition. */
+    .pin-wrap.on-light .spacer{height:0}
   }
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
   .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
