@@ -308,6 +308,8 @@
      dome from ever reaching #material content — it sweeps the spacer, which carries the section
      colour via .on-light. */
   @media (max-width:820px){
+    .statement{background-image:url("assets/hero-hud-4x5-poster.jpg")}  /* portrait poster behind
+                                                the portrait video, so no landscape frame flashes */
     .curtain{height:80svh;top:calc(-80svh + 3px)}
     .pin-wrap.on-dark .spacer{height:100svh}   /* > curtain: hero->material stays clean */
     .pin-wrap.on-light .spacer{height:160svh}  /* curtain 80svh sweeps the lower half; the upper
@@ -894,7 +896,12 @@
 <!-- 01 — THE STATEMENT. pinned: #material's curtain draws up over it. -->
 <div class="pin-wrap on-dark">
 <section class="statement pinned">
-  <video class="hero-video" src="assets/hero-hud.mp4" poster="assets/hero-hud-poster.jpg"
+  <!-- no src here: a script picks the desktop (16:9) or mobile (4:5) crop by width, so the phone
+       never downloads the landscape file. the .statement background poster covers the gap and the
+       no-JS case. data-* hold the two sources. -->
+  <video class="hero-video" poster="assets/hero-hud-poster.jpg"
+         data-src-desk="assets/hero-hud.mp4" data-poster-desk="assets/hero-hud-poster.jpg"
+         data-src-mob="assets/hero-hud-4x5.mp4" data-poster-mob="assets/hero-hud-4x5-poster.jpg"
          autoplay muted loop playsinline aria-hidden="true"></video>
   <div class="hero-scrim"></div>
   <div class="hero-content">
@@ -1297,6 +1304,19 @@
 </div>
 
 <script>
+  // hero video: pick the crop by width once, up front, so the phone never fetches the 16:9 file.
+  // desktop 16:9, mobile 4:5. src is set here (not in the tag) — the autoplay attribute plays it
+  // as soon as the source lands; the .statement poster bg holds the frame until then.
+  (function () {
+    const v = document.querySelector('.hero-video');
+    if (!v) return;
+    const mob = matchMedia('(max-width:820px)').matches;
+    v.poster = v.dataset[mob ? 'posterMob' : 'posterDesk'];
+    v.src = v.dataset[mob ? 'srcMob' : 'srcDesk'];
+    v.load();
+    v.play().catch(() => {});   // some browsers reject autoplay-with-sound; muted hero is exempt, but guard anyway
+  })();
+
   // #material pins only if it fits the viewport — a taller pinned section strands its tail.
   // CSS can't compare content height to viewport height, so measure it and toggle .mat-nofit.
   // phones (<=820px) are always no-fit and get the svh phone layout. runs on load and resize.
