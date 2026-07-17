@@ -310,12 +310,21 @@
   @media (max-width:820px){
     .statement{background-image:url("assets/hero-hud-4x5-poster.jpg")}  /* portrait poster behind
                                                 the portrait video, so no landscape frame flashes */
-    .curtain{height:80svh;top:calc(-80svh + 3px)}
-    .pin-wrap.on-dark .spacer{height:100svh}   /* > curtain: hero->material stays clean */
-    .pin-wrap.on-light .spacer{height:160svh}  /* curtain 80svh sweeps the lower half; the upper
-                                                  80svh is bare section colour, so the dome never
-                                                  climbs onto #material's last block */
-    #material{padding-top:2rem}                /* content rides in right under the curtain base */
+    /* the pinned hero must share the spacers' unit. spacers/curtains are svh, but the hero was
+       vh/dvh — and on a real phone the URL bar grows vh while svh holds, sliding them apart (~80px
+       per transition, invisible in a headless test where all three units equal). all svh here. */
+    .statement{min-height:100svh}
+    .statement.pinned{height:100svh}
+    /* NO scale on phones. origin-bottom scale magnifies the curtain's opaque region; at 1.8x that
+       was 0.72 screen of flat lavender sitting over the hero-exit and material-entry — the void in
+       the report. unscaled and shorter (60svh), the dome passes in ~0.3 screen, like the reference. */
+    .curtain img{animation:none;transform:none}
+    .curtain{height:60svh;top:calc(-60svh + 3px)}
+    .pin-wrap.on-dark .spacer{height:70svh}    /* just over the curtain, so it clears the first
+                                                  screen at rest without a long pinned dead run */
+    .pin-wrap.on-light .spacer{height:90svh}   /* curtain 60svh sweeps the lower part; ~30svh
+                                                  clearance keeps the dome off #material's last block */
+    #material{padding-top:1.5rem}              /* content rides in right under the curtain base */
   }
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
   .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
