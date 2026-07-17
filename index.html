@@ -188,6 +188,14 @@
 
   /* shared */
   section{position:relative;padding:8rem 5vw}
+  /* centre the content sections in a 1200px column: the side padding grows past 5vw once the
+     viewport is wide enough, so the content sits mid-screen with equal gaps instead of pinned
+     left with a void on the right. left as max(5vw, …) so narrow screens keep the 5vw gutter.
+     the full-bleed sections (hero, wordmark marquee, carousel, shop, compare, cta) set their own
+     padding and are left out on purpose. */
+  #material,#problem,#numbers,#science,#film,#possible,.endure,.interlude{
+    padding-inline:max(5vw, (100% - 1200px) / 2);
+  }
 
   /* #1C1B23 is the AVIF's ACTUAL base, not segundo's intended #1D1A24: lossy AVIF shifted it one
      unit, and across the full-width hard curtain edge that one unit read as a visible line. I had
@@ -477,7 +485,7 @@
      and pushed the text into a distant strip. fixed, capped column instead. */
   .cap-split{
     margin-top:3rem;display:grid;grid-template-columns:minmax(0,clamp(260px,26vw,360px)) minmax(0,1fr);
-    gap:clamp(1.5rem,3.5vw,3rem);align-items:center;max-width:1000px;
+    gap:clamp(1.5rem,3.5vw,3rem);align-items:center;   /* fills the centred content column now */
   }
   .cap-video{position:relative;border:1px solid var(--glass-line);border-radius:var(--r);overflow:hidden;background:var(--glass)}
   .cap-video video{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
@@ -501,7 +509,7 @@
   .limits-intro{margin-top:1.8rem;font-size:.72rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--purple-deep)}
   /* headline was stretching to ~1140px and the x-ray sat in a 960px band with a dead void
      beside it. cap the head, then run the bullets and the x-ray as a pair. */
-  .prob-head{max-width:900px}
+  .prob-head{max-width:none}   /* fills the centred content column */
   .prob-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(1.6rem,3.5vw,3.4rem);align-items:center;max-width:1180px;margin-top:2.6rem}
   .prob-split .th-box{margin-top:0;max-width:none}
   @media(max-width:900px){ .prob-split{grid-template-columns:1fr} }
