@@ -290,18 +290,30 @@
      covered and covers, so it carries a pin AND a curtain. */
   #material{z-index:2}
   #film{z-index:3}
-  /* #material's content stacks below 821px and runs to 1236px against an 812px viewport —
-     424px over. a pinned section taller than the viewport strands that overflow: the pin locks
-     at top:0 and the rest can never be scrolled to. so it only pins where it actually fits.
-     unpinned it still scrolls under the film's curtain; it just doesn't hold. */
-  @media (max-width:820px), (max-height:860px){
-    #material.pinned{position:static;height:auto}
-    /* a spacer only earns its height while its section is pinned in front of it. this breakpoint
-       unpins #material (and only #material — the hero still pins here), so its spacer is no
-       longer covered and becomes bare section colour: 1183px of empty #EDE7F8, the void in the
-       report. collapse THAT spacer only. scoping to .on-light is what keeps the hero's runway
-       (.on-dark) intact — zeroing both would strip the hero->material transition. */
-    .pin-wrap.on-light .spacer{height:0}
+  /* #material pins only where it FITS: a section taller than the viewport strands its tail (the
+     pin locks at top:0 and the bottom can never be scrolled to). the height is content-dependent
+     and varies with width — 927px at 1280w, 1236px at 375w — so no CSS breakpoint can catch it.
+     the old `max-height:860px` guessed, and guessed low: at 927px, windows 861-927px tall pinned
+     a section that didn't fit and stranded up to 66px. a 5-line script (end of body) toggles
+     html.mat-nofit by actually comparing scrollHeight to the viewport, so the pin engages exactly
+     when it can. phones (<=820px) always count as no-fit and take the svh block below. */
+  html.mat-nofit #material.pinned{position:static;height:auto}
+  /* wide low window, unpinned: the on-light spacer is no longer covered and shows as bare
+     #ECE8F7 void. collapse it. the phone block re-inflates it with svh just below. */
+  @media (min-width:821px){
+    html.mat-nofit .pin-wrap.on-light .spacer{height:0}
+  }
+  /* PHONE. svh, not vh: the mobile URL bar changes vh mid-scroll and would slide every seam.
+     shorter curtain (80svh) and matched spacers keep transition 1 tight and stop transition 2's
+     dome from ever reaching #material content — it sweeps the spacer, which carries the section
+     colour via .on-light. */
+  @media (max-width:820px){
+    .curtain{height:80svh;top:calc(-80svh + 3px)}
+    .pin-wrap.on-dark .spacer{height:100svh}   /* > curtain: hero->material stays clean */
+    .pin-wrap.on-light .spacer{height:160svh}  /* curtain 80svh sweeps the lower half; the upper
+                                                  80svh is bare section colour, so the dome never
+                                                  climbs onto #material's last block */
+    #material{padding-top:2rem}                /* content rides in right under the curtain base */
   }
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
   .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
@@ -1285,6 +1297,20 @@
 </div>
 
 <script>
+  // #material pins only if it fits the viewport — a taller pinned section strands its tail.
+  // CSS can't compare content height to viewport height, so measure it and toggle .mat-nofit.
+  // phones (<=820px) are always no-fit and get the svh phone layout. runs on load and resize.
+  (function () {
+    const mat = document.getElementById('material');
+    if (!mat) return;
+    const check = () => {
+      const noFit = innerWidth <= 820 || mat.scrollHeight > innerHeight;
+      document.documentElement.classList.toggle('mat-nofit', noFit);
+    };
+    check();
+    addEventListener('resize', check, { passive: true });
+  })();
+
   // superscript every ™ in visible text
   (function () {
     const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
