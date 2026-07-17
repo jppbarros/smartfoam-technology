@@ -244,6 +244,25 @@
     z-index:2;pointer-events:none;
   }
   .curtain img{width:100%;height:100%;object-fit:cover;object-position:center bottom;display:block}
+  /* the curtain grows 100% -> 180% as it crosses the viewport, driven by the scroll itself.
+     CSS, not JS: animation-timeline: view() ties the keyframes to the element's own travel. where
+     it isn't supported (Safari, Firefox) the animation simply never runs and the curtain stays at
+     scale 1 — i.e. it degrades to exactly what is live today, which is why this is safe to try.
+     transform-origin is the whole game: it sits on the BASE, the edge welded to the section's top.
+     scale from the centre would drag that edge down into the section and break the seam the flat
+     base colour exists to hide. uniform scale magnifies without distorting. */
+  @keyframes curtain-grow{from{transform:scale(1)}to{transform:scale(1.8)}}
+  @media (prefers-reduced-motion: no-preference){
+    .curtain img{
+      transform-origin:50% 100%;
+      animation:curtain-grow linear both;
+      animation-timeline:view();
+      /* not cover 0%->100%: that range is viewport + curtain = 220vh, so the growth would still be
+         at ~1.42 when the curtain covers the screen and would spend its last third off-screen,
+         unseen. 50% lands the full 180% right as it takes the viewport. */
+      animation-range:cover 0% cover 50%;
+    }
+  }
   /* the seed glows (…-semente) are gone. they lived inside sticky sections, so they froze for the
      whole 180vh hold — measured: top 0 / bottom 900 at every scroll position while the curtain
      travelled 1341 -> -159. that is not a tuning problem: a pinned section holds the viewport, and
@@ -860,9 +879,10 @@
 <div class="pin-wrap on-light">
 <section id="material" class="pinned">
   <div class="curtain">
-    <img src="assets/primeiro.avif" alt=""
-         srcset="assets/primeiro-500w.avif 500w, assets/primeiro-800w.avif 800w, assets/primeiro.avif 3840w"
-         sizes="100vw">
+    <!-- no srcset: it existed to keep 2MB PNGs off mobile, and in AVIF the full file is 69KB.
+         the 500w/800w tiers saved ~190KB and cost the alpha channel — ffmpeg's libaom-av1 does
+         not encode AVIF alpha and drops it silently, flattening the transparency to black. -->
+    <img src="assets/primeiro.avif" alt="">
   </div>
   <div class="reveal">
     <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span class="soft">to replace the frame.</span></h2>
@@ -898,9 +918,7 @@
 <!-- THE FILM — draws up over the pinned #material on the second curtain -->
 <section id="film">
   <div class="curtain">
-    <img src="assets/segundo.avif" alt=""
-         srcset="assets/segundo-500w.avif 500w, assets/segundo-800w.avif 800w, assets/segundo.avif 3840w"
-         sizes="100vw">
+    <img src="assets/segundo.avif" alt="">
   </div>
   <div class="reveal">
     <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Watch <span class="soft">the film.</span></h2>
