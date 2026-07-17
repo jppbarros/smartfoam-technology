@@ -198,18 +198,21 @@
      padding-top 0 (default 8rem): the curtain base is welded to the film top, so any top padding
      is dead space the curtain covers before content arrives. content now sits right under the
      base and rides in as the curtain lifts. */
-  #film{background:#1C1B23;padding-top:0}
-  #film .film-frame{margin-top:.7rem}    /* was 3.4rem — pulls the video up tight under the title */
-  #science{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
+  /* the purple curtain now lands on #numbers, so the dark base + padding trick moves there.
+     #numbers opens on #1C1B23 (segundo.avif's actual base) and #possible fades it to the page
+     black — #1C1B23 sits ~15 points above #0D0A13 and flat would step. */
+  #numbers{background:#1C1B23;padding-top:0}
+  #numbers .num-grid{margin-top:1.6rem}
+  #possible{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
 
-  /* THE LIGHT SECTION — after o-scs.com, which runs a white expertise section between two
-     dark ones. #material is the only light stop on the page: the material gets explained in
-     daylight, then the film drops you back into the dark for good.
-     every child of #material already draws from these tokens, so re-pointing them here
-     inverts the whole section without touching a single component rule. */
-  #material{
-    background:#ECE8F7;   /* primeiro.avif's actual base, not the intended #EDE7F8 — same 1-unit
-                             AVIF shift as #film, same reason: a seamless curtain edge. */
+  /* THE LIGHT SECTION — after o-scs.com, which runs a white expertise section between two dark
+     ones. #problem is now the page's one light stop: the white curtain draws it up over the
+     wordmark, and the purple curtain drops back into the dark at #numbers.
+     every child already draws from these tokens, so re-pointing them here inverts the whole
+     section without touching a component rule. */
+  #problem{
+    background:#ECE8F7;   /* primeiro.avif's actual base, not the intended #EDE7F8 — the 1-unit
+                             AVIF shift, same as the dark side, for a seamless curtain edge. */
     --ink:#1A1226;--dim:#4A3F63;
     --purple-deep:#5A46A8;          /* #B4A3F5 is a dark-bg colour; it disappears on light */
     --line:rgba(26,18,38,.14);
@@ -217,7 +220,9 @@
     --glass-2:rgba(26,18,38,.02);
     --glass-line:rgba(26,18,38,.13);
     color:var(--ink);
+    padding-top:0;                  /* content rides in right under the white curtain base */
   }
+  #problem .prob-head{margin-top:0}
 
   /* THE TWO BOUNDARIES — a section holds still while the next one draws itself up over it on a
      curtain. no JS: sticky for the hold, one hanging image for the reveal.
@@ -255,11 +260,11 @@
   /* a solid floor in the section's colour, pinned under the curtain's base, so the anti-aliased
      edge blends into the right colour instead of revealing the section behind. only the bottom
      of the box, so it never fills the gradient's transparent top. */
-  #material .curtain::after,#film .curtain::after{
+  #problem .curtain::after,#numbers .curtain::after{
     content:"";position:absolute;left:0;right:0;bottom:0;height:6px;z-index:-1;
   }
-  #material .curtain::after{background:#ECE8F7}
-  #film .curtain::after{background:#1C1B23}
+  #problem .curtain::after{background:#ECE8F7}
+  #numbers .curtain::after{background:#1C1B23}
   .curtain img{width:100%;height:100%;object-fit:cover;object-position:center bottom;display:block}
   /* the curtain grows 100% -> 180% as it crosses the viewport, driven by the scroll itself.
      CSS, not JS: animation-timeline: view() ties the keyframes to the element's own travel. where
@@ -285,10 +290,10 @@
          unseen. 50% lands the full 180% right as it takes the viewport. */
       animation-range:cover 0% cover 50%;
     }
-    /* scoped min-width so it never overrides the mobile `animation:none` (which the #film
-       specificity would otherwise beat and re-enable the scale on phones). */
+    /* the purple curtain (#numbers) grows faster/bigger. min-width so it can't override the mobile
+       curtain-grow-mob (the #numbers specificity would otherwise win). */
     @media (min-width:821px){
-      #film .curtain img{animation-name:curtain-grow-fast;animation-range:cover 0% cover 40%}
+      #numbers .curtain img{animation-name:curtain-grow-fast;animation-range:cover 0% cover 40%}
     }
   }
   /* the seed glows (…-semente) are gone. they lived inside sticky sections, so they froze for the
@@ -297,10 +302,11 @@
      with no JS nothing inside it can move, so anything that must emerge has to come from outside
      the pin. the curtain already is that, and its leading edge is a glow with its own alpha ramp.
      the assets are still in assets/ if a static seed is ever wanted back. */
-  /* each section must outrank the one it covers: hero 1, material 2, film 3. #material both is
+  /* each section must outrank the one it covers: wordmark 1, problem 2, numbers 3. #problem both is
      covered and covers, so it carries a pin AND a curtain. */
-  #material{z-index:2}
-  #film{z-index:3}
+  .wordmark{z-index:1}
+  #problem{z-index:2}
+  #numbers{z-index:3}
   /* #material pins only where it FITS: a section taller than the viewport strands its tail (the
      pin locks at top:0 and the bottom can never be scrolled to). the height is content-dependent
      and varies with width — 927px at 1280w, 1236px at 375w — so no CSS breakpoint can catch it.
@@ -308,7 +314,11 @@
      a section that didn't fit and stranded up to 66px. a 5-line script (end of body) toggles
      html.mat-nofit by actually comparing scrollHeight to the viewport, so the pin engages exactly
      when it can. phones (<=820px) always count as no-fit and take the svh block below. */
-  html.mat-nofit #material.pinned{position:static;height:auto}
+  html.mat-nofit #problem.pinned{position:static;height:auto}
+  /* .wordmark sets position:relative on its own, declared later, so it beats .pinned at equal
+     specificity and never pins — same trap the hero had. two classes outrank one. it also gets
+     centred so the marquee sits mid-screen while pinned, not stuck under its top padding. */
+  .wordmark.pinned{position:sticky;display:flex;flex-direction:column;justify-content:center;padding-block:0}
   /* wide low window, unpinned: the on-light spacer is no longer covered and shows as bare
      #ECE8F7 void. collapse it. the phone block re-inflates it with svh just below. */
   @media (min-width:821px){
@@ -325,7 +335,7 @@
        vh/dvh — and on a real phone the URL bar grows vh while svh holds, sliding them apart (~80px
        per transition, invisible in a headless test where all three units equal). all svh here. */
     .statement{min-height:100svh}
-    .statement.pinned{height:100svh}
+    .pinned{height:100svh}   /* every pinned section (wordmark, problem) shares the svh unit */
     /* both curtains scale on phones now, to engulf the screen. what once made the light curtain a
        void wasn't the scale itself — it was big spacers plus content that lagged behind. tight now:
        each curtain's section content arrives just as the scale maxes, so the dome is always growing
@@ -340,7 +350,7 @@
                                                   screen at rest without a long pinned dead run */
     .pin-wrap.on-light .spacer{height:90svh}   /* curtain 60svh sweeps the lower part; ~30svh
                                                   clearance keeps the dome off #material's last block */
-    #material{padding-top:1.5rem}              /* content rides in right under the curtain base */
+    #problem{padding-top:1.5rem}               /* content rides in right under the curtain base */
   }
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
   .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
@@ -918,9 +928,8 @@
 </nav>
 <div class="nav-scrim" id="navScrim" hidden></div>
 
-<!-- 01 — THE STATEMENT. pinned: #material's curtain draws up over it. -->
-<div class="pin-wrap on-dark">
-<section class="statement pinned">
+<!-- 01 — THE STATEMENT -->
+<section class="statement">
   <!-- no src here: a script picks the desktop (16:9) or mobile (4:5) crop by width, so the phone
        never downloads the landscape file. the .statement background poster covers the gap and the
        no-JS case. data-* hold the two sources. -->
@@ -938,19 +947,9 @@
     <button class="btn-primary" onclick="location.href='#material'">Explore the technology</button>
   </div>
 </section>
-<div class="spacer"></div>
-</div>
 
-<!-- 02 — WHAT IS SMARTFOAM (moved up: define the material before the problem).
-     covered by the film, and covers the hero: it carries both a pin and a curtain. -->
-<div class="pin-wrap on-light">
-<section id="material" class="pinned">
-  <div class="curtain">
-    <!-- no srcset: it existed to keep 2MB PNGs off mobile, and in AVIF the full file is 69KB.
-         the 500w/800w tiers saved ~190KB and cost the alpha channel — ffmpeg's libaom-av1 does
-         not encode AVIF alpha and drops it silently, flattening the transparency to black. -->
-    <img src="assets/primeiro.avif" alt="">
-  </div>
+<!-- 02 — WHAT IS SMARTFOAM -->
+<section id="material">
   <div class="reveal">
     <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span class="soft">to replace the frame.</span></h2>
     <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em>, a proprietary high-density foam system designed to:</p>
@@ -979,14 +978,9 @@
     </div>
   </div>
 </section>
-<div class="spacer"></div>
-</div>
 
-<!-- THE FILM — draws up over the pinned #material on the second curtain -->
+<!-- THE FILM -->
 <section id="film">
-  <div class="curtain">
-    <img src="assets/segundo.avif" alt="">
-  </div>
   <div class="reveal">
     <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Watch <span class="soft">the film.</span></h2>
   </div>
@@ -1051,8 +1045,9 @@
   </div>
 </section>
 
-<!-- GIANT WORDMARK (the page's only marquee) -->
-<section class="wordmark">
+<!-- GIANT WORDMARK — pinned: #problem's white curtain draws up over it -->
+<div class="pin-wrap on-dark">
+<section class="wordmark pinned">
   <h2 data-marquee="-1">SmartFoam
     <svg class="anchor-deco" style="left:-3%;top:-14%;width:26%;height:128%" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       <circle class="ring" cx="50" cy="50" r="44" stroke-dasharray="3 3"/>
@@ -1068,9 +1063,13 @@
   </h2>
   <p class="sub">One material · Structure + comfort · Designed by Rove Lab</p>
 </section>
+<div class="spacer"></div>
+</div>
 
-<!-- 03 — THE PROBLEM WE STARTED WITH -->
-<section id="problem">
+<!-- 03 — THE PROBLEM WE STARTED WITH — the light island: white curtain in, purple curtain out -->
+<div class="pin-wrap on-light">
+<section id="problem" class="pinned">
+  <div class="curtain"><img src="assets/primeiro.avif" alt=""></div>
   <div class="reveal prob-head">
     <h2 class="h-giant">The future of furniture <span class="soft">starts without a frame.</span></h2>
     <p class="lead">For over a century, furniture has relied on the same hidden structure: wood, metal and springs.</p>
@@ -1094,9 +1093,12 @@
            aria-label="Split screen: two people wrestle a framed sofa up a stairwell while one person sets up a SmartFoam module alone"></video>
   </div>
 </section>
+<div class="spacer"></div>
+</div>
 
-<!-- 05 — THE NUMBERS -->
+<!-- 05 — THE NUMBERS — draws up over #problem on the purple curtain -->
 <section id="numbers">
+  <div class="curtain"><img src="assets/segundo.avif" alt=""></div>
   <div class="reveal">
     <p class="eyebrow">The numbers · SGS lab testing, March 2026</p>
     <h2 class="h-giant">Tested where <span class="soft">it counts.</span></h2>
@@ -1342,14 +1344,14 @@
     v.play().catch(() => {});   // some browsers reject autoplay-with-sound; muted hero is exempt, but guard anyway
   })();
 
-  // #material pins only if it fits the viewport — a taller pinned section strands its tail.
-  // CSS can't compare content height to viewport height, so measure it and toggle .mat-nofit.
-  // phones (<=820px) are always no-fit and get the svh phone layout. runs on load and resize.
+  // #problem (the light pinned section) pins only if it fits the viewport — a taller pinned
+  // section strands its tail. CSS can't compare content height to viewport height, so measure it
+  // and toggle .mat-nofit. phones (<=820px) are always no-fit and get the svh phone layout.
   (function () {
-    const mat = document.getElementById('material');
-    if (!mat) return;
+    const sec = document.getElementById('problem');
+    if (!sec) return;
     const check = () => {
-      const noFit = innerWidth <= 820 || mat.scrollHeight > innerHeight;
+      const noFit = innerWidth <= 820 || sec.scrollHeight > innerHeight;
       document.documentElement.classList.toggle('mat-nofit', noFit);
     };
     check();
