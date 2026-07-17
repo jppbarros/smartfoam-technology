@@ -211,8 +211,44 @@
      #numbers opens on #1C1B23 (segundo.avif's actual base) and #possible fades it to the page
      black — #1C1B23 sits ~15 points above #0D0A13 and flat would step. */
   #numbers{background:#1C1B23;padding-top:0}
-  #numbers .num-grid{margin-top:1.6rem}
   #possible{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
+
+  /* THE DIAL — one focus for this section: the BIFMA impact test. a ring closes with the scroll
+     while the counter climbs to 100,000+. dial left, copy right; stacks on narrow screens. */
+  .dial-wrap{
+    margin-top:clamp(2.5rem,6vw,4.5rem);display:grid;
+    grid-template-columns:minmax(0,clamp(280px,34vw,420px)) minmax(0,1fr);
+    gap:clamp(2rem,5vw,4.5rem);align-items:center;
+  }
+  .dial{position:relative;width:100%;aspect-ratio:1}
+  .dial-svg{width:100%;height:100%;display:block;transform:rotate(-90deg)}  /* ring starts at 12 o'clock */
+  .dial-track{fill:none;stroke:rgba(244,241,250,.12);stroke-width:3}
+  .dial-ring{
+    fill:none;stroke:url(#dialGrad);stroke-width:5;stroke-linecap:round;
+    /* r=104 -> circumference 653.45. offset starts full (empty ring), JS drives it to 0 (closed).
+       the CSS default is 0 = closed, so no-JS / reduced-motion shows the finished ring. */
+    stroke-dasharray:653.45;stroke-dashoffset:0;
+    filter:drop-shadow(0 0 10px rgba(167,148,240,.5));
+  }
+  .dial-mid{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:.5rem;padding:14%;
+  }
+  .dial-mark{width:46%;height:auto}
+  .dial-mark ellipse{fill:none;stroke:var(--purple);stroke-width:2;opacity:.9}
+  .dial-num{
+    font-size:clamp(1.9rem,4.4vw,3rem);font-weight:900;letter-spacing:-.02em;line-height:1;
+    color:var(--ink);font-variant-numeric:tabular-nums;   /* digits don't jitter as they climb */
+  }
+  .dial-unit{font-size:max(10px,.6rem);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--purple-deep)}
+  .dial-copy .dial-lead{font-size:clamp(1.4rem,2.8vw,2rem);font-weight:800;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+  .dial-copy .dial-lead em{color:var(--purple-deep);font-style:normal}
+  .dial-copy .dial-sub{margin-top:1.2rem;font-size:1rem;line-height:1.7;color:var(--dim);max-width:52ch}
+  @media(max-width:820px){
+    .dial-wrap{grid-template-columns:1fr;gap:2.2rem;justify-items:center;text-align:center}
+    .dial{width:min(80vw,340px)}
+    .dial-copy .dial-sub{margin-inline:auto}
+  }
 
   /* THE LIGHT SECTION — after o-scs.com, which runs a white expertise section between two dark
      ones. #problem is now the page's one light stop: the white curtain draws it up over the
@@ -1111,16 +1147,38 @@
 <section id="numbers">
   <div class="curtain"><img src="assets/segundo.avif" alt=""></div>
   <div class="reveal">
-    <p class="eyebrow">The numbers · SGS lab testing, March 2026</p>
+    <p class="eyebrow">BIFMA certified · SGS lab testing, March 2026</p>
     <h2 class="h-giant">Tested where <span class="soft">it counts.</span></h2>
   </div>
-  <div class="num-grid reveal">
-    <div class="numtile"><span class="std">ASTM D3574-17</span><span class="what">Core density</span><b>34.8 kg/m³</b><p>Engineered density, calibrated for adaptive support.</p></div>
-    <div class="numtile"><span class="std">IFD 25-65%</span><span class="what">Progressive support</span><b>231→466 N</b><p>Soft to the touch. Firm where it matters.</p></div>
-    <div class="numtile"><span class="std">ASTM D4157 · Wyzenbeek</span><span class="what">Abrasion cycles</span><b>70,000+</b><p>Contract-grade durability. Built for the family, made for life.</p></div>
-    <div class="numtile"><span class="std">BIFMA certified</span><span class="what">Impact cycles</span><b>100,000+</b><p>Commercial-grade structure, tested far past home use.</p></div>
-    <div class="numtile"><span class="std">ISO 13935-1</span><span class="what">Seam strength</span><b>1,088 N</b><p>Every seam, engineered for the long run.</p></div>
-    <div class="numtile"><span class="std">ISO 14184-1</span><span class="what">Formaldehyde</span><b>Zero detected</b><p>Not detected. Built for the air you breathe.</p></div>
+
+  <!-- the dial: a ring that closes with the scroll while the counter climbs to 100,000+.
+       both are driven by one scroll job (see script). the SVG carries the final state so the
+       no-JS / reduced-motion view still reads the achievement. -->
+  <div class="dial-wrap reveal">
+    <div class="dial" role="img" aria-label="BIFMA impact and drop testing: 100,000-plus cycles">
+      <svg class="dial-svg" viewBox="0 0 240 240" aria-hidden="true">
+        <defs>
+          <linearGradient id="dialGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#F7A8C4"/><stop offset="0.5" stop-color="#C9B4EC"/>
+            <stop offset="1" stop-color="#8FC3F7"/>
+          </linearGradient>
+        </defs>
+        <circle class="dial-track" cx="120" cy="120" r="104"/>
+        <circle class="dial-ring"  cx="120" cy="120" r="104"/>
+      </svg>
+      <div class="dial-mid">
+        <svg class="dial-mark" viewBox="0 0 240 120" aria-hidden="true">
+          <ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/>
+          <ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/>
+        </svg>
+        <span class="dial-num" id="dialNum">100,000+</span>
+        <span class="dial-unit">impact / drop cycles</span>
+      </div>
+    </div>
+    <div class="dial-copy">
+      <p class="dial-lead">Commercial-grade structure, tested <em>far past home use.</em></p>
+      <p class="dial-sub">The BIFMA impact and drop protocol runs a seat past 100,000 cycles — the bar for contract furniture in airports, offices and hotels. SmartFoam™ clears it.</p>
+    </div>
   </div>
 
 </section>
@@ -1544,8 +1602,24 @@
       });
     }
 
+    // the BIFMA dial: the ring closes and the counter climbs together as the section scrolls up.
+    const dial = document.querySelector('#numbers .dial');
+    const dialRing = document.querySelector('.dial-ring');
+    const dialNum = document.getElementById('dialNum');
+    const DIAL_CIRC = 653.45;   // 2*pi*104
+    function dialMotion() {
+      const r = dial.getBoundingClientRect(), vh = innerHeight;
+      // 0 as the dial enters from the bottom, 1 by the time it has climbed to ~15% of the screen,
+      // so the ring finishes closing while the dial sits high and readable, not as it leaves.
+      const p = clamp01((vh - r.top) / (vh * 0.72));   // closes as the dial rises to ~centre
+      dialRing.style.strokeDashoffset = (DIAL_CIRC * (1 - p)).toFixed(1);
+      const n = Math.round(p * 100000);
+      dialNum.textContent = n.toLocaleString('en-US') + (p >= 1 ? '+' : '');
+    }
+
     const jobs = [];
     if (carTrack && carSlides.length) jobs.push({ el: carTrack, run: carMotion });
+    if (dial && dialRing && dialNum) jobs.push({ el: document.getElementById('numbers'), run: dialMotion });
     marquees.forEach(m => jobs.push({ el: m.closest('section') || m, run: marqueeMotion }));
 
     const live = new Set();
