@@ -231,7 +231,8 @@
      colouring the wrap makes the hold safe whether or not the pin is on. */
   .pin-wrap{position:relative}
   .pin-wrap.on-dark{background:#0D0A13}
-  .pin-wrap.on-light{background:#EDE7F8}
+  .pin-wrap.on-light{background:#ECE8F7}  /* = #material's base, so the bare spacer (mobile,
+                                             unpinned) meets the section with no 1-unit step */
   .pinned{position:sticky;top:0;height:100vh;z-index:1}
   /* .statement sets position:relative on its own and is declared later in this sheet, so at equal
      specificity it was quietly winning and the hero never pinned. two classes outrank one. */
