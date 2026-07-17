@@ -269,6 +269,11 @@
      scale from the centre would drag that edge down into the section and break the seam the flat
      base colour exists to hide. uniform scale magnifies without distorting. */
   @keyframes curtain-grow{from{transform:scale(1)}to{transform:scale(1.8)}}
+  /* the film curtain reveals the DARK section, so its growth reads less than the light one's — a
+     dark dome expanding is quieter. it gets a bigger target (2.6) reached sooner (cover 40%, vs
+     50%), so it engulfs the screen faster and the effect registers. base-anchored, so the seam is
+     untouched — the extra scale only pushes the top further off-screen. */
+  @keyframes curtain-grow-fast{from{transform:scale(1)}to{transform:scale(2.6)}}
   @media (prefers-reduced-motion: no-preference){
     .curtain img{
       transform-origin:50% 100%;
@@ -278,6 +283,11 @@
          at ~1.42 when the curtain covers the screen and would spend its last third off-screen,
          unseen. 50% lands the full 180% right as it takes the viewport. */
       animation-range:cover 0% cover 50%;
+    }
+    /* scoped min-width so it never overrides the mobile `animation:none` (which the #film
+       specificity would otherwise beat and re-enable the scale on phones). */
+    @media (min-width:821px){
+      #film .curtain img{animation-name:curtain-grow-fast;animation-range:cover 0% cover 40%}
     }
   }
   /* the seed glows (…-semente) are gone. they lived inside sticky sections, so they froze for the
