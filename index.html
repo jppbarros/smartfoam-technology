@@ -193,7 +193,8 @@
      left with a void on the right. left as max(5vw, …) so narrow screens keep the 5vw gutter.
      the full-bleed sections (hero, wordmark marquee, carousel, shop, compare, cta) set their own
      padding and are left out on purpose. */
-  #material,#problem,#numbers,#science,#film,#possible,.endure,.interlude{
+  #material,#problem,#numbers,#science,#film,#possible,.endure,.interlude,
+  #shop,#compare,#faq{
     padding-inline:max(5vw, (100% - 1200px) / 2);
   }
 
@@ -696,7 +697,9 @@
   /* ---------- SCROLL CAROUSEL (rotates with the scroll, no sweep blur) ---------- */
   .car-track{height:260vh;position:relative;padding:0}
   .car-sticky{position:sticky;top:0;height:100dvh;overflow:hidden}
-  .car-head{position:absolute;top:12vh;left:5vw;z-index:20;max-width:90vw}
+  /* the carousel stays full-bleed, but its heading moves to the shared content-column edge so its
+     title lines up with every other section's, instead of sitting further left at 5vw. */
+  .car-head{position:absolute;top:12vh;left:max(5vw, (100% - 1200px) / 2);z-index:20;max-width:90vw}
   .car-head h2{font-size:clamp(1.8rem,4.4vw,3.4rem);font-weight:900;text-transform:uppercase;letter-spacing:-.01em}
   .car-head h2 .soft{color:var(--dim)}
   .car-stage{position:absolute;inset:0;perspective:1100px}
