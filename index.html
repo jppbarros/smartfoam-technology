@@ -199,7 +199,7 @@
      is dead space the curtain covers before content arrives. content now sits right under the
      base and rides in as the curtain lifts. */
   #film{background:#1C1B23;padding-top:0}
-  #film .film-frame{margin-top:1.6rem}   /* was 3.4rem — pulls the video up under the title */
+  #film .film-frame{margin-top:.7rem}    /* was 3.4rem — pulls the video up tight under the title */
   #science{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
 
   /* THE LIGHT SECTION — after o-scs.com, which runs a white expertise section between two
@@ -245,9 +245,21 @@
   .spacer{height:130vh}
   .curtain{
     position:absolute;left:0;width:100%;height:120vh;
-    top:calc(-120vh + 1px);  /* the 1px overlap: without it the seam shows a hairline */
+    /* 3px overlap, was 1px. the image is scaled (see below), and a scaled image's bottom edge is
+       anti-aliased — a semi-transparent hairline that let a sliver of whatever sits behind show
+       through. against the light #material above, that read as a pale line. 1px of overlap rounds
+       away at DPR 2; 3px keeps the section's own colour under that soft edge at any density. */
+    top:calc(-120vh + 3px);
     z-index:2;pointer-events:none;
   }
+  /* a solid floor in the section's colour, pinned under the curtain's base, so the anti-aliased
+     edge blends into the right colour instead of revealing the section behind. only the bottom
+     of the box, so it never fills the gradient's transparent top. */
+  #material .curtain::after,#film .curtain::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:6px;z-index:-1;
+  }
+  #material .curtain::after{background:#ECE8F7}
+  #film .curtain::after{background:#1C1B23}
   .curtain img{width:100%;height:100%;object-fit:cover;object-position:center bottom;display:block}
   /* the curtain grows 100% -> 180% as it crosses the viewport, driven by the scroll itself.
      CSS, not JS: animation-timeline: view() ties the keyframes to the element's own travel. where
