@@ -384,6 +384,7 @@
        per transition, invisible in a headless test where all three units equal). all svh here. */
     .statement{min-height:100svh}
     .pinned{height:100svh}   /* every pinned section (wordmark, problem) shares the svh unit */
+    .hero-action{margin-top:auto;padding-top:3rem}  /* phone: push the CTA to the foot of the hero */
     /* both curtains scale on phones now, to engulf the screen. what once made the light curtain a
        void wasn't the scale itself — it was big spacers plus content that lagged behind. tight now:
        each curtain's section content arrives just as the scale maxes, so the dome is always growing
@@ -437,8 +438,9 @@
       radial-gradient(ellipse 74% 52% at 50% 42%, transparent 42%, rgba(13,10,19,.45) 100%);
   }
   .hero-content{position:relative;z-index:2;max-width:1000px}
-  /* the exit sits at the foot of the hero, clear of the copy burned into the video */
-  .hero-action{position:relative;z-index:2;margin-top:auto;padding-top:3rem}
+  /* desktop: the CTA sits right under the copy. mobile keeps it at the foot of the hero (below),
+     clear of the copy burned into the video — see the phone rule. */
+  .hero-action{position:relative;z-index:2;padding-top:1.9rem}
   .statement h1{
     font-size:clamp(2.6rem,7.4vw,6rem);font-weight:900;line-height:.98;letter-spacing:-.02em;
     text-transform:uppercase;text-wrap:balance;
