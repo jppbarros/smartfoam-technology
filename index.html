@@ -211,6 +211,11 @@
      #numbers opens on #1C1B23 (segundo.avif's actual base) and #possible fades it to the page
      black — #1C1B23 sits ~15 points above #0D0A13 and flat would step. */
   #numbers{background:#1C1B23;padding-top:0}
+  /* when pinned, the section is a full 100vh but its content (heading + dial) flows from the top,
+     so the ring built glued to the top of the screen. centre the flow group vertically so the dial
+     sits mid-viewport while it closes. only when .pinned — under mat-nofit (mobile/static) the
+     section is height:auto and this would do nothing anyway, but scope it to be safe. */
+  #numbers.pinned{display:flex;flex-direction:column;justify-content:center}
   #possible{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
 
   /* THE DIAL — one focus for this section: the BIFMA impact test. a ring closes with the scroll
