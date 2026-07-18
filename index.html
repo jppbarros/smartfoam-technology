@@ -220,6 +220,9 @@
     grid-template-columns:minmax(0,clamp(280px,34vw,420px)) minmax(0,1fr);
     gap:clamp(2rem,5vw,4.5rem);align-items:center;
   }
+  /* the hold: #numbers pins and this spacer is the scroll that builds the ring. shorter than the
+     curtain spacers — it only needs enough travel to fill the ring at a watchable pace. */
+  .dial-hold{height:110vh}
   .dial{position:relative;width:100%;aspect-ratio:1}
   .dial-svg{width:100%;height:100%;display:block;overflow:visible}
   /* the radial ticks: a faint base, brightened per-tick by JS as the reveal sweeps round.
@@ -356,7 +359,7 @@
      a section that didn't fit and stranded up to 66px. a 5-line script (end of body) toggles
      html.mat-nofit by actually comparing scrollHeight to the viewport, so the pin engages exactly
      when it can. phones (<=820px) always count as no-fit and take the svh block below. */
-  html.mat-nofit #problem.pinned{position:static;height:auto}
+  html.mat-nofit #problem.pinned,html.mat-nofit #numbers.pinned{position:static;height:auto}
   /* .wordmark sets position:relative on its own, declared later, so it beats .pinned at equal
      specificity and never pins — same trap the hero had. two classes outrank one. it also gets
      centred so the marquee sits mid-screen while pinned, not stuck under its top padding. */
@@ -364,7 +367,7 @@
   /* wide low window, unpinned: the on-light spacer is no longer covered and shows as bare
      #ECE8F7 void. collapse it. the phone block re-inflates it with svh just below. */
   @media (min-width:821px){
-    html.mat-nofit .pin-wrap.on-light .spacer{height:0}
+    html.mat-nofit .pin-wrap.on-light .spacer,html.mat-nofit .dial-hold{height:0}
   }
   /* PHONE. svh, not vh: the mobile URL bar changes vh mid-scroll and would slide every seam.
      shorter curtain (80svh) and matched spacers keep transition 1 tight and stop transition 2's
@@ -393,6 +396,9 @@
     .pin-wrap.on-light .spacer{height:90svh}   /* curtain 60svh sweeps the lower part; ~30svh
                                                   clearance keeps the dome off #material's last block */
     #problem{padding-top:1.5rem}               /* content rides in right under the curtain base */
+    /* #numbers is unpinned on phones (mat-nofit), so its hold-spacer is just dead scroll — collapse
+       it. the dial builds by screen position here instead of pin travel. */
+    .pin-wrap.on-dark .spacer.dial-hold{height:0}
   }
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
   .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
@@ -1126,8 +1132,10 @@
 <div class="spacer"></div>
 </div>
 
-<!-- 05 — THE NUMBERS — draws up over #problem on the purple curtain -->
-<section id="numbers">
+<!-- 05 — THE NUMBERS — draws up over #problem on the purple curtain, then pins so the page holds
+     still while the BIFMA ring builds; the spacer is the scroll that drives the ring. -->
+<div class="pin-wrap on-dark">
+<section id="numbers" class="pinned">
   <div class="curtain"><img src="assets/segundo.avif" alt=""></div>
   <div class="reveal">
     <p class="eyebrow">BIFMA certified · SGS lab testing, March 2026</p>
@@ -1150,6 +1158,8 @@
   </div>
 
 </section>
+<div class="spacer dial-hold"></div>
+</div>
 
 <!-- 06 — WHAT SMARTFOAM MAKES POSSIBLE -->
 <section id="possible">
@@ -1605,11 +1615,22 @@
     const dial = document.querySelector('#numbers .dial');
     const dialTicks = window.__dialTicks || [];
     const dialNum = document.getElementById('dialNum');
+    const numbersEl = document.getElementById('numbers');
+    const dialWrap = numbersEl?.closest('.pin-wrap');
     function dialMotion() {
-      const r = dial.getBoundingClientRect(), vh = innerHeight;
-      // starts at 0 once the dial is a third of the way up the screen (so the empty ring is
-      // actually seen), reaches 1 as it climbs near the top. before that p clamps to 0 — empty.
-      const p = clamp01((vh * 0.65 - r.top) / (vh * 0.5));
+      const vh = innerHeight;
+      let p;
+      if (getComputedStyle(numbersEl).position === 'sticky') {
+        // pinned (desktop): #numbers is held still while the spacer scrolls, so the ring builds in
+        // place. progress through the PIN: 0 as it locks, 1 as it releases.
+        const travel = dialWrap.offsetHeight - vh;
+        p = travel > 0 ? clamp01(-dialWrap.getBoundingClientRect().top / travel) : 0;
+      } else {
+        // not pinned (phone, where the section is too tall to hold): build by the dial's own screen
+        // position instead, so it fills as it rises into view rather than off-screen.
+        const r = dial.getBoundingClientRect();
+        p = clamp01((vh * 0.65 - r.top) / (vh * 0.5));
+      }
       const lit = Math.round(p * dialTicks.length);
       dialTicks.forEach((t, i) => t.classList.toggle('on', i < lit));
       const n = Math.round(p * 100000);
@@ -1618,8 +1639,8 @@
 
     const jobs = [];
     if (carTrack && carSlides.length) jobs.push({ el: carTrack, run: carMotion });
-    if (dial && dialTicks.length && dialNum) {
-      jobs.push({ el: document.getElementById('numbers'), run: dialMotion });
+    if (dial && dialTicks.length && dialNum && dialWrap) {
+      jobs.push({ el: dialWrap, run: dialMotion });
       dialMotion();   // set the empty start immediately, so the default-lit ring never flashes
     }
     marquees.forEach(m => jobs.push({ el: m.closest('section') || m, run: marqueeMotion }));
