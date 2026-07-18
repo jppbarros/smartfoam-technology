@@ -1403,9 +1403,12 @@
     const g = document.getElementById('dialTicks');
     if (!g) return;
     const N = 60, cx = 120, cy = 120, ri = 72, ro = 88, NS = 'http://www.w3.org/2000/svg';   /* tighter ring, hugs the new circle-less logo */
-    const stops = [[247,168,196],[201,180,236],[143,195,247]];   // #F7A8C4, #C9B4EC, #8FC3F7
+    const stops = [[247,168,196],[201,180,236],[143,195,247]];   // #F7A8C4 pink, #C9B4EC lilac, #8FC3F7 blue
     const lp = (a,b,t)=>Math.round(a+(b-a)*t);
-    const col = f => { const [a,b,t] = f<=.5 ? [stops[0],stops[1],f/.5] : [stops[1],stops[2],(f-.5)/.5];
+    // symmetric ramp: pink -> lilac -> blue -> lilac -> pink, so the first and last tick (adjacent
+    // at the apex) share the same colour and the ring's join is seamless. g mirrors 0->1->0.
+    const col = f => { const g = 1 - Math.abs(2*f - 1);
+      const [a,b,t] = g<=.5 ? [stops[0],stops[1],g/.5] : [stops[1],stops[2],(g-.5)/.5];
       return `rgb(${lp(a[0],b[0],t)},${lp(a[1],b[1],t)},${lp(a[2],b[2],t)})`; };
     for (let i = 0; i < N; i++) {
       const ang = (-90 + i * 360 / N) * Math.PI / 180;
