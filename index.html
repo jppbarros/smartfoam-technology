@@ -231,8 +231,11 @@
   .dial-tick.on{opacity:1;filter:drop-shadow(0 0 5px currentColor)}
   /* the new BIFMA mark is wide (no circle of its own), so size it by width and centre it inside
      the tighter tick ring. */
+  /* the mark's visual weight sits ~18% above its box centre (big "BIFMA" on top, small "CERTIFIED"
+     below), and ~2% left, so a box-centred logo reads high and slightly off. nudge it so the
+     centre of MASS lands on the ring centre — the position the eye reads as centred. */
   .dial-logo{
-    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    position:absolute;left:50%;top:50%;transform:translate(calc(-50% + 2%), calc(-50% + 17%));
     width:48%;height:auto;
     filter:drop-shadow(0 4px 18px rgba(0,0,0,.4));
   }
