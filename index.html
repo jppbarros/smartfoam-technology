@@ -215,7 +215,9 @@
      so the ring built glued to the top of the screen. centre the flow group vertically so the dial
      sits mid-viewport while it closes. only when .pinned — under mat-nofit (mobile/static) the
      section is height:auto and this would do nothing anyway, but scope it to be safe. */
-  #numbers.pinned{display:flex;flex-direction:column;justify-content:center}
+  @media(min-width:821px){
+    #numbers.pinned{display:flex;flex-direction:column;justify-content:center}
+  }
   #possible{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
 
   /* THE DIAL — one focus for this section: the BIFMA impact test. a ring closes with the scroll
@@ -405,9 +407,14 @@
     .pin-wrap.on-light .spacer{height:90svh}   /* curtain 60svh sweeps the lower part; ~30svh
                                                   clearance keeps the dome off #material's last block */
     #problem{padding-top:1.5rem}               /* content rides in right under the curtain base */
-    /* #numbers is unpinned on phones (mat-nofit), so its hold-spacer is just dead scroll — collapse
-       it. the dial builds by screen position here instead of pin travel. */
-    .pin-wrap.on-dark .spacer.dial-hold{height:0}
+    /* #numbers pins on phones too now (user asked: the dial should LOCK mid-screen while the ring
+       builds, not scroll past). unlike #problem it fits ~1 screen, so it can pin without stranding
+       its tail. re-pin it (mat-nofit set it static) and give the hold-spacer travel so dialMotion
+       reads pin progress instead of screen position. content flows from the top (no centring here),
+       so the heading stays fully visible and the dial sits just above centre — the framing pointed
+       to. the sub paragraph rides in as the pin releases. */
+    html.mat-nofit #numbers.pinned{position:sticky;height:100svh}
+    .pin-wrap.on-dark .spacer.dial-hold{height:80svh}
   }
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
   .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
@@ -1628,11 +1635,15 @@
     const numbersEl = document.getElementById('numbers');
     const dialWrap = numbersEl?.closest('.pin-wrap');
     function dialMotion() {
-      const vh = innerHeight;
+      // layout viewport, not innerHeight: the section pins in svh/layout px, and on mobile
+      // innerHeight drifts with the URL bar (and the preview pane reports a scaled innerHeight that
+      // doesn't match the sticky's real travel). clientHeight tracks the pin, so the ring fills over
+      // the whole hold on both phone and desktop instead of saturating in the first third.
+      const vh = document.documentElement.clientHeight || innerHeight;
       let p;
       if (getComputedStyle(numbersEl).position === 'sticky') {
-        // pinned (desktop): #numbers is held still while the spacer scrolls, so the ring builds in
-        // place. progress through the PIN: 0 as it locks, 1 as it releases.
+        // pinned: #numbers is held still while the spacer scrolls, so the ring builds in place
+        // (desktop always; phones now too). progress through the PIN: 0 as it locks, 1 as it releases.
         const travel = dialWrap.offsetHeight - vh;
         p = travel > 0 ? clamp01(-dialWrap.getBoundingClientRect().top / travel) : 0;
       } else {
