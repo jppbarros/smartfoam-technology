@@ -226,8 +226,11 @@
      the just-lit ticks glow. line-cap round so each reads as a clean mark, like the anchor deco. */
   .dial-tick{stroke-width:2.4;stroke-linecap:round;opacity:.13}
   .dial-tick.on{opacity:1;filter:drop-shadow(0 0 5px currentColor)}
+  /* the new BIFMA mark is wide (no circle of its own), so size it by width and centre it inside
+     the tighter tick ring. */
   .dial-logo{
-    position:absolute;inset:0;margin:auto;width:52%;height:52%;object-fit:contain;
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:48%;height:auto;
     filter:drop-shadow(0 4px 18px rgba(0,0,0,.4));
   }
   /* counter beside the ring */
@@ -1399,7 +1402,7 @@
   (function () {
     const g = document.getElementById('dialTicks');
     if (!g) return;
-    const N = 60, cx = 120, cy = 120, ri = 88, ro = 104, NS = 'http://www.w3.org/2000/svg';
+    const N = 60, cx = 120, cy = 120, ri = 72, ro = 88, NS = 'http://www.w3.org/2000/svg';   /* tighter ring, hugs the new circle-less logo */
     const stops = [[247,168,196],[201,180,236],[143,195,247]];   // #F7A8C4, #C9B4EC, #8FC3F7
     const lp = (a,b,t)=>Math.round(a+(b-a)*t);
     const col = f => { const [a,b,t] = f<=.5 ? [stops[0],stops[1],f/.5] : [stops[1],stops[2],(f-.5)/.5];
@@ -1601,8 +1604,9 @@
     const dialNum = document.getElementById('dialNum');
     function dialMotion() {
       const r = dial.getBoundingClientRect(), vh = innerHeight;
-      // 0 as the dial enters from the bottom, 1 by the time it has climbed to ~centre.
-      const p = clamp01((vh - r.top) / (vh * 0.72));
+      // starts at 0 once the dial is a third of the way up the screen (so the empty ring is
+      // actually seen), reaches 1 as it climbs near the top. before that p clamps to 0 — empty.
+      const p = clamp01((vh * 0.65 - r.top) / (vh * 0.5));
       const lit = Math.round(p * dialTicks.length);
       dialTicks.forEach((t, i) => t.classList.toggle('on', i < lit));
       const n = Math.round(p * 100000);
@@ -1611,7 +1615,10 @@
 
     const jobs = [];
     if (carTrack && carSlides.length) jobs.push({ el: carTrack, run: carMotion });
-    if (dial && dialTicks.length && dialNum) jobs.push({ el: document.getElementById('numbers'), run: dialMotion });
+    if (dial && dialTicks.length && dialNum) {
+      jobs.push({ el: document.getElementById('numbers'), run: dialMotion });
+      dialMotion();   // set the empty start immediately, so the default-lit ring never flashes
+    }
     marquees.forEach(m => jobs.push({ el: m.closest('section') || m, run: marqueeMotion }));
 
     const live = new Set();
