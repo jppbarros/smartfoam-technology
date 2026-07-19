@@ -428,10 +428,15 @@
   .sweep-title{
     --p:0;
     color:transparent;-webkit-text-fill-color:transparent;
+    /* white (revealed) on the left, the brand band, then #numbers' own colour (invisible) on the
+       right. as --p climbs 0->1 the window slides from the invisible end toward white, so the line
+       starts invisible, a colour band sweeps across (left letters first), and it lands solid white
+       at --p:1 — which the JS ties to the dial, so it completes as the counter hits 100,000+.
+       ZONE at the right MUST equal #numbers' background (#1C1B23) or the hidden state shows. */
     background-image:linear-gradient(100deg,
-      #1C1B23 0%, #1C1B23 22%,
-      #F2A6C8 32%, #B9A6E8 42%, #9DBFF2 52%,
-      #FFFFFF 62%, #FFFFFF 100%);
+      #FFFFFF 0%, #FFFFFF 34%,
+      #9DBFF2 42%, #B9A6E8 52%, #F2A6C8 60%,
+      #1C1B23 66%, #1C1B23 100%);
     background-size:320% 100%;
     background-position:calc((1 - var(--p)) * 100%) 0;
     -webkit-background-clip:text;background-clip:text;
@@ -1634,6 +1639,9 @@
     const dialNum = document.getElementById('dialNum');
     const numbersEl = document.getElementById('numbers');
     const dialWrap = numbersEl?.closest('.pin-wrap');
+    // the "Tested where it counts" title shares the dial's progress, so its gradient sweep reveals
+    // in step with the counter: invisible at 0, colour band mid-count, solid white by 100,000+.
+    const sweep = document.querySelector('.sweep-title');
     function dialMotion() {
       // layout viewport, not innerHeight: the section pins in svh/layout px, and on mobile
       // innerHeight drifts with the URL bar (and the preview pane reports a scaled innerHeight that
@@ -1656,21 +1664,10 @@
       dialTicks.forEach((t, i) => t.classList.toggle('on', i < lit));
       const n = Math.round(p * 100000);
       dialNum.textContent = n.toLocaleString('en-US') + (p >= 1 ? '+' : '');
-    }
-
-    // "Tested where it counts": scrub the gradient sweep by the title's screen position. left
-    // letters light first; it lands solid white and holds once it clears `end`.
-    const sweep = document.querySelector('.sweep-title');
-    function sweepMotion() {
-      const r = sweep.getBoundingClientRect();
-      const start = innerHeight * 0.9;   // sweep begins as the title enters at 90% of the screen
-      const end   = innerHeight * 0.45;  // and completes by the time it reaches 45%
-      const p = clamp01((start - r.top) / (start - end));
-      sweep.style.setProperty('--p', p.toFixed(3));
+      if (sweep) sweep.style.setProperty('--p', p.toFixed(3));   // sweep the title in step with the count
     }
 
     const jobs = [];
-    if (sweep) { jobs.push({ el: sweep, run: sweepMotion }); sweepMotion(); }
     if (carTrack && carSlides.length) jobs.push({ el: carTrack, run: carMotion });
     if (dial && dialTicks.length && dialNum && dialWrap) {
       jobs.push({ el: dialWrap, run: dialMotion });
