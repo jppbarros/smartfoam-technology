@@ -23,6 +23,9 @@
     --line:rgba(244,241,250,.13);
     /* one radius for every frame, crop and panel on the page */
     --r:14px;
+    /* fixed-header height (64px nav) + 8px breathing room. sticky sections offset by this so a
+       pinned title lands below the nav and clear of its blur, never under the backdrop-filter. */
+    --nav-h:72px;
     /* the comparison table's glass, promoted to a token: translucent panels that let the
        fluid glow through instead of opaque bands that stop it */
     --glass:rgba(244,241,250,.09);
@@ -101,7 +104,10 @@
      each masked to its own band. reads as one blur that thickens toward the top edge.
      nav itself carries no background — an opaque nav would be what .logo blends against,
      and the whole point is for it to blend against the page. */
-  .nav-blur{position:fixed;top:0;left:0;right:0;height:96px;z-index:96;pointer-events:none}
+  /* height matches the 64px header (was 96px, spilling the blur 32px below the nav onto whatever
+     sits under it — e.g. a pinned section title). the five progressive slices just compress into
+     the header band now. */
+  .nav-blur{position:fixed;top:0;left:0;right:0;height:64px;z-index:96;pointer-events:none}
   .nav-blur i{position:absolute;inset:0;display:block}
   .nav-blur i:nth-child(1){-webkit-backdrop-filter:blur(1px);backdrop-filter:blur(1px);
     -webkit-mask-image:linear-gradient(0deg,transparent 0%,#000 16.667%,#000 33.333%,transparent 50%);
@@ -210,11 +216,14 @@
   /* the purple curtain now lands on #numbers, so the dark base + padding trick moves there.
      #numbers opens on #1C1B23 (segundo.avif's actual base) and #possible fades it to the page
      black — #1C1B23 sits ~15 points above #0D0A13 and flat would step. */
-  #numbers{background:#1C1B23;padding-top:0}
-  /* when pinned, the section is a full 100vh but its content (heading + dial) flows from the top,
-     so the ring built glued to the top of the screen. centre the flow group vertically so the dial
-     sits mid-viewport while it closes. only when .pinned — under mat-nofit (mobile/static) the
-     section is height:auto and this would do nothing anyway, but scope it to be safe. */
+  #numbers{background:#1C1B23;padding-top:0;scroll-margin-top:var(--nav-h)}
+  /* pin BELOW the fixed header, not at top:0 — so the "Tested where it counts" title lands under
+     the nav (and clear of its blur) instead of scrolling under the backdrop-filter. height shrinks
+     by the same offset so the sticky box still ends at the viewport bottom (no overflow). */
+  #numbers.pinned{top:var(--nav-h);height:calc(100vh - var(--nav-h))}
+  /* when pinned, the section content (heading + dial) flows from the top, so the ring built glued to
+     the top. centre the flow group vertically so the dial sits mid-viewport while it closes. only
+     when .pinned — under mat-nofit (mobile/static) the section is height:auto and this is a no-op. */
   @media(min-width:821px){
     #numbers.pinned{display:flex;flex-direction:column;justify-content:center}
   }
@@ -227,9 +236,10 @@
     grid-template-columns:minmax(0,clamp(280px,34vw,420px)) minmax(0,1fr);
     gap:clamp(2rem,5vw,4.5rem);align-items:center;
   }
-  /* the hold: #numbers pins and this spacer is the scroll that builds the ring. shorter than the
-     curtain spacers — it only needs enough travel to fill the ring at a watchable pace. */
-  .dial-hold{height:110vh}
+  /* the hold: #numbers pins and this spacer is the scroll the ring/count build over. 150vh so the
+     0 -> 100,000 count is watchable while the section sits still. two classes so it beats the later
+     `.spacer{height:130vh}` rule (equal specificity would otherwise let 130vh win by order). */
+  .spacer.dial-hold{height:150vh}
   .dial{position:relative;width:100%;aspect-ratio:1}
   .dial-svg{width:100%;height:100%;display:block;overflow:visible}
   /* the radial ticks: a faint base, brightened per-tick by JS as the reveal sweeps round.
@@ -413,8 +423,8 @@
        reads pin progress instead of screen position. content flows from the top (no centring here),
        so the heading stays fully visible and the dial sits just above centre — the framing pointed
        to. the sub paragraph rides in as the pin releases. */
-    html.mat-nofit #numbers.pinned{position:sticky;height:100svh}
-    .pin-wrap.on-dark .spacer.dial-hold{height:80svh}
+    html.mat-nofit #numbers.pinned{position:sticky;height:calc(100svh - var(--nav-h))}
+    .pin-wrap.on-dark .spacer.dial-hold{height:120svh}   /* longer hold so the count finishes on-screen */
   }
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
   .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
@@ -1680,10 +1690,13 @@
       const vh = document.documentElement.clientHeight || innerHeight;
       let p;
       if (getComputedStyle(numbersEl).position === 'sticky') {
-        // pinned: #numbers is held still while the spacer scrolls, so the ring builds in place
-        // (desktop always; phones now too). progress through the PIN: 0 as it locks, 1 as it releases.
-        const travel = dialWrap.offsetHeight - vh;
-        p = travel > 0 ? clamp01(-dialWrap.getBoundingClientRect().top / travel) : 0;
+        // pinned: #numbers is held still while the spacer scrolls, so the ring/count build in place.
+        // the pin sits --nav-h below the top now, so progress is measured from the sticky's own
+        // offset over the hold-spacer distance (offsetHeight - section height): 0 as it locks at
+        // --nav-h, 1 exactly as it releases. keeps the count finishing right when the pin lets go.
+        const navH = parseFloat(getComputedStyle(numbersEl).top) || 0;
+        const travel = dialWrap.offsetHeight - numbersEl.offsetHeight;
+        p = travel > 0 ? clamp01((navH - dialWrap.getBoundingClientRect().top) / travel) : 0;
       } else {
         // not pinned (phone, where the section is too tall to hold): build by the dial's own screen
         // position instead, so it fills as it rises into view rather than off-screen.
