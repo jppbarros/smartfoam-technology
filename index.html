@@ -420,6 +420,22 @@
   .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
   .h-giant .soft,.h-serifless .soft,.tagline-editorial .soft{color:var(--dim)}
   .h-giant .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  /* "Tested where it counts": gradient-sweep reveal (after o-scs.com's "Earned on the ground").
+     the title begins as the section's own colour (invisible), a colour band crosses the letters as
+     you scroll, and it lands solid white. --p (0..1) is the scrub, set by JS per frame — no
+     time-based animation. ZONE 1 MUST equal #numbers' background (#1C1B23) or the hidden state
+     isn't truly invisible. left letters light first — correct, matches the reference. */
+  .sweep-title{
+    --p:0;
+    color:transparent;-webkit-text-fill-color:transparent;
+    background-image:linear-gradient(100deg,
+      #1C1B23 0%, #1C1B23 22%,
+      #F2A6C8 32%, #B9A6E8 42%, #9DBFF2 52%,
+      #FFFFFF 62%, #FFFFFF 100%);
+    background-size:320% 100%;
+    background-position:calc((1 - var(--p)) * 100%) 0;
+    -webkit-background-clip:text;background-clip:text;
+  }
   .h-serifless{font-size:clamp(1.9rem,4.4vw,3.6rem);font-weight:900;line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
   .lead{margin-top:1.5rem;font-size:1.05rem;color:var(--dim);max-width:64ch;line-height:1.7;text-wrap:pretty}
   .lead em{color:var(--purple-deep);font-style:normal;font-weight:600}
@@ -837,6 +853,7 @@
   }
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
+    .sweep-title{--p:1}   /* JS scrub is skipped below, so land the title on its final colour */
     *{animation:none !important;transition:none !important}
     .reveal{opacity:1;transform:none;filter:none}
     /* scroll-scrubbed scenes collapse into static layouts */
@@ -1138,7 +1155,7 @@
   <div class="curtain"><img src="assets/segundo.avif" alt=""></div>
   <div class="reveal">
     <p class="eyebrow">BIFMA certified · SGS lab testing, March 2026</p>
-    <h2 class="h-giant">Tested where <span class="soft">it counts.</span></h2>
+    <h2 class="h-giant sweep-title">Tested where it counts.</h2>
   </div>
 
   <!-- the dial: a ring of radial ticks (after the brand's anchor marks) that light up one by one
@@ -1641,7 +1658,19 @@
       dialNum.textContent = n.toLocaleString('en-US') + (p >= 1 ? '+' : '');
     }
 
+    // "Tested where it counts": scrub the gradient sweep by the title's screen position. left
+    // letters light first; it lands solid white and holds once it clears `end`.
+    const sweep = document.querySelector('.sweep-title');
+    function sweepMotion() {
+      const r = sweep.getBoundingClientRect();
+      const start = innerHeight * 0.9;   // sweep begins as the title enters at 90% of the screen
+      const end   = innerHeight * 0.45;  // and completes by the time it reaches 45%
+      const p = clamp01((start - r.top) / (start - end));
+      sweep.style.setProperty('--p', p.toFixed(3));
+    }
+
     const jobs = [];
+    if (sweep) { jobs.push({ el: sweep, run: sweepMotion }); sweepMotion(); }
     if (carTrack && carSlides.length) jobs.push({ el: carTrack, run: carMotion });
     if (dial && dialTicks.length && dialNum && dialWrap) {
       jobs.push({ el: dialWrap, run: dialMotion });
