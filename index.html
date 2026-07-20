@@ -763,41 +763,38 @@
   }
   .btn-ghost:hover{border-color:var(--purple);color:var(--purple-deep)}
 
-  /* ---------- SOCIAL PROOF — Field Notes (photos + testimonials sync on scroll) ---------- */
+  /* ---------- SOCIAL PROOF — Field Notes (photo cards scroll over a fixed testimonial) ---------- */
   /* --sweep-bg re-points the sweep-title's hidden zone to THIS section's bg (#0D0A13), so the
      "Loved where it lives" reveal starts truly invisible here too. */
   .fieldnotes{background:var(--bg);position:relative;--sweep-bg:#0D0A13}
-  .fn-track{position:relative;height:500vh}   /* pinned stage + 5 bands × ~80vh of scroll */
+  .fn-intro{text-align:center;max-width:780px;margin:0 auto;padding:8rem 6vw 0}
+  .fn-intro .lead{margin-top:.9rem;font-size:1rem;color:var(--dim)}
+  .fn-track{position:relative}
+  /* LOW layer: the single central testimonial, filled by JS from the card covering it */
   .fn-sticky{
-    position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:clamp(1.6rem,4vh,3rem);padding:3vh 6vw;overflow:hidden;
+    position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));z-index:1;
+    display:flex;align-items:center;justify-content:center;padding:2vh 6vw;pointer-events:none;
   }
-  .fn-head{text-align:center;max-width:780px}
-  .fn-head .lead{margin-top:.9rem;font-size:1rem;color:var(--dim)}
-  .fn-stage{
-    display:grid;grid-template-columns:minmax(0,clamp(240px,26vw,340px)) minmax(0,1fr);
-    gap:clamp(2rem,5vw,4.5rem);align-items:center;width:100%;max-width:980px;
+  .fn-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:min(430px,78vw);aspect-ratio:1;border:1px dashed rgba(167,148,240,.35);border-radius:50%}
+  .fn-live{position:relative;max-width:600px;text-align:center}
+  .fn-live blockquote{margin:0;font-size:clamp(1.3rem,2.6vw,2.05rem);line-height:1.4;font-weight:500;color:var(--ink);letter-spacing:-.01em}
+  .fn-live figcaption{margin-top:1.4rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem}
+  .fn-live .who{font-weight:800;color:var(--ink);letter-spacing:.02em}
+  .fn-live .variant{color:var(--purple-deep)}
+  /* HIGH layer: opaque photo cards, centred, one every ~120vh (so the text is exposed between them)
+     and above the text (z-index 2) — a passing card hides the text while the review swaps under it */
+  .fn-cards{position:relative;z-index:2;margin:0;padding:0;list-style:none}
+  .fn-band{display:flex;justify-content:center;align-items:center;min-height:120vh}
+  .fn-card{
+    position:relative;width:min(420px,88vw);aspect-ratio:4/5;background:#2A2436;
+    border-radius:var(--r);overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.55);
   }
-  .fn-photowrap{position:relative}
-  .fn-frame{position:absolute;inset:-10px;border:1px dashed rgba(167,148,240,.5);border-radius:var(--r);pointer-events:none;z-index:3}
-  .fn-frame i{position:absolute;width:8px;height:8px;background:var(--bg);border:1px solid var(--purple)}
-  .fn-frame i:nth-child(1){top:-4px;left:-4px}.fn-frame i:nth-child(2){top:-4px;right:-4px}
-  .fn-frame i:nth-child(3){bottom:-4px;left:-4px}.fn-frame i:nth-child(4){bottom:-4px;right:-4px}
-  /* every photo shares one 4:5 slot, absolute + object-fit, so swapping never shifts layout */
-  .fn-photos{position:relative;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;background:#2A2436}
+  .fn-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
   .fn-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(244,241,250,.22);z-index:0}
   .fn-ph svg{width:44px;height:44px}
-  .fn-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s ease;z-index:1}
-  .fn-photo.on{opacity:1}
-  /* quotes stack in one grid cell so the tallest sets the height — no jump as they swap */
-  .fn-quotes{display:grid}
-  .fn-quote{grid-column:1;grid-row:1;opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease;text-align:left}
-  .fn-quote.on{opacity:1;transform:none}
-  .fn-quote blockquote{margin:0;font-size:clamp(1.25rem,2.3vw,1.8rem);line-height:1.42;font-weight:500;color:var(--ink);letter-spacing:-.01em}
-  .fn-quote figcaption{margin-top:1.4rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
-  .fn-quote .who{font-weight:800;color:var(--ink);letter-spacing:.02em}
-  .fn-quote .variant{color:var(--purple-deep)}
+  /* each card's review: visually hidden (the sticky shows the live copy) but kept for a11y / no-JS */
+  .fn-said{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
   .stars{display:inline-flex;gap:2px;color:#F2B8CE;margin-bottom:1.1rem}
   .stars svg{width:16px;height:16px;display:block}
   .badge{display:inline-flex;align-items:center;font-size:.64rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-deep);border:1px solid var(--glass-line);border-radius:999px;padding:.18rem .55rem}
@@ -818,26 +815,24 @@
   .rv-all a:hover{color:var(--ink)}
 
   @media(max-width:820px){
-    .fn-track{height:450svh}                              /* 100svh stage + 5 × 70svh bands */
-    .fn-sticky{height:calc(100svh - var(--nav-h));gap:1.4rem;padding:2vh 6vw}
-    .fn-stage{grid-template-columns:1fr;gap:1.4rem;max-width:420px;justify-items:center}
-    .fn-photowrap{width:min(56vw,230px)}
-    .fn-quote{text-align:center}
-    .fn-quote figcaption{justify-content:center}
-    .fn-quote blockquote{font-size:1.15rem}
-    .stars{margin-left:auto;margin-right:auto}
+    .fn-intro{padding-top:5rem}
+    .fn-sticky{height:calc(100svh - var(--nav-h))}
+    .fn-band{min-height:100svh}                 /* cards a touch closer on phones */
+    .fn-live blockquote{font-size:1.2rem}
     .rv-grid{grid-template-columns:1fr;max-width:420px}
     .rvcards{padding-bottom:5rem}
   }
   @media (prefers-reduced-motion: reduce){
-    /* no pin, no crossfade: first testimonial fixed, the rest a static list below it */
-    .fn-track{height:auto}
-    .fn-sticky{position:static;height:auto;display:block;padding:6rem 6vw}
-    .fn-stage{grid-template-columns:1fr;margin-top:2.5rem;max-width:640px;margin-inline:auto}
-    .fn-photowrap{max-width:320px;margin:0 auto 2.5rem}
-    .fn-quotes{display:block}
-    .fn-quote{opacity:1;transform:none;padding-top:2rem;margin-top:2rem;border-top:1px solid var(--glass-line)}
-    .fn-quote:first-of-type{padding-top:0;margin-top:0;border-top:none}
+    /* no pin, no cover: drop the live layer; show each card with its review below it as a list */
+    .fn-sticky{display:none}
+    .fn-band{display:block;min-height:0;margin-bottom:3.5rem;text-align:center;max-width:460px;margin-inline:auto}
+    .fn-card{margin:0 auto 1.4rem}
+    .fn-said{position:static;width:auto;height:auto;clip-path:none;white-space:normal}
+    .fn-said blockquote{margin:0;font-size:1.15rem;line-height:1.5;color:var(--ink)}
+    .fn-said figcaption{margin-top:1rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
+    .fn-said .who{font-weight:800;color:var(--ink)}
+    .fn-said .variant{color:var(--purple-deep)}
+    .fn-said .stars{margin-left:auto;margin-right:auto}
   }
 
   /* dashed selection frame with handles (identity motif).
@@ -1501,58 +1496,66 @@
   </div>
 </section>
 
-<!-- 13 — SOCIAL PROOF: Field Notes. Customer photos crossfade in a fixed visual while the central
-     testimonial swaps in sync with scroll (after o-scs.com's "Field Notes"). Drop cliente-01.avif …
-     cliente-05.avif into assets/ and refresh — the placeholders are replaced automatically. -->
+<!-- 13 — SOCIAL PROOF: Field Notes. The central testimonial rides a LOW sticky layer; the customer
+     photo cards scroll UP IN FRONT of it (higher z-index), covering the text and revealing the next
+     review as they pass — the swap fires hidden behind a card, so the text never fades. Drop
+     cliente-01.avif … cliente-05.avif into assets/ and refresh to replace the placeholders. -->
 <section class="fieldnotes" id="reviews" aria-label="Customer reviews">
+  <div class="fn-intro reveal">
+    <p class="eyebrow">Real homes, real reviews</p>
+    <h2 class="h-giant sweep-title" style="font-size:clamp(2rem,4.8vw,4rem)">Loved where it lives.</h2>
+    <p class="lead">4.6 out of 5 across 1,057 verified reviews.</p>
+  </div>
   <div class="fn-track">
-    <div class="fn-sticky">
-      <div class="fn-head reveal">
-        <p class="eyebrow">Real homes, real reviews</p>
-        <h2 class="h-giant sweep-title" style="font-size:clamp(2rem,4.8vw,4rem)">Loved where it lives.</h2>
-        <p class="lead">4.6 out of 5 across 1,057 verified reviews.</p>
-      </div>
-      <div class="fn-stage">
-        <div class="fn-photowrap">
-          <div class="fn-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-          <div class="fn-photos">
-            <span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
-            <img class="fn-photo on" src="assets/cliente-01.avif" alt="" onerror="this.style.display='none'">
-            <img class="fn-photo" src="assets/cliente-02.avif" alt="" onerror="this.style.display='none'">
-            <img class="fn-photo" src="assets/cliente-03.avif" alt="" onerror="this.style.display='none'">
-            <img class="fn-photo" src="assets/cliente-04.avif" alt="" onerror="this.style.display='none'">
-            <img class="fn-photo" src="assets/cliente-05.avif" alt="" onerror="this.style.display='none'">
-          </div>
-        </div>
-        <div class="fn-quotes">
-          <figure class="fn-quote on">
-            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-            <blockquote>It was really fun opening it and watching it expand! It only took three days until it was finished expanding. Love this couch!</blockquote>
-            <figcaption><span class="who">Trinaa A.</span> <span class="badge">Verified</span> <span class="variant">Krypton Green</span></figcaption>
-          </figure>
-          <figure class="fn-quote">
-            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-            <blockquote>My favorite part is being able to change the configuration. It's like having a new couch every day. Sometimes we even split them up between rooms.</blockquote>
-            <figcaption><span class="who">Ana V.</span> <span class="badge">Verified</span> <span class="variant">Pearl</span></figcaption>
-          </figure>
-          <figure class="fn-quote">
-            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-            <blockquote>I've been thinking about getting this couch for some time. I am extremely happy with it! It's firm and comfortable and great size!</blockquote>
-            <figcaption><span class="who">Kamile P.</span> <span class="badge">Verified</span> <span class="variant">Platinum Grey</span></figcaption>
-          </figure>
-          <figure class="fn-quote">
-            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-            <blockquote>The M1 is perfect! It's so comfortable and well made! Shipment went smoothly &amp; arrived quickly. Highly recommend!</blockquote>
-            <figcaption><span class="who">James L.</span> <span class="badge">Verified</span> <span class="variant">Helium Cloud</span></figcaption>
-          </figure>
-          <figure class="fn-quote">
-            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-            <blockquote>I researched 'boneless' sofas for several months. It was a smart purchase and I am extremely pleased with the quality. I was skeptical but I am convinced.</blockquote>
-            <figcaption><span class="who">Verified buyer</span> <span class="badge">Verified</span> <span class="variant">Pearl</span></figcaption>
-          </figure>
-        </div>
-      </div>
+    <!-- low layer: the single central testimonial, filled by JS from the card that is covering it -->
+    <div class="fn-sticky" aria-hidden="true">
+      <div class="fn-ring"></div>
+      <figure class="fn-live" id="fnLive"></figure>
     </div>
+    <!-- high layer: photo cards that scroll up over the text. each carries its own review (visually
+         hidden, but in the a11y tree and shown as a static list under reduced-motion). -->
+    <ol class="fn-cards">
+      <li class="fn-band">
+        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-01.avif" alt="" onerror="this.style.display='none'"></div>
+        <figure class="fn-said">
+          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+          <blockquote>It was really fun opening it and watching it expand! It only took three days until it was finished expanding. Love this couch!</blockquote>
+          <figcaption><span class="who">Trinaa A.</span> <span class="badge">Verified</span> <span class="variant">Krypton Green</span></figcaption>
+        </figure>
+      </li>
+      <li class="fn-band">
+        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-02.avif" alt="" onerror="this.style.display='none'"></div>
+        <figure class="fn-said">
+          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+          <blockquote>My favorite part is being able to change the configuration. It's like having a new couch every day. Sometimes we even split them up between rooms.</blockquote>
+          <figcaption><span class="who">Ana V.</span> <span class="badge">Verified</span> <span class="variant">Pearl</span></figcaption>
+        </figure>
+      </li>
+      <li class="fn-band">
+        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-03.avif" alt="" onerror="this.style.display='none'"></div>
+        <figure class="fn-said">
+          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+          <blockquote>I've been thinking about getting this couch for some time. I am extremely happy with it! It's firm and comfortable and great size!</blockquote>
+          <figcaption><span class="who">Kamile P.</span> <span class="badge">Verified</span> <span class="variant">Platinum Grey</span></figcaption>
+        </figure>
+      </li>
+      <li class="fn-band">
+        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-04.avif" alt="" onerror="this.style.display='none'"></div>
+        <figure class="fn-said">
+          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+          <blockquote>The M1 is perfect! It's so comfortable and well made! Shipment went smoothly &amp; arrived quickly. Highly recommend!</blockquote>
+          <figcaption><span class="who">James L.</span> <span class="badge">Verified</span> <span class="variant">Helium Cloud</span></figcaption>
+        </figure>
+      </li>
+      <li class="fn-band">
+        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-05.avif" alt="" onerror="this.style.display='none'"></div>
+        <figure class="fn-said">
+          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+          <blockquote>I researched 'boneless' sofas for several months. It was a smart purchase and I am extremely pleased with the quality. I was skeptical but I am convinced.</blockquote>
+          <figcaption><span class="who">Verified buyer</span> <span class="badge">Verified</span> <span class="variant">Pearl</span></figcaption>
+        </figure>
+      </li>
+    </ol>
   </div>
 </section>
 
@@ -1880,31 +1883,38 @@
       if (sweep) sweep.style.setProperty('--p', p.toFixed(3));   // sweep the title in step with the count
     }
 
-    // social proof (Field Notes): active review index from scroll progress through the pinned track;
-    // the matching photo + testimonial crossfade in. the heading uses the sweep-title effect, driven
-    // here by its own screen position (it isn't tied to the dial counter). scroll-scrubbed, both ways.
-    const fnTrack = document.querySelector('.fn-track');
+    // social proof (Field Notes): the photo cards scroll UP over a fixed central testimonial. when a
+    // card fully covers the text slot, swap the sticky's review to that card's — instantly, hidden
+    // behind the card, so the text never fades. keeps the last review while exposed; restores the
+    // previous one on the way back up (same rule). the heading uses the sweep-title effect, driven
+    // here by its own screen position (not tied to the dial counter).
+    const fnSection = document.querySelector('.fieldnotes');
     const fnSticky = document.querySelector('.fn-sticky');
-    const fnPhotos = [...document.querySelectorAll('.fn-photo')];
-    const fnQuotes = [...document.querySelectorAll('.fn-quote')];
+    const fnLive = document.getElementById('fnLive');
+    const fnBands = [...document.querySelectorAll('.fn-band')];
+    const fnSaid = fnBands.map(b => b.querySelector('.fn-said'));
     const fnTitle = document.querySelector('.fieldnotes .sweep-title');
-    let fnActive = -1;
+    let fnQuoteIdx = -1;
+    const setFnQuote = i => { if (i === fnQuoteIdx || !fnLive || !fnSaid[i]) return; fnQuoteIdx = i; fnLive.innerHTML = fnSaid[i].innerHTML; };
+    if (fnLive && fnSaid[0]) setFnQuote(0);               // first review, exposed before any card
     function fnMotion() {
       const vh = document.documentElement.clientHeight || innerHeight;
-      if (fnTitle) {                                      // reveal the heading as it rises into view
+      if (fnTitle) {                                       // reveal the heading as it rises into view
         const t = fnTitle.getBoundingClientRect();
         fnTitle.style.setProperty('--p', clamp01((vh * 0.95 - t.top) / (vh * 0.45)).toFixed(3));
       }
-      const navH = parseFloat(getComputedStyle(fnSticky).top) || 0;
-      const travel = fnTrack.offsetHeight - (vh - navH);  // the pinned scroll distance (5 bands)
-      const p = travel > 0 ? clamp01((navH - fnTrack.getBoundingClientRect().top) / travel) : 0;
-      const n = fnQuotes.length;
-      const idx = Math.min(n - 1, Math.floor(p * n));     // which band holds the viewport
-      if (idx !== fnActive) {
-        fnActive = idx;
-        fnPhotos.forEach((el, i) => el.classList.toggle('on', i === idx));
-        fnQuotes.forEach((el, i) => el.classList.toggle('on', i === idx));
-      }
+      const sr = fnSticky.getBoundingClientRect();
+      const cy = sr.top + sr.height / 2;                   // the viewport line the text sits on
+      const T = 110;                                       // half the text band a card must fully hide
+      let covering = -1, best = Infinity;
+      fnBands.forEach((b, i) => {
+        const r = b.querySelector('.fn-card').getBoundingClientRect();
+        if (r.top <= cy - T && r.bottom >= cy + T) {       // this card fully covers the text slot
+          const d = Math.abs((r.top + r.bottom) / 2 - cy);
+          if (d < best) { best = d; covering = i; }
+        }
+      });
+      if (covering !== -1) setFnQuote(covering);           // swap only while hidden behind a card
     }
 
     const jobs = [];
@@ -1913,7 +1923,7 @@
       jobs.push({ el: dialWrap, run: dialMotion });
       dialMotion();   // set the empty start immediately, so the default-lit ring never flashes
     }
-    if (fnTrack && fnQuotes.length) { jobs.push({ el: fnTrack, run: fnMotion }); fnMotion(); }
+    if (fnSection && fnBands.length) { jobs.push({ el: fnSection, run: fnMotion }); fnMotion(); }
     marquees.forEach(m => jobs.push({ el: m.closest('section') || m, run: marqueeMotion }));
 
     const live = new Set();
