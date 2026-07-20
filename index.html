@@ -996,7 +996,10 @@
 
   /* ---------- SCROLL CAROUSEL (rotates with the scroll, no sweep blur) ---------- */
   .car-track{height:260vh;position:relative;padding:0}
-  .car-sticky{position:sticky;top:0;height:100dvh;overflow:hidden}
+  /* sem overflow:hidden: no iOS o overflow:hidden num sticky recorta o glow FIXO atras, criando a
+     "quebra" no fundo do carrossel. os slides nao vazam vertical (ficam ~27-71% da tela) e o vazamento
+     lateral ja e contido pelo overflow-x:clip global do html. */
+  .car-sticky{position:sticky;top:0;height:100dvh}
   /* the carousel stays full-bleed, but its heading moves to the shared content-column edge so its
      title lines up with every other section's, instead of sitting further left at 5vw. */
   /* head centralizado no topo, no padrao da shop (eyebrow pequeno + titulo grande). aqui o titulo
@@ -1086,13 +1089,11 @@
        top em dvh (nao vh): as imagens usam % do sticky (dvh); com vh no head, a barra de URL do iOS
        ao reaparecer (scroll pra cima) fazia a imagem subir e invadir o texto. dvh mantem os dois em
        sincronia. */
-    .car-head{
-      top:12dvh;
-      /* scrim escuro atras do titulo: sobre imagens claras o eyebrow/nome/sub-label ficavam sem
-         contraste e ilegiveis. o gradiente garante leitura e some antes das imagens. */
-      background:linear-gradient(180deg, rgba(13,10,19,.94) 0%, rgba(13,10,19,.82) 45%, rgba(13,10,19,0) 100%);
-      padding-bottom:2.4rem;
-    }
+    .car-head{top:12dvh}
+    /* legibilidade do titulo por text-shadow (nao mais por um scrim de gradiente atras — a faixa do
+       scrim lia como uma "quebra" no fundo do carrossel). a sombra da contraste sobre imagens claras
+       sem pintar faixa nenhuma. */
+    .car-eyebrow,.car-name,.car-room{text-shadow:0 1px 10px rgba(13,10,19,.85),0 0 3px rgba(13,10,19,.7)}
     .cslide,.car-center{top:49%}
     .logo .prod-suffix{display:none}
     .shop{padding-bottom:12rem}
