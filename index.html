@@ -812,11 +812,23 @@
   .fn-intro .lead{margin-top:.9rem;font-size:1rem;color:var(--dim)}
   .fn-track{position:relative}
   /* LOW layer: the single central testimonial, filled by JS from the card covering it */
+  /* o texto agora fica ACIMA das fotos (z-3 > fn-cards z-2): antes as fotos (uma delas grande e quase
+     central) cobriam o depoimento quase o tempo todo. um scrim radial desfocado atras do texto
+     (::before) garante contraste quando uma foto passa atras, sem escondê-lo. */
   .fn-sticky{
-    position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));z-index:1;
+    position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));z-index:3;
     display:flex;align-items:center;justify-content:center;padding:2vh 6vw;pointer-events:none;
   }
-  .fn-live{position:relative;max-width:600px;text-align:center;opacity:1;transition:opacity .18s ease}
+  .fn-live{
+    position:relative;max-width:600px;text-align:center;opacity:1;
+    transition:opacity .4s ease, filter .4s ease;will-change:opacity,filter;
+  }
+  .fn-live::before{
+    content:"";position:absolute;z-index:-1;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:128%;height:160%;pointer-events:none;
+    background:radial-gradient(ellipse at center, rgba(13,10,19,.86) 0%, rgba(13,10,19,.72) 46%, rgba(13,10,19,0) 74%);
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  }
   .fn-live blockquote{margin:0;font-size:clamp(1.3rem,2.6vw,2.05rem);line-height:1.4;font-weight:500;color:var(--ink);letter-spacing:-.01em}
   .fn-live figcaption{margin-top:1.4rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem}
   .fn-live .who{font-weight:800;color:var(--ink);letter-spacing:.02em}
@@ -1983,9 +1995,15 @@
     const setFnQuote = i => {
       if (i === fnQuoteIdx || !fnLive || !fnSaid[i]) return;
       fnQuoteIdx = i;
+      // fade + leve desfoque na saida, troca o texto escondido, depois foca de volta — nao "pisca".
       fnLive.style.opacity = '0';
+      fnLive.style.filter = 'blur(6px)';
       clearTimeout(fnLive._t);
-      fnLive._t = setTimeout(() => { fnLive.innerHTML = fnSaid[i].innerHTML; fnLive.style.opacity = '1'; }, 150);
+      fnLive._t = setTimeout(() => {
+        fnLive.innerHTML = fnSaid[i].innerHTML;
+        fnLive.style.opacity = '1';
+        fnLive.style.filter = 'blur(0px)';
+      }, 240);
     };
     if (fnLive && fnSaid[0]) { fnQuoteIdx = 0; fnLive.innerHTML = fnSaid[0].innerHTML; }  // first review, no fade
     function fnMotion() {
