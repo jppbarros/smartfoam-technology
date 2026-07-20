@@ -819,7 +819,9 @@
   /* ---------- SOCIAL PROOF — Field Notes (photo cards scroll over a fixed testimonial) ---------- */
   /* --sweep-bg re-points the sweep-title's hidden zone to THIS section's bg (#0D0A13), so the
      "Loved where it lives" reveal starts truly invisible here too. */
-  .fieldnotes{background:transparent;position:relative;--sweep-bg:#0D0A13;overflow-x:clip}   /* glow atras (era #0D0A13 chapado) */
+  /* sem overflow-x:clip aqui: o html ja tem clip global (mata o scroll lateral), e um ancestral com
+     clip pode fazer o .fn-sticky tremer no iOS. glow atras (era #0D0A13 chapado). */
+  .fieldnotes{background:transparent;position:relative;--sweep-bg:#0D0A13}
   .fn-intro{text-align:center;max-width:780px;margin:0 auto;padding:8rem 6vw 0}
   .fn-intro .lead{margin-top:1rem;font-size:1rem;color:var(--dim)}
   .fn-track{position:relative}
@@ -827,6 +829,9 @@
   .fn-sticky{
     position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));z-index:1;
     display:flex;align-items:center;justify-content:center;padding:2vh 6vw;pointer-events:none;
+    /* camada GPU propria: sem isto, no iOS o depoimento fixo treme verticalmente durante o momentum
+       scroll (rasteriza a cada frame por cima do glow FIXO que agora aparece atras). */
+    transform:translateZ(0);will-change:transform;
   }
   /* transition inclui filter pro fade+blur suave da troca (nao "pisca") */
   .fn-live{
