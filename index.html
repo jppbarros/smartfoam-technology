@@ -1052,8 +1052,17 @@
     section{padding:6rem 6vw}
       .car-track{padding:0}
     .cslide,.car-center{height:min(44vh,420px)}
-    /* mobile: aproxima titulo e imagens (havia ~194px de vazio). head desce um pouco, imagens sobem. */
-    .car-head{top:12vh}
+    /* mobile: aproxima titulo e imagens (havia ~194px de vazio). head desce um pouco, imagens sobem.
+       top em dvh (nao vh): as imagens usam % do sticky (dvh); com vh no head, a barra de URL do iOS
+       ao reaparecer (scroll pra cima) fazia a imagem subir e invadir o texto. dvh mantem os dois em
+       sincronia. */
+    .car-head{
+      top:12dvh;
+      /* scrim escuro atras do titulo: sobre imagens claras o eyebrow/nome/sub-label ficavam sem
+         contraste e ilegiveis. o gradiente garante leitura e some antes das imagens. */
+      background:linear-gradient(180deg, rgba(13,10,19,.94) 0%, rgba(13,10,19,.82) 45%, rgba(13,10,19,0) 100%);
+      padding-bottom:2.4rem;
+    }
     .cslide,.car-center{top:49%}
     .logo .prod-suffix{display:none}
     .shop{padding-bottom:12rem}
@@ -1162,7 +1171,7 @@
 <a class="logo nav-logo" href="./">
   <img src="assets/rovelab-logo-white.png" alt="Rove Lab">
   <span class="sep"></span>
-  <span class="prod"><img class="sf-word" src="assets/sf-word-white.svg" alt="SmartFoam™"><span class="prod-suffix"> · Technology</span></span>
+  <span class="prod"><img class="sf-word" src="assets/sf-word-white.svg" alt="SmartFoam™"></span>
 </a>
 
 <nav>
@@ -1240,7 +1249,7 @@
   <!-- the film sits right under the intro copy now (id="film" keeps the nav anchor working) -->
   <div class="film-frame reveal" id="film">
     <video id="filmVideo" src="assets/smartfoam-film.mp4" poster="assets/film-poster.jpg"
-           muted loop playsinline preload="metadata" aria-label="The SmartFoam film"></video>
+           autoplay muted loop playsinline preload="metadata" aria-label="The SmartFoam film"></video>
   </div>
 </section>
 
@@ -1845,13 +1854,23 @@
       vids.forEach(v => { v.controls = true; v.removeAttribute('aria-hidden'); });
       return;
     }
+    // tenta dar play com retries antes de cair pros controles: o play() pode falhar por corrida (video
+    // ainda sem buffer). so mostra controles no ultimo recurso (ex: Low Power Mode do iOS bloqueia
+    // autoplay). assim o filme reproduz sozinho quando o usuario para na dobra, sem tocar na UI.
+    const tryPlay = (v, attempt = 0) => {
+      const p = v.play();
+      if (p && p.catch) p.then(() => { v.controls = false; }).catch(() => {
+        if (attempt < 3) setTimeout(() => tryPlay(v, attempt + 1), 350);
+        else v.controls = true;
+      });
+    };
     const vio = new IntersectionObserver(entries => {
       entries.forEach(en => {
         const v = en.target;
-        if (en.isIntersecting) v.play().catch(() => { v.controls = true; });
+        if (en.isIntersecting) tryPlay(v);
         else v.pause();
       });
-    }, { threshold: 0.35 });
+    }, { threshold: 0.25 });
     vids.forEach(v => vio.observe(v));
   })();
 
