@@ -796,7 +796,7 @@
      over the fixed testimonial. --fw width, --fa aspect, --fx horizontal offset, set per position. */
   .fn-card{
     position:relative;width:var(--fw,300px);aspect-ratio:var(--fa,4/5);background:#2A2436;
-    border-radius:var(--r);overflow:hidden;box-shadow:0 34px 80px rgba(0,0,0,.55);
+    border-radius:0;overflow:hidden;box-shadow:0 34px 80px rgba(0,0,0,.55);
     transform:translateX(var(--fx,0));
   }
   .fn-band:nth-child(1) .fn-card{--fw:clamp(260px,25vw,380px);--fa:4/5;--fx:-19vw}
@@ -816,7 +816,7 @@
   /* closing review cards */
   .rvcards{background:var(--bg);padding:1rem 6vw 7rem;position:relative}
   .rv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;max-width:1120px;margin:0 auto}
-  .rv-card{background:var(--glass);border:1px solid var(--glass-line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+  .rv-card{background:var(--glass);border:1px solid var(--glass-line);border-radius:0;overflow:hidden;display:flex;flex-direction:column}
   .rv-cardimg{position:relative;aspect-ratio:4/5;background:#2A2436}
   .rv-cardimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
   .rv-cardbody{padding:1.4rem 1.5rem 1.6rem;display:flex;flex-direction:column;gap:.9rem;flex:1}
@@ -895,16 +895,16 @@
   .cslide{
     position:absolute;top:58%;left:50%;height:min(52vh,520px);aspect-ratio:3/4;
     transform:translate(-50%,-50%);overflow:hidden;background:var(--glass);border:1px solid var(--glass-line);
-    border-radius:44% 44% 44% 44% / 22% 22% 22% 22%;will-change:transform,opacity;
+    border-radius:0;will-change:transform,opacity;
   }
   .cslide img{width:100%;height:100%;object-fit:cover;object-position:center 62%;display:block}
   .car-center{
     position:absolute;top:58%;left:50%;transform:translate(-50%,-50%);
     height:min(52vh,520px);aspect-ratio:3/4;pointer-events:none;z-index:15;
   }
-  .car-center .select-frame{inset:-12px;border-radius:44% 44% 44% 44% / 22% 22% 22% 22%}
-  /* the handles mark a rectangle's corners; on the elliptical frame they float in dead space */
-  .car-center .select-frame i{display:none}
+  .car-center .select-frame{inset:-12px;border-radius:0}
+  /* the handles mark the frame's corners — now the frame is a rectangle, so they sit on them */
+  .car-center .select-frame i{display:block}
   .car-cap{
     position:absolute;bottom:-40px;left:-12px;white-space:nowrap;
     font-size:.6rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#CFC6E8;
