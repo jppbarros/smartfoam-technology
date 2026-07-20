@@ -225,7 +225,10 @@
   /* the purple curtain now lands on #numbers, so the dark base + padding trick moves there.
      #numbers opens on #1C1B23 (segundo.avif's actual base) and #possible fades it to the page
      black — #1C1B23 sits ~15 points above #0D0A13 and flat would step. */
-  #numbers{background:#1C1B23;padding-top:0;scroll-margin-top:var(--nav-h)}
+  /* #1C1B23 SO no topo (a costura da cortina), fade pra transparente logo abaixo pra o glow (.flow)
+     aparecer atras do #numbers como nas outras secoes — antes era laje solida sem glow (o "roxo
+     chapado"). o wrap on-dark tbm virou transparente (abaixo), senao o glow ficaria tampado. */
+  #numbers{background:linear-gradient(180deg,#1C1B23 0, #1C1B23 7vh, rgba(28,27,35,0) 46vh);padding-top:0;scroll-margin-top:var(--nav-h)}
   /* pin BELOW the fixed header, not at top:0 — so the "Tested where it counts" title lands under
      the nav (and clear of its blur) instead of scrolling under the backdrop-filter. height shrinks
      by the same offset so the sticky box still ends at the viewport bottom (no overflow). */
@@ -255,7 +258,9 @@
     #numbers{--num-shift:0px}
     .num-shift{transform:translateY(calc(-1 * var(--num-shift)))}
   }
-  #possible{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
+  /* transparente: #numbers ja termina em transparente (glow), entao aqui nao precisa mais fazer o
+     fade a partir de #1C1B23 — deixa o glow continuo e seamless entre as duas secoes. */
+  #possible{background:transparent}
 
   /* THE DIAL — one focus for this section: the BIFMA impact test. a ring closes with the scroll
      while the counter climbs to 100,000+. dial left, copy right; stacks on narrow screens. */
@@ -327,7 +332,9 @@
      through: measured 488px of #0D0A13 cutting the light section dead before the curtain arrives.
      colouring the wrap makes the hold safe whether or not the pin is on. */
   .pin-wrap{position:relative}
-  .pin-wrap.on-dark{background:#0D0A13}
+  .pin-wrap.on-dark{background:transparent}   /* transparente pra o glow (.flow) aparecer atras das
+     secoes escuras pinadas (wordmark/logobuild/#numbers) em vez de laje #0D0A13 chapada — consistente
+     com as secoes claras que ja mostram o glow. o body ja e #0D0A13, entao o fundo base nao muda. */
   .pin-wrap.on-light{background:#ECE8F7}  /* = #material's base, so the bare spacer (mobile,
                                              unpinned) meets the section with no 1-unit step */
   .pinned{position:sticky;top:0;height:100vh;z-index:1}
@@ -812,7 +819,7 @@
   /* ---------- SOCIAL PROOF — Field Notes (photo cards scroll over a fixed testimonial) ---------- */
   /* --sweep-bg re-points the sweep-title's hidden zone to THIS section's bg (#0D0A13), so the
      "Loved where it lives" reveal starts truly invisible here too. */
-  .fieldnotes{background:var(--bg);position:relative;--sweep-bg:#0D0A13;overflow-x:clip}
+  .fieldnotes{background:transparent;position:relative;--sweep-bg:#0D0A13;overflow-x:clip}   /* glow atras (era #0D0A13 chapado) */
   .fn-intro{text-align:center;max-width:780px;margin:0 auto;padding:8rem 6vw 0}
   .fn-intro .lead{margin-top:1rem;font-size:1rem;color:var(--dim)}
   .fn-track{position:relative}
@@ -863,7 +870,7 @@
   .badge{display:inline-flex;align-items:center;font-size:.64rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-deep);border:1px solid var(--glass-line);border-radius:999px;padding:.18rem .55rem}
 
   /* closing review cards */
-  .rvcards{background:var(--bg);padding:1rem 6vw 7rem;position:relative}
+  .rvcards{background:transparent;padding:1rem 6vw 7rem;position:relative}   /* glow atras (era #0D0A13 chapado) */
   .rv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:1120px;margin:0 auto}
   .rv-card{background:var(--glass);border:1px solid var(--glass-line);border-radius:0;overflow:hidden;display:flex;flex-direction:column}
   .rv-cardimg{position:relative;aspect-ratio:4/5;background:#2A2436}
