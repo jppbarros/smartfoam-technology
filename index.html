@@ -233,13 +233,13 @@
   @media(min-width:821px){
     #numbers.pinned{display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(1.25rem,4vh,4rem)}
   }
-  /* num-shift: puxa o conteudo (titulo + dial) 100% da altura da secao PRA CIMA, pra dentro da zona
-     da cortina escura, pra que ja apareca conforme a cortina sobe em vez do escuro ler como vazio.
-     transform (nao margin) pra nao mexer no fluxo (a secao mantem altura, #possible fica no lugar) e
-     nao mover a cortina. --num-shift = altura da secao pinada; ajustar aqui pra afinar a magnitude.
-     so no desktop com motion: sem motion / mobile o conteudo fica no lugar (transform none). */
+  /* num-shift: puxa o conteudo (titulo + dial) PRA CIMA, pra dentro da zona da cortina escura, pra
+     que ja apareca conforme a cortina sobe em vez do escuro ler como vazio. transform (nao margin)
+     pra nao mexer no fluxo (a secao mantem altura, #possible fica no lugar) e nao mover a cortina.
+     --num-shift controla a magnitude: 100% da altura da secao (100vh - nav-h) some por cima no
+     repouso; valores menores mostram o conteudo mais cedo SEM sumir. so no desktop com motion. */
   @media (min-width:821px) and (prefers-reduced-motion: no-preference){
-    #numbers{--num-shift:calc(100vh - var(--nav-h))}
+    #numbers{--num-shift:0px}
     .num-shift{transform:translateY(calc(-1 * var(--num-shift)))}
   }
   #possible{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
