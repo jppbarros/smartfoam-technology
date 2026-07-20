@@ -2046,7 +2046,11 @@
       const vh = document.documentElement.clientHeight || innerHeight;
       const navH = parseFloat(getComputedStyle(lb).top) || 0;
       const travel = lbWrap.offsetHeight - lb.offsetHeight;  // the hold-spacer distance
-      const p = travel > 0 ? clamp01((navH - lbWrap.getBoundingClientRect().top) / travel) : 0;
+      // conta sobre ENTRADA + hold, nao so o hold: com so o hold, o p ficava 0 durante toda a entrada
+      // (~1 viewport de scroll escuro vazio) e o build so comecava depois do pin travar. medindo desde
+      // vh (secao comeca a entrar) o logo ja se monta enquanto sobe pra dentro da tela — sem area vazia.
+      const total = (vh - navH) + travel;
+      const p = total > 0 ? clamp01((vh - lbWrap.getBoundingClientRect().top) / total) : 0;
       // build finishes in the first ~half of the hold, so the logo is fully formed on the dark
       // stage before the #problem white curtain sweeps up over it in the tail.
       // innermost: a tiny circle grows into the central circle (rx = ry), 0 -> .08
