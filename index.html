@@ -563,7 +563,9 @@
   /* wordmark SmartFoam (typography-only-white) no badge, no lugar da marca elipse que ficou pequena
      demais. seletor .scard .badge pra vencer .scard img{height:100%}. altura casada ao "POWERED BY". */
   .scard .badge .sf-word-img{height:14px;width:auto;display:inline-block;margin-left:.42rem}
-  .sf-lockup{height:clamp(22px,2.6vw,30px);width:auto;display:block}
+  /* cabecalho da coluna #compare: so a tipografia (wordmark), nao o lockup. wordmark e largo/baixo,
+     entao altura menor que o lockup pra nao estourar a coluna. */
+  .sf-lockup{height:clamp(15px,1.9vw,21px);width:auto;display:block}
   .prod .sf-word{margin-right:.3rem}
   footer .sf-word{height:16px}
 
@@ -1466,7 +1468,7 @@
           <th scope="col" class="lbl"><span class="sr-only">Characteristics</span></th>
           <th scope="col" class="sf">
             <span class="colname">
-              <img class="sf-lockup" src="assets/sf-lockup-white.svg" alt="SmartFoam™">
+              <img class="sf-lockup" src="assets/sf-word-white.svg" alt="SmartFoam™">
               <span class="s">Boneless Design™</span>
             </span>
           </th>
