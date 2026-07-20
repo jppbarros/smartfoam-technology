@@ -785,9 +785,10 @@
   /* HIGH layer: opaque photo cards, centred, one every ~120vh (so the text is exposed between them)
      and above the text (z-index 2) — a passing card hides the text while the review swaps under it */
   .fn-cards{position:relative;z-index:2;margin:0;padding:0;list-style:none}
-  .fn-band{display:flex;justify-content:center;align-items:center;min-height:120vh}
+  /* grid place-items centres the card in every band identically — no left/right drift */
+  .fn-band{display:grid;place-items:center;min-height:120vh}
   .fn-card{
-    position:relative;width:min(420px,88vw);aspect-ratio:4/5;background:#2A2436;
+    position:relative;width:min(420px,88vw);aspect-ratio:4/5;margin:0 auto;background:#2A2436;
     border-radius:var(--r);overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.55);
   }
   .fn-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
@@ -1904,12 +1905,14 @@
         fnTitle.style.setProperty('--p', clamp01((vh * 0.95 - t.top) / (vh * 0.45)).toFixed(3));
       }
       const sr = fnSticky.getBoundingClientRect();
-      const cy = sr.top + sr.height / 2;                   // the viewport line the text sits on
+      const cy = sr.top + sr.height / 2;                   // the point the text sits on…
+      const cx = sr.left + sr.width / 2;                   // …horizontally and vertically
       const T = 110;                                       // half the text band a card must fully hide
       let covering = -1, best = Infinity;
       fnBands.forEach((b, i) => {
         const r = b.querySelector('.fn-card').getBoundingClientRect();
-        if (r.top <= cy - T && r.bottom >= cy + T) {       // this card fully covers the text slot
+        // this card fully covers the text slot (over the centre both ways) → swap is hidden
+        if (r.top <= cy - T && r.bottom >= cy + T && r.left <= cx && r.right >= cx) {
           const d = Math.abs((r.top + r.bottom) / 2 - cy);
           if (d < best) { best = d; covering = i; }
         }
