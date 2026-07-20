@@ -881,9 +881,9 @@
      curta demais (a foto passava, trocava, e a proxima ja chegava). 118vh abre uma janela de leitura
      clara entre cada foto. */
   .fn-band{display:grid;place-items:center;min-height:118vh}
-  /* janela extra ANTES da ultima foto: segura o penultimo depoimento ("The M1 is perfect...") exposto
-     por mais scroll ate a ultima foto chegar, entao ele da pra ler. */
-  .fn-band:nth-child(5){min-height:158vh}
+  /* ultimo band mais curto + foto ancorada ao fim: a foto centralizada num band de 158vh deixava um
+     grande vazio abaixo, entre a ultima review e a linha "4.6/5". (mobile tem o seu proprio valor.) */
+  .fn-band:nth-child(5){min-height:90vh;align-content:end;padding-bottom:6vh}
   /* photo cards, each landing at its OWN horizontal spot AND its own size/shape (after o-scs.com's
      Field Notes): they scatter left/right/centre and mix widths + aspect ratios as they float up
      over the fixed testimonial. --fw width, --fa aspect, --fx horizontal offset, set per position. */
