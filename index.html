@@ -577,23 +577,21 @@
 
   /* 04 — science columns */
   .cell3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem;margin-top:3.4rem}
-  .cellcard{background:var(--glass);border:1px solid var(--glass-line);border-radius:var(--r);padding:1.8rem}
-  .cellcard h3{font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem}
+  /* estilo editorial (tipo Nike Mind): imagem em cima, texto embaixo, sem card/titulo. os icones SVG
+     e os h3 sairam; cada card agora e um placeholder de imagem + paragrafo. trocar .cell-ph por <img>
+     quando as imagens reais chegarem. */
+  .cellcard{background:none;border:none;padding:0}
   .cellcard p{color:var(--dim);font-size:.9rem;line-height:1.65}
-  /* one language across the three: flat shapes, the same 1.3 purple outline, the same fill,
-     the same 122x64 box. they were three grammars before (outline / solid gradient bars /
-     filled blocks with a typographic arrow). the gradient survives in one place, the curve,
-     where it carries the meaning: soft to firm. */
-  .cellviz{height:64px;margin-bottom:1.1rem;display:flex;align-items:center}
-  .cellviz svg{height:100%;width:auto;overflow:visible}
-  .cellviz .wall{fill:rgba(190,170,255,.13);stroke:#CDBDF2;stroke-width:1.3}
-  /* the curve carried a fraction of the ink the cell cluster did; the area gives it the same
-     body as the other two without breaking the fill language */
-  .cellviz .area{fill:rgba(190,170,255,.13);stroke:none}
-  .cellviz .curve{fill:none;stroke:url(#cvg);stroke-width:2.8;stroke-linecap:round}
-  .cellviz .node{fill:#171221;stroke:#CDBDF2;stroke-width:1.3}
-  .cellviz .arrow{fill:none;stroke:#CDBDF2;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
-  .curvelab{font-size:max(10px,.55rem);font-weight:800;letter-spacing:.14em;color:var(--purple-label);text-transform:uppercase}
+  .cell-ph{
+    aspect-ratio:4/5;margin-bottom:1.3rem;
+    background:
+      repeating-linear-gradient(45deg,rgba(167,148,240,.05) 0 14px,rgba(167,148,240,.09) 14px 28px),
+      linear-gradient(135deg,#272233,#1a1725);
+    border:1px dashed rgba(167,148,240,.28);
+    display:flex;align-items:center;justify-content:center;
+    color:rgba(207,193,245,.45);font-size:.68rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
+  }
+  .cell-ph::after{content:"Imagem"}
 
   /* what SmartFoam does: real unboxing footage left, expandable points right */
   /* the video is portrait, so an fr-based column let it grow to ~900px tall on wide screens
@@ -1203,47 +1201,15 @@
   </div>
   <div class="cell3 reveal">
     <div class="cellcard">
-      <!-- a foam cross-section: packed cells with walls, and air moving through them -->
-      <div class="cellviz" aria-hidden="true">
-        <svg viewBox="0 0 122 64">
-          <circle class="wall" cx="15" cy="17" r="12"/><circle class="wall" cx="40" cy="13" r="9.5"/>
-          <circle class="wall" cx="62" cy="19" r="12.5"/><circle class="wall" cx="86" cy="14" r="10"/>
-          <circle class="wall" cx="108" cy="19" r="11"/>
-          <circle class="wall" cx="12" cy="46" r="10"/><circle class="wall" cx="35" cy="45" r="12"/>
-          <circle class="wall" cx="59" cy="48" r="10.5"/><circle class="wall" cx="83" cy="44" r="12.5"/>
-          <circle class="wall" cx="107" cy="47" r="10"/>
-          <circle class="wall" cx="26" cy="30" r="6"/><circle class="wall" cx="49" cy="33" r="6.5"/>
-          <circle class="wall" cx="73" cy="31" r="6"/><circle class="wall" cx="96" cy="32" r="6.5"/>
-        </svg>
-      </div>
-      <h3>Adaptive Cell Structure</h3>
+      <div class="cell-ph" aria-hidden="true"></div>
       <p>Open-cell architecture that breathes, responds to load, and recovers fully, sit after sit, year after year.</p>
     </div>
     <div class="cellcard">
-      <div class="cellviz" aria-hidden="true">
-        <svg viewBox="0 0 122 64">
-          <defs><linearGradient id="cvg" x1="0" y1="1" x2="1" y2="0">
-            <stop offset="0" stop-color="#F7A8C4"/><stop offset=".5" stop-color="#C9B4EC"/><stop offset="1" stop-color="#8FC3F7"/>
-          </linearGradient></defs>
-          <path class="area" d="M6,54 C32,51 48,41 66,30 C84,19 104,10 116,6 L116,58 L6,58 Z"/>
-          <path class="curve" d="M6,54 C32,51 48,41 66,30 C84,19 104,10 116,6"/>
-          <circle class="node" cx="32" cy="51" r="3"/>
-          <circle class="node" cx="66" cy="30" r="3"/>
-          <circle class="node" cx="116" cy="6" r="3"/>
-        </svg>
-      </div>
-      <h3>Progressive Support Curve</h3>
+      <div class="cell-ph" aria-hidden="true"></div>
       <p>Soft at first touch. Firm at full lean. SmartFoam™ adapts pressure and resistance depending on how weight is distributed across the surface.</p>
     </div>
     <div class="cellcard">
-      <div class="cellviz" aria-hidden="true">
-        <svg viewBox="0 0 122 64">
-          <rect class="wall" x="6" y="44" width="38" height="14" rx="3"/>
-          <path class="arrow" d="M54,32 h12 M63,27.5 l4.5,4.5 -4.5,4.5"/>
-          <rect class="wall" x="78" y="6" width="38" height="52" rx="3"/>
-        </svg>
-      </div>
-      <h3>Expansion Memory</h3>
+      <div class="cell-ph" aria-hidden="true"></div>
       <p>Compressed for shipping and engineered to expand into full form upon arrival. SmartFoam™ returns to its engineered shape every time, and stays there.</p>
     </div>
   </div>
