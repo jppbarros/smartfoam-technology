@@ -34,7 +34,11 @@
     font-size:16px;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  /* overflow-x:clip aqui no html tambem (o body ja tem): o .grain e position:fixed com width:200%,
+     e elementos fixed escapam do clip do body — sozinho o body deixava a pagina rolar de lado no
+     mobile (fundo aparecia nas laterais). clip no root contem o grain e qualquer fixed/scaled sem
+     virar scroll-container que mate os position:sticky (hidden mataria; clip nao). */
+  html{scroll-behavior:smooth;overflow-x:clip}
   body{
     background:var(--bg);color:var(--ink);
     font-family:"Urbanist",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
