@@ -944,9 +944,11 @@
   .car-sticky{position:sticky;top:0;height:100dvh;overflow:hidden}
   /* the carousel stays full-bleed, but its heading moves to the shared content-column edge so its
      title lines up with every other section's, instead of sitting further left at 5vw. */
-  .car-head{position:absolute;top:12vh;left:max(5vw, (100% - 1200px) / 2);z-index:20;max-width:90vw}
-  .car-head h2{font-size:clamp(1.8rem,4.4vw,3.4rem);font-weight:900;text-transform:uppercase;letter-spacing:-.01em}
-  .car-head h2 .soft{color:var(--dim)}
+  /* head centralizado no topo, no padrao da shop (eyebrow pequeno + titulo grande). aqui o titulo
+     grande e o NOME DO PRODUTO (muda com o carrossel via as camadas .car-layer); "So modular..."
+     vira o eyebrow pequeno acima dele, entao deixa de competir na mesma hierarquia. */
+  .car-head{position:absolute;top:7vh;left:0;right:0;z-index:20;text-align:center;padding:0 6vw}
+  .car-eyebrow{font-size:max(10px,.72rem);font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.1rem}
   .car-stage{position:absolute;inset:0;perspective:1100px}
   /* the owner asked this one to lean elliptical: a tall capsule, not a rounded card */
   .cslide{
@@ -966,10 +968,7 @@
      (cta-gules): duas camadas absolutas EMPILHADAS no mesmo lugar; ao trocar de slide o nome novo
      sobe de baixo com fade-in SOBREPONDO o anterior, que sai por cima com fade-out. cross-fade +
      slide via WAAPI, sem mascara. */
-  .car-name-wrap{
-    position:absolute;left:0;right:0;bottom:7vh;z-index:20;text-align:center;pointer-events:none;
-    padding:0 6vw;min-height:clamp(4rem,9vw,5.6rem);
-  }
+  .car-name-wrap{position:relative;min-height:clamp(3.4rem,8vw,4.8rem);pointer-events:none}
   .car-layer{position:absolute;left:0;right:0;top:0;opacity:0;will-change:transform,opacity}
   #carLayerA{opacity:1}   /* visivel por padrao (fallback sem JS / reduced-motion) */
   .car-name{
@@ -1388,7 +1387,11 @@
 <section class="car-track" id="rooms">
   <div class="car-sticky">
     <div class="car-head">
-      <h2>So modular, <span class="soft">it's every room.</span></h2>
+      <p class="car-eyebrow">So modular, it's every room</p>
+      <div class="car-name-wrap">
+        <div class="car-layer" id="carLayerA"><b class="car-name">M1 Sectional</b><span class="car-room">Living room</span></div>
+        <div class="car-layer" id="carLayerB"></div>
+      </div>
     </div>
     <div class="car-stage" id="carStage">
       <figure class="cslide" data-caption="M1 Sectional · Living room">
@@ -1411,10 +1414,6 @@
       </figure>
     </div>
     <div class="car-center"></div>
-    <div class="car-name-wrap">
-      <div class="car-layer" id="carLayerA"><b class="car-name">M1 Sectional</b><span class="car-room">Living room</span></div>
-      <div class="car-layer" id="carLayerB"></div>
-    </div>
   </div>
 </section>
 
