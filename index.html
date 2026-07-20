@@ -221,11 +221,17 @@
      the nav (and clear of its blur) instead of scrolling under the backdrop-filter. height shrinks
      by the same offset so the sticky box still ends at the viewport bottom (no overflow). */
   #numbers.pinned{top:var(--nav-h);height:calc(100vh - var(--nav-h))}
-  /* when pinned, the section content (heading + dial) flows from the top, so the ring built glued to
-     the top. centre the flow group vertically so the dial sits mid-viewport while it closes. only
-     when .pinned — under mat-nofit (mobile/static) the section is height:auto and this is a no-op. */
+  /* when pinned, the section content (heading + dial) flows from the top. it must ANCHOR to the top,
+     not centre: the purple curtain reveals the section from its seam (its top) downward, so anything
+     centred in the 100vh-navH box sits ~180px lower and the dial (BIFMA seal + counter) hangs off the
+     bottom of the screen while the curtain is still rising — the block only "arrives" after the pin
+     locks. flex-start rides the whole block up under the curtain's edge, so the seal + counter (at 0)
+     + text are already present in the lower two-thirds as the curtain lifts. the small padding-top
+     keeps the title clear of the nav when pinned and lands the dial just above centre while it closes.
+     only when .pinned — under mat-nofit (mobile/static) the section is height:auto and this is a no-op,
+     and the phone block below already flows from the top by design. */
   @media(min-width:821px){
-    #numbers.pinned{display:flex;flex-direction:column;justify-content:center}
+    #numbers.pinned{display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(1.25rem,4vh,4rem)}
   }
   #possible{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
 
