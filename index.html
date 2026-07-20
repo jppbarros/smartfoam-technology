@@ -139,6 +139,13 @@
     content:"";position:absolute;inset:0;
     background:linear-gradient(180deg,rgba(13,10,19,.30),rgba(13,10,19,0) 78%);
   }
+  /* mobile: o backdrop-filter progressivo desenha uma costura visivel (linha) no topo no iOS. troca
+     pelos slices ocultos + so o tint gradiente (suave, sem linha) reforcado pra manter o header legivel.
+     assim o header cola no topo do navegador sem divisoria. */
+  @media(max-width:820px){
+    .nav-blur i{display:none}
+    .nav-blur::after{background:linear-gradient(180deg,rgba(13,10,19,.85),rgba(13,10,19,0) 92%)}
+  }
   .logo{display:flex;align-items:center;gap:1rem;text-decoration:none;color:inherit}
   /* the nav logo only — the footer reuses .logo and must stay put.
      it lives outside <nav> on purpose: position:fixed makes nav a stacking context, and a
