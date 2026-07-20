@@ -1925,6 +1925,17 @@
       const n = Math.round(p * 100000);
       dialNum.textContent = n.toLocaleString('en-US') + (p >= 1 ? '+' : '');
       if (sweep) sweep.style.setProperty('--p', p.toFixed(3));   // sweep the title in step with the count
+
+      // num-shift: durante a ENTRADA (antes de pinar) o conteudo (titulo + dial) comeca deslocado pra
+      // cima, dentro da cortina escura, e assenta em 0 exatamente quando a secao pina — a cortina
+      // desliza revelando ele, em vez de o escuro (segundo.avif ~toda #1C1B23) ler como vazio.
+      // entryProg = 1 quando a secao entra la embaixo, 0 ao pinar. o transform que consome esta var
+      // so existe no CSS desktop + motion, entao setar em telas menores e inocuo (sem efeito).
+      const shiftNavH = parseFloat(getComputedStyle(numbersEl).top) || 0;
+      const entryTravel = vh - shiftNavH;
+      const entryProg = entryTravel > 0
+        ? clamp01((dialWrap.getBoundingClientRect().top - shiftNavH) / entryTravel) : 0;
+      numbersEl.style.setProperty('--num-shift', (entryProg * vh * 0.70).toFixed(1) + 'px');
     }
 
     // social proof (Field Notes): the photo cards scroll UP over a fixed central testimonial. when a
