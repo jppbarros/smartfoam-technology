@@ -766,7 +766,7 @@
   /* ---------- SOCIAL PROOF — Field Notes (photo cards scroll over a fixed testimonial) ---------- */
   /* --sweep-bg re-points the sweep-title's hidden zone to THIS section's bg (#0D0A13), so the
      "Loved where it lives" reveal starts truly invisible here too. */
-  .fieldnotes{background:var(--bg);position:relative;--sweep-bg:#0D0A13}
+  .fieldnotes{background:var(--bg);position:relative;--sweep-bg:#0D0A13;overflow-x:clip}
   .fn-intro{text-align:center;max-width:780px;margin:0 auto;padding:8rem 6vw 0}
   .fn-intro .lead{margin-top:.9rem;font-size:1rem;color:var(--dim)}
   .fn-track{position:relative}
@@ -777,7 +777,7 @@
   }
   .fn-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
     width:min(430px,78vw);aspect-ratio:1;border:1px dashed rgba(167,148,240,.35);border-radius:50%}
-  .fn-live{position:relative;max-width:600px;text-align:center}
+  .fn-live{position:relative;max-width:600px;text-align:center;opacity:1;transition:opacity .18s ease}
   .fn-live blockquote{margin:0;font-size:clamp(1.3rem,2.6vw,2.05rem);line-height:1.4;font-weight:500;color:var(--ink);letter-spacing:-.01em}
   .fn-live figcaption{margin-top:1.4rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem}
   .fn-live .who{font-weight:800;color:var(--ink);letter-spacing:.02em}
@@ -785,12 +785,20 @@
   /* HIGH layer: opaque photo cards, centred, one every ~120vh (so the text is exposed between them)
      and above the text (z-index 2) — a passing card hides the text while the review swaps under it */
   .fn-cards{position:relative;z-index:2;margin:0;padding:0;list-style:none}
-  /* grid place-items centres the card in every band identically — no left/right drift */
-  .fn-band{display:grid;place-items:center;min-height:120vh}
+  .fn-band{display:grid;place-items:center;min-height:88vh}
+  /* small photo cards, each landing at its OWN horizontal spot (after o-scs.com's Field Notes):
+     they scatter left/right/centre as they float up over the fixed testimonial, rather than all
+     stacking dead-centre. --fx per position below; they are small enough not to mask the text. */
   .fn-card{
-    position:relative;width:min(420px,88vw);aspect-ratio:4/5;margin:0 auto;background:#2A2436;
-    border-radius:var(--r);overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.55);
+    position:relative;width:clamp(180px,18vw,260px);aspect-ratio:4/5;background:#2A2436;
+    border-radius:var(--r);overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.5);
+    transform:translateX(var(--fx,0));
   }
+  .fn-band:nth-child(1) .fn-card{--fx:-20vw}
+  .fn-band:nth-child(2) .fn-card{--fx:22vw}
+  .fn-band:nth-child(3) .fn-card{--fx:-34vw}
+  .fn-band:nth-child(4) .fn-card{--fx:4vw}
+  .fn-band:nth-child(5) .fn-card{--fx:30vw}
   .fn-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
   .fn-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(244,241,250,.22);z-index:0}
   .fn-ph svg{width:44px;height:44px}
@@ -818,7 +826,13 @@
   @media(max-width:820px){
     .fn-intro{padding-top:5rem}
     .fn-sticky{height:calc(100svh - var(--nav-h))}
-    .fn-band{min-height:100svh}                 /* cards a touch closer on phones */
+    .fn-band{min-height:80svh}
+    .fn-card{width:clamp(150px,52vw,230px)}      /* smaller so it can swing left/right on a phone */
+    .fn-band:nth-child(1) .fn-card{--fx:-16vw}   /* alternate left / right down the column */
+    .fn-band:nth-child(2) .fn-card{--fx:16vw}
+    .fn-band:nth-child(3) .fn-card{--fx:-16vw}
+    .fn-band:nth-child(4) .fn-card{--fx:16vw}
+    .fn-band:nth-child(5) .fn-card{--fx:-16vw}
     .fn-live blockquote{font-size:1.2rem}
     .rv-grid{grid-template-columns:1fr;max-width:420px}
     .rvcards{padding-bottom:5rem}
@@ -827,7 +841,7 @@
     /* no pin, no cover: drop the live layer; show each card with its review below it as a list */
     .fn-sticky{display:none}
     .fn-band{display:block;min-height:0;margin-bottom:3.5rem;text-align:center;max-width:460px;margin-inline:auto}
-    .fn-card{margin:0 auto 1.4rem}
+    .fn-card{margin:0 auto 1.4rem;transform:none;width:min(320px,80vw)}
     .fn-said{position:static;width:auto;height:auto;clip-path:none;white-space:normal}
     .fn-said blockquote{margin:0;font-size:1.15rem;line-height:1.5;color:var(--ink)}
     .fn-said figcaption{margin-top:1rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
@@ -1896,8 +1910,16 @@
     const fnSaid = fnBands.map(b => b.querySelector('.fn-said'));
     const fnTitle = document.querySelector('.fieldnotes .sweep-title');
     let fnQuoteIdx = -1;
-    const setFnQuote = i => { if (i === fnQuoteIdx || !fnLive || !fnSaid[i]) return; fnQuoteIdx = i; fnLive.innerHTML = fnSaid[i].innerHTML; };
-    if (fnLive && fnSaid[0]) setFnQuote(0);               // first review, exposed before any card
+    // the photos are small and scattered, so they can't hide the swap — ease the text with a quick
+    // crossfade instead (matches the reference's `transition:all` on the note text).
+    const setFnQuote = i => {
+      if (i === fnQuoteIdx || !fnLive || !fnSaid[i]) return;
+      fnQuoteIdx = i;
+      fnLive.style.opacity = '0';
+      clearTimeout(fnLive._t);
+      fnLive._t = setTimeout(() => { fnLive.innerHTML = fnSaid[i].innerHTML; fnLive.style.opacity = '1'; }, 150);
+    };
+    if (fnLive && fnSaid[0]) { fnQuoteIdx = 0; fnLive.innerHTML = fnSaid[0].innerHTML; }  // first review, no fade
     function fnMotion() {
       const vh = document.documentElement.clientHeight || innerHeight;
       if (fnTitle) {                                       // reveal the heading as it rises into view
@@ -1905,19 +1927,14 @@
         fnTitle.style.setProperty('--p', clamp01((vh * 0.95 - t.top) / (vh * 0.45)).toFixed(3));
       }
       const sr = fnSticky.getBoundingClientRect();
-      const cy = sr.top + sr.height / 2;                   // the point the text sits on…
-      const cx = sr.left + sr.width / 2;                   // …horizontally and vertically
-      const T = 110;                                       // half the text band a card must fully hide
-      let covering = -1, best = Infinity;
+      const cy = sr.top + sr.height / 2;                   // the line the testimonial sits on
+      let near = -1, best = Infinity;                      // the photo nearest that line is "passing"
       fnBands.forEach((b, i) => {
         const r = b.querySelector('.fn-card').getBoundingClientRect();
-        // this card fully covers the text slot (over the centre both ways) → swap is hidden
-        if (r.top <= cy - T && r.bottom >= cy + T && r.left <= cx && r.right >= cx) {
-          const d = Math.abs((r.top + r.bottom) / 2 - cy);
-          if (d < best) { best = d; covering = i; }
-        }
+        const d = Math.abs((r.top + r.bottom) / 2 - cy);
+        if (d < best) { best = d; near = i; }
       });
-      if (covering !== -1) setFnQuote(covering);           // swap only while hidden behind a card
+      if (near !== -1 && best < vh * 0.4) setFnQuote(near); // swap as a photo passes; hold between
     }
 
     const jobs = [];
