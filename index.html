@@ -1915,9 +1915,13 @@
         // the pin sits --nav-h below the top now, so progress is measured from the sticky's own
         // offset over the hold-spacer distance (offsetHeight - section height): 0 as it locks at
         // --nav-h, 1 exactly as it releases. keeps the count finishing right when the pin lets go.
-        const navH = parseFloat(getComputedStyle(numbersEl).top) || 0;
-        const travel = dialWrap.offsetHeight - numbersEl.offsetHeight;
-        p = travel > 0 ? clamp01((navH - dialWrap.getBoundingClientRect().top) / travel) : 0;
+        // conta sobre ENTRADA + hold, nao so o hold: com o num-shift o conteudo ja aparece e assenta
+        // durante a entrada, entao amarrar a contagem so ao hold deixava o dial parado + contador 0 ao
+        // "bater no teto", exigindo um 2o scroll pra a animacao comecar. medir do topo do wrap cruzando
+        // desde vh (conteudo comeca a entrar) ate o fim do hold: progresso = quanto o wrap subiu sobre
+        // sua altura total. assim ticks/contador/gradiente ja sobem conforme a secao revela.
+        const total = dialWrap.offsetHeight;   // entrada (vh - navH) + hold, = altura do pin-wrap
+        p = total > 0 ? clamp01((vh - dialWrap.getBoundingClientRect().top) / total) : 0;
       } else {
         // not pinned (phone, where the section is too tall to hold): build by the dial's own screen
         // position instead, so it fills as it rises into view rather than off-screen.
