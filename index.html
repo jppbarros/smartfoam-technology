@@ -775,8 +775,6 @@
     position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));z-index:1;
     display:flex;align-items:center;justify-content:center;padding:2vh 6vw;pointer-events:none;
   }
-  .fn-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:min(430px,78vw);aspect-ratio:1;border:1px dashed rgba(167,148,240,.35);border-radius:50%}
   .fn-live{position:relative;max-width:600px;text-align:center;opacity:1;transition:opacity .18s ease}
   .fn-live blockquote{margin:0;font-size:clamp(1.3rem,2.6vw,2.05rem);line-height:1.4;font-weight:500;color:var(--ink);letter-spacing:-.01em}
   .fn-live figcaption{margin-top:1.4rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem}
@@ -786,19 +784,19 @@
      and above the text (z-index 2) — a passing card hides the text while the review swaps under it */
   .fn-cards{position:relative;z-index:2;margin:0;padding:0;list-style:none}
   .fn-band{display:grid;place-items:center;min-height:88vh}
-  /* small photo cards, each landing at its OWN horizontal spot (after o-scs.com's Field Notes):
-     they scatter left/right/centre as they float up over the fixed testimonial, rather than all
-     stacking dead-centre. --fx per position below; they are small enough not to mask the text. */
+  /* photo cards, each landing at its OWN horizontal spot AND its own size/shape (after o-scs.com's
+     Field Notes): they scatter left/right/centre and mix widths + aspect ratios as they float up
+     over the fixed testimonial. --fw width, --fa aspect, --fx horizontal offset, set per position. */
   .fn-card{
-    position:relative;width:clamp(180px,18vw,260px);aspect-ratio:4/5;background:#2A2436;
-    border-radius:var(--r);overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.5);
+    position:relative;width:var(--fw,300px);aspect-ratio:var(--fa,4/5);background:#2A2436;
+    border-radius:var(--r);overflow:hidden;box-shadow:0 34px 80px rgba(0,0,0,.55);
     transform:translateX(var(--fx,0));
   }
-  .fn-band:nth-child(1) .fn-card{--fx:-20vw}
-  .fn-band:nth-child(2) .fn-card{--fx:22vw}
-  .fn-band:nth-child(3) .fn-card{--fx:-34vw}
-  .fn-band:nth-child(4) .fn-card{--fx:4vw}
-  .fn-band:nth-child(5) .fn-card{--fx:30vw}
+  .fn-band:nth-child(1) .fn-card{--fw:clamp(260px,25vw,380px);--fa:4/5;--fx:-19vw}
+  .fn-band:nth-child(2) .fn-card{--fw:clamp(240px,23vw,340px);--fa:1/1;--fx:22vw}
+  .fn-band:nth-child(3) .fn-card{--fw:clamp(220px,21vw,320px);--fa:4/5;--fx:-33vw}
+  .fn-band:nth-child(4) .fn-card{--fw:clamp(300px,32vw,460px);--fa:3/4;--fx:5vw}
+  .fn-band:nth-child(5) .fn-card{--fw:clamp(240px,23vw,340px);--fa:1/1;--fx:29vw}
   .fn-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
   .fn-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(244,241,250,.22);z-index:0}
   .fn-ph svg{width:44px;height:44px}
@@ -827,12 +825,12 @@
     .fn-intro{padding-top:5rem}
     .fn-sticky{height:calc(100svh - var(--nav-h))}
     .fn-band{min-height:80svh}
-    .fn-card{width:clamp(150px,52vw,230px)}      /* smaller so it can swing left/right on a phone */
-    .fn-band:nth-child(1) .fn-card{--fx:-16vw}   /* alternate left / right down the column */
-    .fn-band:nth-child(2) .fn-card{--fx:16vw}
-    .fn-band:nth-child(3) .fn-card{--fx:-16vw}
-    .fn-band:nth-child(4) .fn-card{--fx:16vw}
-    .fn-band:nth-child(5) .fn-card{--fx:-16vw}
+    /* bigger, still mixed sizes/shapes, alternating left / right down the column */
+    .fn-band:nth-child(1) .fn-card{--fw:62vw;--fa:4/5;--fx:-15vw}
+    .fn-band:nth-child(2) .fn-card{--fw:56vw;--fa:1/1;--fx:17vw}
+    .fn-band:nth-child(3) .fn-card{--fw:60vw;--fa:4/5;--fx:-15vw}
+    .fn-band:nth-child(4) .fn-card{--fw:66vw;--fa:3/4;--fx:13vw}
+    .fn-band:nth-child(5) .fn-card{--fw:56vw;--fa:1/1;--fx:-16vw}
     .fn-live blockquote{font-size:1.2rem}
     .rv-grid{grid-template-columns:1fr;max-width:420px}
     .rvcards{padding-bottom:5rem}
@@ -841,7 +839,7 @@
     /* no pin, no cover: drop the live layer; show each card with its review below it as a list */
     .fn-sticky{display:none}
     .fn-band{display:block;min-height:0;margin-bottom:3.5rem;text-align:center;max-width:460px;margin-inline:auto}
-    .fn-card{margin:0 auto 1.4rem;transform:none;width:min(320px,80vw)}
+    .fn-card{margin:0 auto 1.4rem;transform:none;width:min(340px,82vw);aspect-ratio:4/5}
     .fn-said{position:static;width:auto;height:auto;clip-path:none;white-space:normal}
     .fn-said blockquote{margin:0;font-size:1.15rem;line-height:1.5;color:var(--ink)}
     .fn-said figcaption{margin-top:1rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
@@ -1524,7 +1522,6 @@
   <div class="fn-track">
     <!-- low layer: the single central testimonial, filled by JS from the card that is covering it -->
     <div class="fn-sticky" aria-hidden="true">
-      <div class="fn-ring"></div>
       <figure class="fn-live" id="fnLive"></figure>
     </div>
     <!-- high layer: photo cards that scroll up over the text. each carries its own review (visually
