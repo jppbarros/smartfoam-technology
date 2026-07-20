@@ -537,6 +537,13 @@
   /* inline mini mark for nav + badges */
   .sfm{height:14px;width:auto;vertical-align:-2px;margin-right:.45rem;overflow:visible}
   .sfm ellipse{fill:none;stroke:currentColor;stroke-width:10}
+  /* official SmartFoam logo, replacing the hand-drawn placeholder marks */
+  .sf-word{height:14px;width:auto;display:block}
+  .sf-mark-img{height:11px;width:auto;display:inline-block;margin-right:.4rem;vertical-align:-1px}
+  .scard .badge .sf-mark-img{height:11px;width:auto}   /* beat .scard img{height:100%} */
+  .sf-lockup{height:clamp(22px,2.6vw,30px);width:auto;display:block}
+  .prod .sf-word{margin-right:.3rem}
+  footer .sf-word{height:16px}
 
   /* 02 — x-ray */
   /* real footage replaced the x-ray diagram: 16:9, and no grid overlay on top of film */
@@ -1050,7 +1057,7 @@
 <a class="logo nav-logo" href="./">
   <img src="assets/rovelab-logo-white.png" alt="Rove Lab">
   <span class="sep"></span>
-  <span class="prod"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>SmartFoam™<span class="prod-suffix"> · Technology</span></span>
+  <span class="prod"><img class="sf-word" src="assets/sf-word-white.svg" alt="SmartFoam™"><span class="prod-suffix"> · Technology</span></span>
 </a>
 
 <nav>
@@ -1399,19 +1406,19 @@
   <div class="shop-grid reveal">
     <a class="scard" href="https://rovelab.ca/products/m1-sofa-sectional?variant=49514719084844" target="_blank" rel="noopener">
       <div class="ph"><img src="assets/products/m1-sectional-helium-cloud.webp" alt="M1 Sofa Sectional" loading="lazy"></div>
-      <div class="info"><h3>M1 Sofa</h3><span class="badge"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>Powered by SmartFoam™</span></div>
+      <div class="info"><h3>M1 Sofa</h3><span class="badge"><img class="sf-mark-img" src="assets/sf-mark.svg" alt="">Powered by SmartFoam™</span></div>
     </a>
     <a class="scard" href="https://rovelab.ca/products/m1-outdoor-three-seater-sofa?variant=52722712838444" target="_blank" rel="noopener">
       <div class="ph"><img src="assets/products/m1-outdoor-orbit-groove.webp" alt="M1 Outdoor" loading="lazy"></div>
-      <div class="info"><h3>M1 Outdoor</h3><span class="badge"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>Powered by SmartFoam™</span></div>
+      <div class="info"><h3>M1 Outdoor</h3><span class="badge"><img class="sf-mark-img" src="assets/sf-mark.svg" alt="">Powered by SmartFoam™</span></div>
     </a>
     <a class="scard" href="https://rovelab.ca/products/marshbello-loveseat?variant=50759907180844" target="_blank" rel="noopener">
       <div class="ph"><img src="assets/products/marshbello-carbon-black.webp" alt="Marshbello" loading="lazy"></div>
-      <div class="info"><h3>Marshbello</h3><span class="badge"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>Powered by SmartFoam™</span></div>
+      <div class="info"><h3>Marshbello</h3><span class="badge"><img class="sf-mark-img" src="assets/sf-mark.svg" alt="">Powered by SmartFoam™</span></div>
     </a>
     <a class="scard" href="https://rovelab.ca/products/s8-sleeper-sofa-bed?variant=51880710799660" target="_blank" rel="noopener">
       <div class="ph"><img src="assets/products/s8-comet-ivory.webp" alt="S8 Sleeper" loading="lazy"></div>
-      <div class="info"><h3>S8 Sleeper</h3><span class="badge"><svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>Powered by SmartFoam™</span></div>
+      <div class="info"><h3>S8 Sleeper</h3><span class="badge"><img class="sf-mark-img" src="assets/sf-mark.svg" alt="">Powered by SmartFoam™</span></div>
     </a>
   </div>
 </section>
@@ -1433,8 +1440,7 @@
           <th scope="col" class="lbl"><span class="sr-only">Characteristics</span></th>
           <th scope="col" class="sf">
             <span class="colname">
-              <svg class="sfm" viewBox="0 0 240 120" aria-hidden="true"><ellipse cx="120" cy="60" rx="26" ry="15"/><ellipse cx="120" cy="60" rx="50" ry="15"/><ellipse cx="120" cy="60" rx="76" ry="15"/><ellipse cx="120" cy="60" rx="104" ry="15"/></svg>
-              <span class="n">SmartFoam™</span>
+              <img class="sf-lockup" src="assets/sf-lockup-white.svg" alt="SmartFoam™">
               <span class="s">Boneless Design™</span>
             </span>
           </th>
@@ -1606,7 +1612,7 @@
   <a class="logo" href="./">
     <img src="assets/rovelab-logo-white.png" alt="Rove Lab">
     <span class="sep"></span>
-    <span class="prod">SmartFoam™</span>
+    <img class="sf-word" src="assets/sf-word-white.svg" alt="SmartFoam™">
   </a>
   <div>© 2026 Rove Lab Inc. · Not foam. SmartFoam™.</div>
 </footer>
