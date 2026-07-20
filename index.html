@@ -139,13 +139,6 @@
     content:"";position:absolute;inset:0;
     background:linear-gradient(180deg,rgba(13,10,19,.30),rgba(13,10,19,0) 78%);
   }
-  /* mobile: o backdrop-filter progressivo desenha uma costura visivel (linha) no topo no iOS. troca
-     pelos slices ocultos + so o tint gradiente (suave, sem linha) reforcado pra manter o header legivel.
-     assim o header cola no topo do navegador sem divisoria. */
-  @media(max-width:820px){
-    .nav-blur i{display:none}
-    .nav-blur::after{background:linear-gradient(180deg,rgba(13,10,19,.85),rgba(13,10,19,0) 92%)}
-  }
   .logo{display:flex;align-items:center;gap:1rem;text-decoration:none;color:inherit}
   /* the nav logo only — the footer reuses .logo and must stay put.
      it lives outside <nav> on purpose: position:fixed makes nav a stacking context, and a
@@ -881,9 +874,9 @@
      curta demais (a foto passava, trocava, e a proxima ja chegava). 118vh abre uma janela de leitura
      clara entre cada foto. */
   .fn-band{display:grid;place-items:center;min-height:118vh}
-  /* ultimo band mais curto + foto ancorada ao fim: a foto centralizada num band de 158vh deixava um
-     grande vazio abaixo, entre a ultima review e a linha "4.6/5". (mobile tem o seu proprio valor.) */
-  .fn-band:nth-child(5){min-height:90vh;align-content:end;padding-bottom:6vh}
+  /* ultimo band encurtado, foto CENTRALIZADA (mesma aparencia de antes, nao abaixada): reduz a cauda
+     vazia abaixo da foto pra o "4.6/5" ficar perto da ultima review. */
+  .fn-band:nth-child(5){min-height:80vh}
   /* photo cards, each landing at its OWN horizontal spot AND its own size/shape (after o-scs.com's
      Field Notes): they scatter left/right/centre and mix widths + aspect ratios as they float up
      over the fixed testimonial. --fw width, --fa aspect, --fx horizontal offset, set per position. */
@@ -907,7 +900,9 @@
   .badge{display:inline-flex;align-items:center;font-size:.64rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-deep);border:1px solid var(--glass-line);border-radius:999px;padding:.18rem .55rem}
 
   /* closing review cards */
-  .rvcards{background:transparent;padding:1rem 6vw 7rem;position:relative}   /* glow atras (era #0D0A13 chapado) */
+  /* margin negativa sobe o "4.6/5" pra perto da ultima review (fecha a cauda vazia do fieldnotes sem
+     mexer na foto, que fica centralizada). */
+  .rvcards{background:transparent;padding:1rem 6vw 7rem;position:relative;margin-top:-36vh}
   .rv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:1120px;margin:0 auto}
   .rv-card{background:var(--glass);border:1px solid var(--glass-line);border-radius:0;overflow:hidden;display:flex;flex-direction:column}
   .rv-cardimg{position:relative;aspect-ratio:4/5;background:#2A2436}
@@ -925,9 +920,7 @@
     .fn-intro{padding-top:5rem}
     .fn-sticky{height:calc(100svh - var(--nav-h))}
     .fn-band{min-height:108svh}
-    /* ultimo band mais curto + foto ancorada ao fim: reduz o vazio entre a ultima review e o "4.6/5"
-       (a foto centralizada num band de 145svh deixava ~480px vazios abaixo). */
-    .fn-band:nth-child(5){min-height:82svh;align-content:end;padding-bottom:6svh}
+    .fn-band:nth-child(5){min-height:80svh}   /* encurtado, foto centralizada (cauda vazia menor ate o "4.6/5") */
     /* bigger, still mixed sizes/shapes, alternating left / right down the column */
     .fn-band:nth-child(1) .fn-card{--fw:62vw;--fa:4/5;--fx:-15vw}
     .fn-band:nth-child(2) .fn-card{--fw:56vw;--fa:1/1;--fx:17vw}
@@ -1003,9 +996,7 @@
 
   /* ---------- SCROLL CAROUSEL (rotates with the scroll, no sweep blur) ---------- */
   .car-track{height:260vh;position:relative;padding:0}
-  /* translateZ: camada GPU propria — sticky com overflow:hidden sobre o glow FIXO pode desenhar uma
-     costura no fundo no iOS (mesma classe do tremor do field notes). isola o compositing. */
-  .car-sticky{position:sticky;top:0;height:100dvh;overflow:hidden;transform:translateZ(0)}
+  .car-sticky{position:sticky;top:0;height:100dvh;overflow:hidden}
   /* the carousel stays full-bleed, but its heading moves to the shared content-column edge so its
      title lines up with every other section's, instead of sitting further left at 5vw. */
   /* head centralizado no topo, no padrao da shop (eyebrow pequeno + titulo grande). aqui o titulo
@@ -1069,7 +1060,10 @@
       position:fixed;top:64px;left:0;right:0;z-index:99;display:block;
       background:#120E1B;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
       padding:1.4rem 6vw 2rem;max-height:calc(100dvh - 64px);overflow-y:auto;
-      transform:translateY(-108%);transition:transform .35s cubic-bezier(.16,1,.3,1);
+      /* -108% nao escondia por completo: como top:64px, sobrava ~18px do fundo da gaveta (com a
+         border-bottom) espiando no topo — era a "divisoria"/deslocamento do header. calc(-100% - 72px)
+         sobe a altura inteira + o offset do top, escondendo por completo. */
+      transform:translateY(calc(-100% - 72px));transition:transform .35s cubic-bezier(.16,1,.3,1);
     }
     .nav-panel.open{transform:none}
     .nav-group-label{
