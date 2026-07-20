@@ -1165,36 +1165,8 @@
     <h2 class="h-serifless">SmartFoam™. The structural foam we invented <span class="soft">to replace the frame.</span></h2>
     <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em>, a proprietary high-density foam system designed to:</p>
   </div>
-  <!-- video left, title + expandable explanation right (per the review) -->
-  <div class="cap-split reveal">
-    <div class="cap-video">
-      <video src="assets/unboxing.mp4" poster="assets/unboxing-poster.jpg"
-             data-scrollplay muted loop playsinline preload="metadata"
-             aria-label="Unboxing a Rove Lab couch: the module expands into full form"></video>
-    </div>
-    <div class="caps">
-      <details class="cap" open>
-        <summary><h3>Compress for the couch-in-a-box experience</h3></summary>
-        <p>Designed for compact shipping and easier moving. A full sectional leaves the lab as a box one person can carry.</p>
-      </details>
-      <details class="cap">
-        <summary><h3>Expand into full form in minutes</h3></summary>
-        <p>Expands rapidly after unboxing, with tool-free assembly. No screws, no hardware, no instructions to decode.</p>
-      </details>
-      <details class="cap">
-        <summary><h3>Hold that form for years</h3></summary>
-        <p>Delivers long-term comfort, support and durability. Expansion Memory returns SmartFoam™ to its engineered shape, sit after sit.</p>
-      </details>
-    </div>
-  </div>
-</section>
-
-<!-- THE FILM -->
-<section id="film">
-  <div class="reveal">
-    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Watch <span class="soft">the film.</span></h2>
-  </div>
-  <div class="film-frame reveal">
+  <!-- the film sits right under the intro copy now (id="film" keeps the nav anchor working) -->
+  <div class="film-frame reveal" id="film">
     <video id="filmVideo" src="assets/smartfoam-film.mp4" poster="assets/film-poster.jpg"
            muted loop playsinline preload="metadata" aria-label="The SmartFoam film"></video>
   </div>
@@ -1362,6 +1334,28 @@
       <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg>
       <h3>Modular Design</h3>
       <p>Rearrange your sofa however you want. Lightweight, flexible and easy to reconfigure as your space and lifestyle change.</p>
+    </div>
+  </div>
+  <!-- unboxing video + the compress/expand/hold accordion, moved here from #material -->
+  <div class="cap-split reveal" style="margin-top:3.4rem">
+    <div class="cap-video">
+      <video src="assets/unboxing.mp4" poster="assets/unboxing-poster.jpg"
+             data-scrollplay muted loop playsinline preload="metadata"
+             aria-label="Unboxing a Rove Lab couch: the module expands into full form"></video>
+    </div>
+    <div class="caps">
+      <details class="cap" open>
+        <summary><h3>Compress for the couch-in-a-box experience</h3></summary>
+        <p>Designed for compact shipping and easier moving. A full sectional leaves the lab as a box one person can carry.</p>
+      </details>
+      <details class="cap">
+        <summary><h3>Expand into full form in minutes</h3></summary>
+        <p>Expands rapidly after unboxing, with tool-free assembly. No screws, no hardware, no instructions to decode.</p>
+      </details>
+      <details class="cap">
+        <summary><h3>Hold that form for years</h3></summary>
+        <p>Delivers long-term comfort, support and durability. Expansion Memory returns SmartFoam™ to its engineered shape, sit after sit.</p>
+      </details>
     </div>
   </div>
   <p class="lead reveal" style="max-width:70ch;margin-top:3.2rem">SmartFoam™ doesn't just replace a frame. It replaces an industry that hasn't asked the right questions in a hundred years. <em>And we're just getting started.</em></p>
