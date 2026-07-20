@@ -874,6 +874,8 @@
     -webkit-background-clip:text;background-clip:text;color:transparent;
     position:relative;display:inline-block;will-change:transform;
   }
+  /* the giant wordmark is now the official logo lockup (mark + wordmark) */
+  .wordmark-logo{display:block;width:min(1040px,86vw);height:auto;margin:0 auto}
   .anchor-deco{position:absolute;pointer-events:none;overflow:visible}
   .anchor-deco circle.ring{fill:none;stroke:rgba(167,148,240,.85);stroke-width:1}
   .anchor-deco line{stroke:rgba(167,148,240,.6);stroke-width:1}
@@ -1232,19 +1234,7 @@
 <!-- GIANT WORDMARK — pinned: #problem's white curtain draws up over it -->
 <div class="pin-wrap on-dark">
 <section class="wordmark pinned">
-  <h2 data-marquee="-1">SmartFoam
-    <svg class="anchor-deco" style="left:-3%;top:-14%;width:26%;height:128%" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      <circle class="ring" cx="50" cy="50" r="44" stroke-dasharray="3 3"/>
-      <line x1="6" y1="50" x2="-6" y2="50"/><line x1="94" y1="50" x2="106" y2="50"/>
-      <circle class="pt" cx="6" cy="50" r="2.6"/><circle class="pt" cx="94" cy="50" r="2.6"/>
-      <circle class="pt" cx="50" cy="6" r="2.6"/><circle class="pt" cx="50" cy="94" r="2.6"/>
-    </svg>
-    <svg class="anchor-deco" style="right:-2%;top:-10%;width:22%;height:120%" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      <circle class="ring" cx="50" cy="50" r="42" stroke-dasharray="3 3"/>
-      <circle class="pt" cx="8" cy="50" r="2.6"/><circle class="pt" cx="92" cy="50" r="2.6"/>
-      <circle class="pt" cx="50" cy="8" r="2.6"/><circle class="pt" cx="50" cy="92" r="2.6"/>
-    </svg>
-  </h2>
+  <img class="wordmark-logo" src="assets/sf-lockup-white.svg" alt="SmartFoam">
   <p class="sub">One material · Structure + comfort · Designed by Rove Lab</p>
 </section>
 <div class="spacer"></div>
