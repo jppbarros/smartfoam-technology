@@ -592,21 +592,10 @@
 
   /* 04 — science columns */
   .cell3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:3.5rem}
-  /* estilo editorial (tipo Nike Mind): imagem em cima, texto embaixo, sem card/titulo. os icones SVG
-     e os h3 sairam; cada card agora e um placeholder de imagem + paragrafo. trocar .cell-ph por <img>
-     quando as imagens reais chegarem. */
+  /* estilo editorial (tipo Nike Mind): imagem em cima, texto embaixo, sem card/titulo. */
   .cellcard{background:none;border:none;padding:0}
   .cellcard p{color:var(--dim);font-size:.9rem;line-height:1.65}
-  .cell-ph{
-    aspect-ratio:4/5;margin-bottom:1.3rem;
-    background:
-      repeating-linear-gradient(45deg,rgba(167,148,240,.05) 0 14px,rgba(167,148,240,.09) 14px 28px),
-      linear-gradient(135deg,#272233,#1a1725);
-    border:1px dashed rgba(167,148,240,.28);
-    display:flex;align-items:center;justify-content:center;
-    color:rgba(207,193,245,.45);font-size:.68rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
-  }
-  .cell-ph::after{content:"Imagem"}
+  .cell-img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;margin-bottom:1.3rem}
 
   /* what SmartFoam does: real unboxing footage left, expandable points right */
   /* the video is portrait, so an fr-based column let it grow to ~900px tall on wide screens
@@ -1260,15 +1249,15 @@
   </div>
   <div class="cell3 reveal">
     <div class="cellcard">
-      <div class="cell-ph" aria-hidden="true"></div>
+      <img class="cell-img" src="assets/cell-1.webp" alt="" loading="lazy">
       <p>Open-cell architecture that breathes, responds to load, and recovers fully, sit after sit, year after year.</p>
     </div>
     <div class="cellcard">
-      <div class="cell-ph" aria-hidden="true"></div>
+      <img class="cell-img" src="assets/cell-2.webp" alt="" loading="lazy">
       <p>Soft at first touch. Firm at full lean. SmartFoam™ adapts pressure and resistance depending on how weight is distributed across the surface.</p>
     </div>
     <div class="cellcard">
-      <div class="cell-ph" aria-hidden="true"></div>
+      <img class="cell-img" src="assets/cell-3.webp" alt="" loading="lazy">
       <p>Compressed for shipping and engineered to expand into full form upon arrival. SmartFoam™ returns to its engineered shape every time, and stays there.</p>
     </div>
   </div>
