@@ -233,6 +233,15 @@
   @media(min-width:821px){
     #numbers.pinned{display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(1.25rem,4vh,4rem)}
   }
+  /* num-shift: puxa o conteudo (titulo + dial) 100% da altura da secao PRA CIMA, pra dentro da zona
+     da cortina escura, pra que ja apareca conforme a cortina sobe em vez do escuro ler como vazio.
+     transform (nao margin) pra nao mexer no fluxo (a secao mantem altura, #possible fica no lugar) e
+     nao mover a cortina. --num-shift = altura da secao pinada; ajustar aqui pra afinar a magnitude.
+     so no desktop com motion: sem motion / mobile o conteudo fica no lugar (transform none). */
+  @media (min-width:821px) and (prefers-reduced-motion: no-preference){
+    #numbers{--num-shift:calc(100vh - var(--nav-h))}
+    .num-shift{transform:translateY(calc(-1 * var(--num-shift)))}
+  }
   #possible{background:linear-gradient(180deg,#1C1B23 0%, rgba(28,27,35,0) 55%)}
 
   /* THE DIAL — one focus for this section: the BIFMA impact test. a ring closes with the scroll
@@ -1289,6 +1298,12 @@
 <div class="pin-wrap on-dark">
 <section id="numbers" class="pinned">
   <div class="curtain"><img src="assets/segundo.avif" alt=""></div>
+  <!-- num-shift: sobe o conteudo (titulo + dial) ~100% da altura da secao pra dentro da zona da
+       cortina, pra que ele ja apareca enquanto a cortina escura (segundo.avif e quase toda #1C1B23)
+       sobe, em vez de o escuro ler como espaco vazio. transform (nao margin) pra nao colapsar a
+       altura da secao nem mover a cortina; o valor mora em --num-shift pra afinar rapido. a cortina
+       fica FORA deste wrapper de proposito. -->
+  <div class="num-shift">
   <div class="reveal">
     <p class="eyebrow">BIFMA certified · SGS lab testing, March 2026</p>
     <h2 class="h-giant sweep-title">Tested where it counts.</h2>
@@ -1307,6 +1322,7 @@
       <span class="dial-unit">impact / drop cycles</span>
       <p class="dial-sub">The BIFMA impact and drop protocol runs a seat past 100,000 cycles — the bar for contract furniture in airports, offices and hotels. SmartFoam™ clears it.</p>
     </div>
+  </div>
   </div>
 
 </section>
