@@ -875,7 +875,7 @@
     position:relative;display:inline-block;will-change:transform;
   }
   /* the giant wordmark is now the official logo lockup (mark + wordmark) */
-  .wordmark-logo{display:block;width:min(1040px,86vw);height:auto;margin:0 auto}
+  .wordmark-logo{display:block;width:min(1040px,86vw);height:auto;margin:0 auto;will-change:transform}
   .anchor-deco{position:absolute;pointer-events:none;overflow:visible}
   .anchor-deco circle.ring{fill:none;stroke:rgba(167,148,240,.85);stroke-width:1}
   .anchor-deco line{stroke:rgba(167,148,240,.6);stroke-width:1}
@@ -1234,7 +1234,7 @@
 <!-- GIANT WORDMARK — pinned: #problem's white curtain draws up over it -->
 <div class="pin-wrap on-dark">
 <section class="wordmark pinned">
-  <img class="wordmark-logo" src="assets/sf-lockup-white.svg" alt="SmartFoam">
+  <img class="wordmark-logo" data-marquee="-1" src="assets/sf-lockup-white.svg" alt="SmartFoam">
   <p class="sub">One material · Structure + comfort · Designed by Rove Lab</p>
 </section>
 <div class="spacer"></div>
