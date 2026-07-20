@@ -238,6 +238,10 @@
      pra nao mexer no fluxo (a secao mantem altura, #possible fica no lugar) e nao mover a cortina.
      --num-shift controla a magnitude: 100% da altura da secao (100vh - nav-h) some por cima no
      repouso; valores menores mostram o conteudo mais cedo SEM sumir. so no desktop com motion. */
+  /* conteudo ACIMA da cortina: a cortina e z-index:2; sem isto o conteudo (z auto) fica atras dela e
+     some sob o escuro. z:3 poe o titulo + dial na frente, entao aparecem enquanto a cortina ainda
+     cobre. position:relative pra o z-index valer em qualquer layout. */
+  .num-shift{position:relative;z-index:3}
   @media (min-width:821px) and (prefers-reduced-motion: no-preference){
     #numbers{--num-shift:0px}
     .num-shift{transform:translateY(calc(-1 * var(--num-shift)))}
