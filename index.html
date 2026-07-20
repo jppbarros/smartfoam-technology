@@ -728,7 +728,9 @@
 
   /* 10 — shop grid */
   .shop{padding-bottom:10rem}
-  .shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;margin-top:3.4rem}
+  /* 6 produtos: desktop 2 linhas de 3 (3 col), mobile 3 linhas de 2 (2 col) */
+  .shop-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.1rem;margin-top:3.4rem}
+  @media(max-width:820px){ .shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem} }
   .scard{display:block;text-decoration:none;color:inherit;background:var(--glass);border:1px solid var(--glass-line);border-radius:var(--r);overflow:hidden;transition:transform .3s,border-color .3s}
   .scard:hover{transform:translateY(-7px);border-color:rgba(167,148,240,.55)}
   .scard .ph{aspect-ratio:4/3;overflow:hidden;border-radius:calc(var(--r) - 1px) calc(var(--r) - 1px) 0 0}
@@ -1442,6 +1444,10 @@
     <a class="scard" href="https://rovelab.com/products/o2-bed" target="_blank" rel="noopener">
       <div class="ph"><img src="assets/products/o2-bed.webp" alt="O2 Bed" loading="lazy"></div>
       <div class="info"><h3>O2 Bed</h3><span class="badge">Powered by <img class="sf-word-img" src="assets/sf-word-badge.png" alt="SmartFoam™"></span></div>
+    </a>
+    <a class="scard" href="https://rovelab.ca/products/solaris-outdoor-chaise-lounge" target="_blank" rel="noopener">
+      <div class="ph"><img src="assets/products/solaris-outdoor.webp" alt="Solaris Outdoor Chaise Lounge" loading="lazy"></div>
+      <div class="info"><h3>Solaris</h3><span class="badge">Powered by <img class="sf-word-img" src="assets/sf-word-badge.png" alt="SmartFoam™"></span></div>
     </a>
   </div>
 </section>
