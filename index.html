@@ -754,10 +754,19 @@
   .scard .info{padding:1.1rem 1.2rem 1.3rem}
   .scard h3{font-size:.95rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
   .scard .badge{
-    display:inline-flex;align-items:center;white-space:nowrap;   /* uma linha so — antes quebrava e embolava a marca */
-    margin-top:.5rem;font-size:max(10px,.5rem);font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    /* centralizado no card: era inline-flex left-aligned e, como o pill e largo, estourava a direita
+       (descentralizado). fit-content + margin auto centraliza; max-width:100% impede transbordar. */
+    display:flex;width:fit-content;max-width:100%;margin:.5rem auto 0;
+    align-items:center;justify-content:center;white-space:nowrap;
+    font-size:max(10px,.5rem);font-weight:600;letter-spacing:.1em;text-transform:uppercase;
     color:#CFC1F5;background:rgba(167,148,240,.14);border:1px solid rgba(167,148,240,.4);
-    padding:.28rem .6rem;border-radius:999px;
+    padding:.28rem .55rem;border-radius:999px;
+  }
+  /* cards estreitos (2-col mobile): encolhe o badge pra caber sem cortar. DEPOIS da regra base pra
+     vencer por ordem de fonte (mesma especificidade). */
+  @media(max-width:820px){
+    .scard .badge{font-size:9px;letter-spacing:.05em;padding:.24rem .45rem}
+    .scard .badge .sf-word-img{height:7px;margin-left:.3rem}
   }
   .cta-line{margin-top:4rem;text-align:center}
   .cta-line p{font-size:.72rem;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-bottom:1.4rem}
