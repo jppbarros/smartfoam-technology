@@ -984,8 +984,11 @@
      (cta-gules): duas camadas absolutas EMPILHADAS no mesmo lugar; ao trocar de slide o nome novo
      sobe de baixo com fade-in SOBREPONDO o anterior, que sai por cima com fade-out. cross-fade +
      slide via WAAPI, sem mascara. */
-  .car-name-wrap{position:relative;min-height:clamp(3.4rem,8vw,4.8rem);pointer-events:none}
-  .car-layer{position:absolute;left:0;right:0;top:0;opacity:0;will-change:transform,opacity}
+  /* grid-overlap: as duas camadas ocupam a MESMA celula (empilhadas p/ o cross-fade), e o wrap ganha
+     altura natural da maior — flui certo abaixo do eyebrow. o min-height + absolute anterior fazia o
+     wrap renderizar por cima do eyebrow no mobile (textos embolados). */
+  .car-name-wrap{position:relative;display:grid;pointer-events:none}
+  .car-layer{grid-area:1/1;opacity:0;will-change:transform,opacity}
   #carLayerA{opacity:1}   /* visivel por padrao (fallback sem JS / reduced-motion) */
   .car-name{
     display:block;font-size:clamp(1.7rem,5vw,3.4rem);font-weight:900;letter-spacing:-.015em;
@@ -995,7 +998,7 @@
     display:block;margin-top:.75rem;font-size:.62rem;font-weight:800;letter-spacing:.26em;
     text-transform:uppercase;color:#CFC6E8;opacity:.8;
   }
-  @media(max-width:820px){ .car-name-wrap{bottom:5vh} .car-name{font-size:clamp(1.5rem,7vw,2.4rem)} }
+  @media(max-width:820px){ .car-name{font-size:clamp(1.5rem,7vw,2.4rem)} }
 
   /* ---------- THE FILM ---------- */
   .film-frame{
@@ -1037,6 +1040,9 @@
     section{padding:6rem 6vw}
       .car-track{padding:0}
     .cslide,.car-center{height:min(44vh,420px)}
+    /* mobile: aproxima titulo e imagens (havia ~194px de vazio). head desce um pouco, imagens sobem. */
+    .car-head{top:12vh}
+    .cslide,.car-center{top:49%}
     .logo .prod-suffix{display:none}
     .shop{padding-bottom:12rem}
 
@@ -1416,7 +1422,7 @@
       <figure class="cslide" data-caption="M1 Outdoor · Backyard deck">
         <img src="assets/products/m1-outdoor.webp" alt="M1 Outdoor on a deck" loading="lazy">
       </figure>
-      <figure class="cslide" data-caption="M1 Leather · Study">
+      <figure class="cslide" data-caption="M1 Leather · Home office">
         <img src="assets/products/m1-leather.webp" alt="M1 Leather sofa" loading="lazy">
       </figure>
       <figure class="cslide" data-caption="Marshbello · Statement lounge">
