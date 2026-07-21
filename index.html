@@ -1141,7 +1141,10 @@
   /* head centralizado no topo, no padrao da shop (eyebrow pequeno + titulo grande). aqui o titulo
      grande e o NOME DO PRODUTO (muda com o carrossel via as camadas .car-layer); "So modular..."
      vira o eyebrow pequeno acima dele, entao deixa de competir na mesma hierarquia. */
-  .car-head{position:absolute;top:7vh;left:0;right:0;z-index:20;text-align:center;padding:0 6vw}
+  /* o cabecalho desce pra fora da banda de desfoque do header (96px): em 7vh ele caia em ~63px numa
+     tela de 900 e a eyebrow saia inteira borrada. ancorado no --nav-h e nao em vh porque o que ele
+     precisa evitar tem altura FIXA — com vh, telas baixas voltavam a enfia-lo debaixo do header. */
+  .car-head{position:absolute;top:calc(var(--nav-h) + 2rem);left:0;right:0;z-index:20;text-align:center;padding:0 6vw}
   .car-eyebrow{font-size:max(10px,.72rem);font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.1rem}
   .car-stage{position:absolute;inset:0;perspective:1100px}
   /* the owner asked this one to lean elliptical: a tall capsule, not a rounded card */
@@ -1225,7 +1228,11 @@
        top em dvh (nao vh): as imagens usam % do sticky (dvh); com vh no head, a barra de URL do iOS
        ao reaparecer (scroll pra cima) fazia a imagem subir e invadir o texto. dvh mantem os dois em
        sincronia. */
-    .car-head{top:12dvh}
+    /* mantem o 12dvh (a sincronia com as imagens descrita acima) mas com PISO na banda de desfoque:
+       12dvh da ~101px numa tela de 844 — 5px acima da banda de 96 — e encolhe pra ~90px quando a
+       barra de URL do iOS reaparece, enfiando a eyebrow de volta no borrado. o max() so atua nesse
+       regime baixo; acima dele o dvh continua mandando. */
+    .car-head{top:max(calc(var(--nav-h) + 2rem), 12dvh)}
     /* legibilidade do titulo por text-shadow (nao mais por um scrim de gradiente atras — a faixa do
        scrim lia como uma "quebra" no fundo do carrossel). a sombra da contraste sobre imagens claras
        sem pintar faixa nenhuma. */
