@@ -728,8 +728,14 @@
   /* DEPOIS da regra base de proposito: @media NAO soma especificidade, entao `.cap-video video`
      dentro e fora da media empatam em (0,1,1) e vence a ULTIMA declarada. com este bloco antes, o
      4:5 voltava a ganhar e o corte paisagem era espremido numa caixa retrato. */
+  /* o par nao usa mais colunas proprias: ele REPETE a grade dos cards acima (.poss-grid resolve em
+     4 colunas iguais com gap de 1rem nesta largura). o video ocupa as colunas 1-3 e o fecho a 4a,
+     entao a borda direita do video cai exatamente na do 3o card e o texto ocupa a pegada do 4o —
+     as duas faixas passam a ler como um bloco so, nao como duas grades diferentes empilhadas. */
   @media(min-width:821px){
-    .cap-split{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
+    .cap-split{grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;align-items:center}
+    .cap-video{grid-column:1 / 4}
+    .cap-close{grid-column:4 / 5;max-width:none}
     .cap-video video{aspect-ratio:16/9}
   }
   .caps{display:grid;gap:1px;background:var(--glass-line);border:1px solid var(--glass-line);border-radius:var(--r);overflow:hidden}
@@ -2206,6 +2212,10 @@
     });
     aplicar();
     mq.addEventListener('change', aplicar);
+    // + resize: o evento 'change' do MediaQueryList nao chega em todo ambiente (e num deles a janela
+    // cruzava o breakpoint sem o arquivo trocar). 'resize' sempre chega, e aplicar() sai na primeira
+    // linha quando o src ja e o correto, entao o custo de reavaliar aqui e nulo.
+    addEventListener('resize', aplicar, { passive: true });
   })();
 
   // videos play themselves when scrolled into view and pause when they leave.
