@@ -1184,10 +1184,24 @@
        64 na base resolve os dois criterios de uma vez — a fronteira soma exatamente 160 e cada
        secao mantem respiro proprio. as pinadas ficam de fora: o padding delas e parte da
        coreografia (o #problem gruda no pe da cortina, o #numbers tem padding-top 0 de proposito). */
-    section:not(.pinned):not(.statement){padding-top:96px;padding-bottom:64px}
+    /* #rooms fica FORA: e full-bleed (carrossel sticky que sangra ate as bordas) e sempre teve 0/0.
+       a regra generica tinha somado 96+64 em volta dele, virando espaco morto antes do "Ready in a
+       box" — parte do buraco que aparecia no device. */
+    section:not(.pinned):not(.statement):not(#rooms){padding-top:96px;padding-bottom:64px}
     /* o #numbers e pinado (fora da regra acima), mas o padding-bottom dele e interno a caixa pinada,
        nao respiro entre secoes — baixar fecha a fronteira #numbers->#possible, que somava 192. */
     #numbers{padding-bottom:64px}
+    /* FIM DO FIELD NOTES -> FAQ. o depoimento e CENTRADO numa caixa sticky de ~100svh, entao quando
+       o track acaba sobram ~290px vazios abaixo dele (a metade de baixo da caixa) + os paddings.
+       zerar o padding do #reviews e subir o #faq come exatamente essa metade morta. isto NAO e a
+       margem negativa que removi antes: aquela invadia a janela em que a ultima review fica exposta
+       (que acontece durante o .fn-tail, ANTES do track acabar); esta so atua depois do fim dele. */
+    #reviews{padding-bottom:0}
+    #faq{margin-top:-200px}
+    /* CARROSSEL -> "READY IN A BOX". mesmo caso: o slide fica em top:49% da caixa sticky, entao ao
+       soltar sobram ~245px mortos abaixo dele antes do #shop comecar. subir o #shop come essa faixa
+       sem encostar no slide (que termina em ~599 de 844). */
+    #shop{margin-top:-160px}
     .cta{padding-top:120px;padding-bottom:96px}   /* secao de destaque: 120, o teto */
 
     /* mobile: lead with SmartFoam and let the table run past the right edge. the reader
