@@ -159,21 +159,6 @@
     content:"";position:absolute;inset:0;
     background:linear-gradient(180deg,rgba(13,10,19,.30),rgba(13,10,19,0) 70%);
   }
-  /* GRAIN do header: so aparece com a pagina rolada (html.scrolled). parado no topo o header e
-     transparente e um grao ali seria sujeira sobre o hero; assim que o conteudo comeca a passar por
-     baixo, o grao entra junto com o desfoque e da materia a faixa (mesma textura do .grain global).
-     z 97 = acima das fatias de desfoque (96) e abaixo do <nav> (100), pra o grao nao ser borrado
-     pelos proprios backdrop-filters. mascarado com a mesma silhueta da banda pra nao ter corte reto. */
-  .nav-grain{
-    position:fixed;top:0;left:0;right:0;height:96px;z-index:97;pointer-events:none;
-    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
-    mix-blend-mode:screen;
-    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 100%);
-    mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 100%);
-    opacity:0;transition:opacity .45s ease;
-  }
-  html.scrolled .nav-grain{opacity:.14}
-  @media (prefers-reduced-motion: reduce){ .nav-grain{transition:none} }
   .logo{display:flex;align-items:center;gap:1rem;text-decoration:none;color:inherit}
   /* the nav logo only — the footer reuses .logo and must stay put.
      it lives outside <nav> on purpose: position:fixed makes nav a stacking context, and a
@@ -206,6 +191,21 @@
   }
   .nav-div{width:1px;height:16px;background:var(--line);flex:none}
   .nav-shop{color:var(--purple-deep)}
+  /* MENU SOBRE FUNDO CLARO. mesmos valores que o #problem usa pra inverter a si proprio
+     (--ink:#1A1226, --purple-deep:#5A46A8): o lilas do tema escuro some sobre o lavanda claro.
+     nao da pra usar mix-blend-mode como o logo — ele so funciona la porque o logo vive FORA do
+     <nav>, que e fixed e portanto um contexto de empilhamento proprio. a transicao acompanha a
+     entrada da cortina em vez de estalar. */
+  .nav-sections a,.nav-shop,.drop-btn,.nav-div,.burger span{transition:color .3s ease,background .3s ease}
+  html.nav-escuro .nav-sections a,
+  html.nav-escuro .drop-btn{color:#4A3F63}
+  html.nav-escuro .nav-sections a:hover,
+  html.nav-escuro .drop-btn:hover,
+  html.nav-escuro .nav-sections a.is-current{color:#1A1226}
+  html.nav-escuro .nav-shop{color:#5A46A8}
+  html.nav-escuro .nav-sections a.is-current::after{background:#5A46A8}
+  html.nav-escuro .nav-div{background:rgba(26,18,38,.2)}
+  html.nav-escuro .burger span{background:#1A1226}
 
   .nav-drop{position:relative}
   .drop-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 0}
@@ -1366,7 +1366,6 @@
 <div class="grain"></div>
 
 <div class="nav-blur" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-<div class="nav-grain" aria-hidden="true"></div>
 
 <a class="logo nav-logo" href="./">
   <img src="assets/rovelab-logo-white.png" alt="Rove Lab">
@@ -1973,18 +1972,33 @@
     addEventListener('resize', check, { passive: true });
   })();
 
-  // html.scrolled: liga o grain do header assim que a pagina sai do topo. limiar de 8px (nao 0) pra
-  // o overscroll elastico do iOS nao piscar o estado. le uma flag propria em vez de reagir a cada
-  // evento pra nao tocar no DOM em todo frame de scroll.
+  // HEADER SOBRE FUNDO CLARO: o menu inverte pra escuro, como o logo ja faz.
+  // o logo consegue por mix-blend-mode:difference, mas so porque ele mora FORA do <nav> — <nav> e
+  // position:fixed, o que cria um contexto de empilhamento, e um filho com blend so enxerga o
+  // backdrop do proprio contexto (o comentario do .nav-logo registra isso). entao aqui a inversao e
+  // por classe, decidida pela geometria: a pagina tem exatamente uma regiao clara (#problem, com a
+  // cortina branca que a antecede), e basta saber se ela cobre a faixa do header.
+  // a cortina e um domo que CRESCE, entao mede-se o retangulo da IMAGEM dela (que ja reflete a
+  // escala), nao a caixa — a caixa existe muito antes de a area estar pintada.
   (function () {
     const root = document.documentElement;
+    const claro = document.getElementById('problem');
+    if (!claro) return;
+    const LINHA = 48;   // meio da faixa de 96px do header: onde o texto do menu de fato assenta
     let on = null;
+    // a cortina NAO entra pelo retangulo da imagem: ela e um domo com alpha que cresce, e a caixa
+    // dela cobre a linha por mais de uma viewport antes de haver qualquer branco pintado ali (medido:
+    // o nav invertia com a secao ainda a 900px). o sinal confiavel e a PROXIMIDADE da secao — quando
+    // o topo dela entra na metade de baixo da tela, o domo ja varreu o header.
     const sync = () => {
-      const next = scrollY > 8;
-      if (next !== on) { on = next; root.classList.toggle('scrolled', next); }
+      const vh = document.documentElement.clientHeight || innerHeight;
+      const r = claro.getBoundingClientRect();
+      const next = r.bottom >= LINHA && r.top <= vh * 0.55;
+      if (next !== on) { on = next; root.classList.toggle('nav-escuro', next); }
     };
     sync();
     addEventListener('scroll', sync, { passive: true });
+    addEventListener('resize', sync, { passive: true });
   })();
 
   // build the BIFMA dial's radial ticks (always, so reduced-motion / no-JS shows the full ring).
