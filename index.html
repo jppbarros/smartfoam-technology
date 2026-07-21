@@ -113,32 +113,54 @@
      each masked to its own band. reads as one blur that thickens toward the top edge.
      nav itself carries no background — an opaque nav would be what .logo blends against,
      and the whole point is for it to blend against the page. */
-  /* height matches the 64px header (was 96px, spilling the blur 32px below the nav onto whatever
-     sits under it — e.g. a pinned section title). the five progressive slices just compress into
-     the header band now. */
-  .nav-blur{position:fixed;top:0;left:0;right:0;height:64px;z-index:96;pointer-events:none}
+  /* 96px, nao 64: com a banda colada na altura do nav (64px) as cinco fatias se espremiam e o
+     desfoque FORTE ficava so na tira de cima — justo onde nao ha conteudo do header — enquanto o
+     logo e o menu (y ~25-44) pegavam pouco. agora o forte (8-16px) cobre a faixa do nav inteira e
+     os 32px abaixo dela sao uma CAUDA fraca (4 -> 2 -> 1px) que dissolve o corte reto.
+     gradientes em 180deg (de cima pra baixo) pra a ordem das paradas ler igual a geometria.
+     a cauda e fraca de proposito: um titulo pinado assenta em --nav-h (72px) + o padding-top da
+     secao, entao so encosta na faixa de <=2px, que e visualmente nula (era esse spill que motivou
+     o corte pra 64px). */
+  .nav-blur{position:fixed;top:0;left:0;right:0;height:96px;z-index:96;pointer-events:none}
   .nav-blur i{position:absolute;inset:0;display:block}
   .nav-blur i:nth-child(1){-webkit-backdrop-filter:blur(1px);backdrop-filter:blur(1px);
-    -webkit-mask-image:linear-gradient(0deg,transparent 0%,#000 16.667%,#000 33.333%,transparent 50%);
-    mask-image:linear-gradient(0deg,transparent 0%,#000 16.667%,#000 33.333%,transparent 50%)}
+    -webkit-mask-image:linear-gradient(180deg,transparent 80%,#000 92%,#000 100%);
+    mask-image:linear-gradient(180deg,transparent 80%,#000 92%,#000 100%)}
   .nav-blur i:nth-child(2){-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
-    -webkit-mask-image:linear-gradient(0deg,transparent 16.667%,#000 33.333%,#000 50%,transparent 66.667%);
-    mask-image:linear-gradient(0deg,transparent 16.667%,#000 33.333%,#000 50%,transparent 66.667%)}
+    -webkit-mask-image:linear-gradient(180deg,transparent 65%,#000 78%,#000 88%,transparent 95%);
+    mask-image:linear-gradient(180deg,transparent 65%,#000 78%,#000 88%,transparent 95%)}
   .nav-blur i:nth-child(3){-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
-    -webkit-mask-image:linear-gradient(0deg,transparent 33.333%,#000 50%,#000 66.667%,transparent 83.333%);
-    mask-image:linear-gradient(0deg,transparent 33.333%,#000 50%,#000 66.667%,transparent 83.333%)}
+    -webkit-mask-image:linear-gradient(180deg,transparent 48%,#000 62%,#000 75%,transparent 85%);
+    mask-image:linear-gradient(180deg,transparent 48%,#000 62%,#000 75%,transparent 85%)}
   .nav-blur i:nth-child(4){-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-    -webkit-mask-image:linear-gradient(0deg,transparent 50%,#000 66.667%,#000 83.333%,transparent 100%);
-    mask-image:linear-gradient(0deg,transparent 50%,#000 66.667%,#000 83.333%,transparent 100%)}
+    -webkit-mask-image:linear-gradient(180deg,transparent 30%,#000 45%,#000 60%,transparent 72%);
+    mask-image:linear-gradient(180deg,transparent 30%,#000 45%,#000 60%,transparent 72%)}
   .nav-blur i:nth-child(5){-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-    -webkit-mask-image:linear-gradient(0deg,transparent 66.667%,#000 83.333%,#000 100%);
-    mask-image:linear-gradient(0deg,transparent 66.667%,#000 83.333%,#000 100%)}
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 40%,transparent 55%);
+    mask-image:linear-gradient(180deg,#000 0%,#000 40%,transparent 55%)}
   /* the tint the nav used to carry, moved below .logo so the blend still sees through it.
-     kept light on purpose: past ~.45 it lifts the backdrop enough that .logo never flips. */
+     kept light on purpose: past ~.45 it lifts the backdrop enough that .logo never flips.
+     fade ate 70% (era 78%): a banda cresceu, e o tint tem de morrer junto com o desfoque forte,
+     nao arrastar cinza pela cauda. */
   .nav-blur::after{
     content:"";position:absolute;inset:0;
-    background:linear-gradient(180deg,rgba(13,10,19,.30),rgba(13,10,19,0) 78%);
+    background:linear-gradient(180deg,rgba(13,10,19,.30),rgba(13,10,19,0) 70%);
   }
+  /* GRAIN do header: so aparece com a pagina rolada (html.scrolled). parado no topo o header e
+     transparente e um grao ali seria sujeira sobre o hero; assim que o conteudo comeca a passar por
+     baixo, o grao entra junto com o desfoque e da materia a faixa (mesma textura do .grain global).
+     z 97 = acima das fatias de desfoque (96) e abaixo do <nav> (100), pra o grao nao ser borrado
+     pelos proprios backdrop-filters. mascarado com a mesma silhueta da banda pra nao ter corte reto. */
+  .nav-grain{
+    position:fixed;top:0;left:0;right:0;height:96px;z-index:97;pointer-events:none;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode:screen;
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 100%);
+    mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 100%);
+    opacity:0;transition:opacity .45s ease;
+  }
+  html.scrolled .nav-grain{opacity:.14}
+  @media (prefers-reduced-motion: reduce){ .nav-grain{transition:none} }
   .logo{display:flex;align-items:center;gap:1rem;text-decoration:none;color:inherit}
   /* the nav logo only — the footer reuses .logo and must stay put.
      it lives outside <nav> on purpose: position:fixed makes nav a stacking context, and a
@@ -1209,6 +1231,7 @@
 <div class="grain"></div>
 
 <div class="nav-blur" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="nav-grain" aria-hidden="true"></div>
 
 <a class="logo nav-logo" href="./">
   <img src="assets/rovelab-logo-white.png" alt="Rove Lab">
@@ -1817,6 +1840,20 @@
     };
     check();
     addEventListener('resize', check, { passive: true });
+  })();
+
+  // html.scrolled: liga o grain do header assim que a pagina sai do topo. limiar de 8px (nao 0) pra
+  // o overscroll elastico do iOS nao piscar o estado. le uma flag propria em vez de reagir a cada
+  // evento pra nao tocar no DOM em todo frame de scroll.
+  (function () {
+    const root = document.documentElement;
+    let on = null;
+    const sync = () => {
+      const next = scrollY > 8;
+      if (next !== on) { on = next; root.classList.toggle('scrolled', next); }
+    };
+    sync();
+    addEventListener('scroll', sync, { passive: true });
   })();
 
   // build the BIFMA dial's radial ticks (always, so reduced-motion / no-JS shows the full ring).
