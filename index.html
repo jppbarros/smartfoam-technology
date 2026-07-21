@@ -28,6 +28,19 @@
     --s-1:.25rem;--s-2:.5rem;--s-3:.75rem;--s-4:1rem;--s-5:1.25rem;--s-6:1.5rem;
     --s-8:2rem;--s-10:2.5rem;--s-12:3rem;--s-14:3.5rem;--s-16:4rem;--s-20:5rem;--s-24:6rem;
     --radius-pill:999px;   /* pilulas padronizadas (havia 99px e 999px misturados) */
+    /* ESCALA DE TITULO — tres degraus, agora nomeados. antes o degrau do meio era um
+       clamp(2rem,4.8vw,4rem) copiado INLINE em 4 <h2>, e o de baixo morava so no .h-serifless:
+       a hierarquia existia por acidente e nao dava pra afinar num lugar so.
+         h2-lead  (74px @1440) picos narrativos, titulo curto — #science, #problem, #numbers
+         h2       (64px @1440) secoes de catalogo/utilidade — shop, compare, reviews, faq
+         h2-long  (58px @1440) titulos longos de duas oracoes — #material, #possible */
+    --fs-h2-lead:clamp(2.2rem,5.5vw,4.6rem);
+    --fs-h2:clamp(2rem,4.8vw,4rem);
+    --fs-h2-long:clamp(1.9rem,4.4vw,3.6rem);
+    /* respiro do titulo ate o conteudo dele. era 2.8/3/3.5rem para o MESMO papel (45/48/56px medidos).
+       um valor so: 3rem contra os 8rem entre secoes = agrupamento claro (proximidade), o titulo cola
+       no que ele titula em vez de flutuar no meio do caminho. */
+    --gap-title:var(--s-12);
     /* fixed-header height (64px nav) + 8px breathing room. sticky sections offset by this so a
        pinned title lands below the nav and clear of its blur, never under the backdrop-filter. */
     --nav-h:72px;
@@ -342,6 +355,13 @@
     --glass-line:rgba(26,18,38,.13);
     color:var(--ink);
     padding-top:0;                  /* content rides in right under the white curtain base */
+    /* padding-bottom menor que os 8rem das outras secoes DE PROPOSITO, e nao e quebra de ritmo: esta
+       secao pina em altura cheia e o proximo bloco chega por cima numa cortina, entao este padding
+       nunca vira respiro VISIVEL entre secoes — ele so engorda o scrollHeight, que e exatamente o
+       numero comparado com a viewport pra decidir se a secao pina (html.mat-nofit). com 8rem a folga
+       ate o limiar era ~0px em telas de ~818px de altura: qualquer diferenca de renderizacao de fonte
+       tirava o pin. 4rem devolve essa margem sem custo visual. */
+    padding-bottom:var(--s-16);
   }
   #problem .prob-head{margin-top:0}
 
@@ -484,9 +504,14 @@
     html.mat-nofit #numbers.pinned{position:sticky;height:calc(100svh - var(--nav-h))}
     .pin-wrap.on-dark .spacer.dial-hold{height:120svh}   /* longer hold so the count finishes on-screen */
   }
-  .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:1.3rem}
-  .h-giant{font-size:clamp(2.2rem,5.5vw,4.6rem);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
+  .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:var(--s-5)}
+  .h-giant{font-size:var(--fs-h2-lead);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
+  /* degrau do meio: secoes de catalogo/utilidade. era este clamp copiado inline em cada <h2>. */
+  .h-sec{font-size:var(--fs-h2)}
   .h-giant .soft,.h-serifless .soft,.tagline-editorial .soft{color:var(--dim)}
+  /* corpo de texto: pretty resolve a ultima linha (evita a palavra orfa) sem mexer na medida.
+     nos titulos ja usamos balance, que e o certo pra 2-3 linhas curtas. */
+  .lead,.dial-sub,.poss p,.cap-close,.fn-intro .lead{text-wrap:pretty}
   .h-giant .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   /* "Tested where it counts": gradient-sweep reveal (after o-scs.com's "Earned on the ground").
      the title begins as the section's own colour (invisible), a colour band crosses the letters as
@@ -509,7 +534,7 @@
     background-position:calc((1 - var(--p)) * 100%) 0;
     -webkit-background-clip:text;background-clip:text;
   }
-  .h-serifless{font-size:clamp(1.9rem,4.4vw,3.6rem);font-weight:900;line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
+  .h-serifless{font-size:var(--fs-h2-long);font-weight:900;line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
   .lead{margin-top:1.5rem;font-size:1.05rem;color:var(--dim);max-width:64ch;line-height:1.7;text-wrap:pretty}
   .lead em{color:var(--purple-deep);font-style:normal;font-weight:600}
   .reveal{
@@ -615,7 +640,7 @@
 
 
   /* 04 — science columns */
-  .cell3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:3.5rem}
+  .cell3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:var(--gap-title)}
   /* mobile: carrossel horizontal com peek do proximo card (estilo nike.com/mind). quebra o padding da
      secao pra full-width, cada card ~80vw com snap; o proximo aparece de leve na borda. */
   @media(max-width:820px){
@@ -673,7 +698,7 @@
      chips each with a red ✕ emoji: reads as an AI-generated feature grid, not an argument. now it's
      a labelled list with hairline dividers and a small dash marker — quieter, more considered. */
   .prob-head{max-width:none}   /* fills the centred content column */
-  .prob-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(2rem,4vw,4rem);align-items:center;max-width:1180px;margin-top:2.8rem}
+  .prob-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(2rem,4vw,4rem);align-items:center;max-width:1180px;margin-top:var(--gap-title)}
   .prob-split .th-box{margin-top:0;max-width:none}
   @media(max-width:900px){ .prob-split{grid-template-columns:1fr;gap:2.4rem} }
   /* the label anchors the list instead of floating: smaller tracking, a rule under it. */
@@ -691,7 +716,7 @@
   /* comparison: row label on the left, then two column panels. SmartFoam leads and sits
      raised; each cell is a short verdict plus one supporting line, which is what keeps the
      three columns readable all the way down to 375px instead of restacking. */
-  .cmp{margin-top:3rem}
+  .cmp{margin-top:var(--gap-title)}
   .cmp table{width:100%;border-collapse:separate;border-spacing:clamp(6px,1vw,12px) 0}
   .cmp caption,.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
   .cmp thead th{padding:1.5rem 1rem 1.3rem;text-align:center;vertical-align:middle}
@@ -739,7 +764,7 @@
 
 
   /* FAQ (GEO / AI search visibility) */
-  .faq{max-width:900px;margin-top:3rem}
+  .faq{max-width:900px;margin-top:var(--gap-title)}
   .faq details{background:var(--glass);border:1px solid var(--glass-line);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
   /* block, not flex: the ™ superscript is its own element, and a flex summary would
      treat it as a separate item and space-between would fling it across the row */
@@ -758,7 +783,7 @@
 
 
   /* 06 — four unlocks */
-  .poss-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:3.5rem}
+  .poss-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:var(--gap-title)}
   .poss{background:var(--glass);border:1px solid var(--glass-line);border-radius:var(--r);padding:1.8rem;transition:transform .25s,border-color .25s}
   /* hover only where there's a real pointer: on touch screens :hover sticks to the last-tapped
      card, leaving it looking selected. */
@@ -775,9 +800,9 @@
 
 
   /* 10 — shop grid */
-  .shop{padding-bottom:10rem}
+  .shop{padding-bottom:8rem}
   /* 6 produtos: desktop 2 linhas de 3 (3 col), mobile 3 linhas de 2 (2 col) */
-  .shop-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:3.5rem}
+  .shop-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:var(--gap-title)}
   @media(max-width:820px){ .shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem} }
   .scard{display:block;text-decoration:none;color:inherit;background:var(--glass);border:1px solid var(--glass-line);border-radius:var(--r);overflow:hidden;transition:transform .3s,border-color .3s}
   .scard:hover{transform:translateY(-7px);border-color:rgba(167,148,240,.55)}
@@ -1086,7 +1111,7 @@
 
   /* ---------- THE FILM ---------- */
   .film-frame{
-    position:relative;margin-top:3.5rem;overflow:hidden;
+    position:relative;margin-top:var(--gap-title);overflow:hidden;
   }
   .film-frame video{display:block;width:100%;height:auto}
 
@@ -1466,7 +1491,7 @@
     </div>
   </div>
   <!-- unboxing video + the compress/expand/hold accordion, moved here from #material -->
-  <div class="cap-split reveal" style="margin-top:3.5rem">
+  <div class="cap-split reveal">
     <div class="cap-video">
       <video src="assets/unboxing.mp4" poster="assets/unboxing-poster.jpg"
              data-scrollplay muted loop playsinline preload="metadata"
@@ -1534,7 +1559,7 @@
 <section class="shop" id="shop">
   <div class="reveal">
     <p class="eyebrow">Explore the Lab Boneless Couch</p>
-    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Ready <span class="soft">in a box.</span></h2>
+    <h2 class="h-giant h-sec">Ready <span class="soft">in a box.</span></h2>
   </div>
   <div class="shop-grid reveal">
     <div class="scard">
@@ -1658,7 +1683,7 @@
 <!-- 10.5 — COMPARISON (GEO): moved down, directly before the FAQ -->
 <section id="compare">
   <div class="reveal">
-    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">SmartFoam™ <span class="soft">vs traditional foam.</span></h2>
+    <h2 class="h-giant h-sec">SmartFoam™ <span class="soft">vs traditional foam.</span></h2>
   </div>
   <p class="cmp-hint reveal">
     Swipe to compare
@@ -1705,7 +1730,7 @@
 <section class="fieldnotes" id="reviews" aria-label="Customer reviews">
   <div class="fn-intro reveal">
     <p class="eyebrow">Real homes, real reviews</p>
-    <h2 class="h-giant sweep-title" style="font-size:clamp(2rem,4.8vw,4rem)">Loved where it lives.</h2>
+    <h2 class="h-giant sweep-title h-sec">Loved where it lives.</h2>
     <p class="lead">4.6 out of 5 across 1,057 <a class="rv-link" href="https://rovelab.ca/products/m1-sofa-sectional" target="_blank" rel="noopener">verified reviews</a>.</p>
   </div>
   <div class="fn-track">
@@ -1770,7 +1795,7 @@
 <!-- 11 — FAQ (GEO / AI search visibility) -->
 <section id="faq">
   <div class="reveal">
-    <h2 class="h-giant" style="font-size:clamp(2rem,4.8vw,4rem)">Questions, <span class="soft">answered.</span></h2>
+    <h2 class="h-giant h-sec">Questions, <span class="soft">answered.</span></h2>
   </div>
   <div class="faq reveal">
     <details>
