@@ -984,15 +984,20 @@
   .lb-e{fill:none;stroke:#968EC3;stroke-width:3.4;opacity:0}
   .lb-word{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:27%;opacity:0}
   .logobuild .sub{margin-top:0;font-size:.7rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:var(--dim);text-align:center}
-  /* o hold define o percurso TOTAL do build (entrada + este spacer). era 260vh: o build terminava em
-     34% do percurso e sobravam ~2.3 telas de scroll morto (logo parado) antes da cortina do #problem
-     chegar. agora o JS gasta 82% do percurso no build (LB_SPAN) e o spacer so precisa da sobra do
-     hold formado — 60vh mantem a MESMA velocidade de montagem de antes, sem o vazio. */
-  .lb-hold{height:60vh}
+  /* o hold define o percurso TOTAL do build (entrada + este spacer), e o fim dele NAO e "vazio": a
+     cortina do #problem tem 120vh e comeca a entrar na tela ~1092px ANTES da secao dela chegar. ou
+     seja, o hold precisa cobrir essa aproximacao + uma janela em que o logo fica formado e limpo.
+     60vh (tentativa anterior) era menor que a propria aproximacao => a cortina ja estava em cena
+     antes de dar pra ver o logo pronto. 230vh equilibra: com LB_SPAN o build termina deixando
+     ~1.4 tela de pos-build (contra 2.6 do 260vh original), das quais ~0.4 e logo formado sem cortina. */
+  .lb-hold{height:230vh}
   @media(max-width:820px){
     .logobuild.pinned{height:100svh;gap:1.8rem}
     .lb-word{width:34%}
-    .lb-hold{height:110svh}   /* idem mobile (era 150svh): mesma duracao de build, sem a cauda parada */
+    /* nao redeclarar .lb-hold aqui: `.pin-wrap.on-dark .spacer{height:70svh}` (0,3,0) vence de
+       `.lb-hold` (0,1,0), entao no mobile o hold SEMPRE foi 70svh e qualquer valor aqui e morto —
+       os "150svh"/"110svh" que ja moraram nesta linha nunca renderizaram. quem manda no hold mobile
+       e aquela regra; pra mexer, use `.spacer.lb-hold` (duas classes) como o .dial-hold faz. */
   }
   @media (prefers-reduced-motion: reduce){
     /* JS is skipped — show the finished logo, static */
@@ -2130,8 +2135,17 @@
       // AGORA: shift = (wrapTop - navH) * (1 - NUM_RATE), sem clamp no topo. a taxa e constante em
       // todo o percurso, entao o conteudo faz UMA subida continua, do pe da tela ate a posicao pinada,
       // onde para (shift 0 exatamente ao pinar; negativo e cortado pelo max).
+      // TETO (0.70vh, o mesmo do codigo original): o conteudo sobe pra DENTRO da cortina e e lido por
+      // cima dela (z 3 > z 2), mas a cortina e um DOMO com alpha que cresce — a caixa dela cobre a
+      // tela muito antes da area PINTADA cobrir. passar deste teto joga o conteudo na faixa ainda
+      // nao pintada, e ele aparece solto sobre o #problem claro (foi o que quebrou: com a taxa
+      // constante sem teto, o shift passava de 0.70vh assim que a secao estava longe o bastante).
+      // o teto so morde ENQUANTO o conteudo ainda esta abaixo da viewport — 0.70vh * RATE/(1-RATE)
+      // = 1.05vh > vh - navH - offset em qualquer altura de tela — entao a subida VISIVEL continua
+      // sendo uma so, em taxa constante. os dois requisitos convivem.
+      const bruto = (wrapTop0 - navH0) * (1 - NUM_RATE);
       numbersEl.style.setProperty('--num-shift',
-        Math.max(0, (wrapTop0 - navH0) * (1 - NUM_RATE)).toFixed(1) + 'px');
+        Math.max(0, Math.min(bruto, vh * 0.70)).toFixed(1) + 'px');
     }
 
     // social proof (Field Notes): the photo cards scroll UP over a fixed central testimonial. when a
@@ -2203,7 +2217,7 @@
       // esticado pra consumir LB_SPAN do percurso, sobrando so a cauda de hold formado.
       // (isso substitui o antigo `stretch` mobile: a duracao agora vem do par LB_SPAN + .lb-hold,
       // que e o que de fato controla quanto scroll a montagem custa.)
-      const LB_END = 0.34, LB_SPAN = 0.82;
+      const LB_END = 0.34, LB_SPAN = innerWidth <= 820 ? 0.66 : 0.48;
       const pb = clamp01(p * (LB_END / LB_SPAN));
       // innermost: a tiny circle grows into the central circle (rx = ry), 0 -> .08
       const t0 = lbEase(clamp01(pb / 0.08));
