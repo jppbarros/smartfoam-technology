@@ -195,6 +195,15 @@
     text-transform:uppercase;white-space:nowrap;transition:color .25s;background:none;border:none;cursor:pointer;
   }
   .nav-sections a:hover,.nav-shop:hover,.drop-btn:hover{color:var(--ink)}
+  /* secao em que o leitor esta agora (scroll-spy). o traco embaixo carrega o estado — so mudar a cor
+     seria confundivel com o :hover. position:relative + ::after pra o traco nao alterar a altura da
+     linha (um border-bottom empurraria os itens e faria o nav "pular" ao trocar de secao). */
+  .nav-sections a{position:relative}
+  .nav-sections a.is-current{color:var(--ink)}
+  .nav-sections a.is-current::after{
+    content:"";position:absolute;left:0;right:0;bottom:-6px;height:1.5px;
+    background:var(--purple-deep);border-radius:var(--radius-pill);
+  }
   .nav-div{width:1px;height:16px;background:var(--line);flex:none}
   .nav-shop{color:var(--purple-deep)}
 
@@ -247,6 +256,11 @@
   #shop,#compare,#faq{
     padding-inline:max(5vw, (100% - 1200px) / 2);
   }
+  /* ALVOS DE ANCORA. sem isto o link do nav para o topo da secao no topo da VIEWPORT, e os 72px do
+     header fixo (mais os 96px da banda de desfoque) comem o inicio dela — o titulo chegava por baixo
+     do header. nav-h + s-8 = 104px poe o titulo logo abaixo da banda inteira, nao so do nav.
+     so o #numbers tinha isto, e mesmo assim com 72px (ainda dentro da banda). */
+  section[id],.fieldnotes[id]{scroll-margin-top:calc(var(--nav-h) + var(--s-8))}
 
   /* #1C1B23 is the AVIF's ACTUAL base, not segundo's intended #1D1A24: lossy AVIF shifted it one
      unit, and across the full-width hard curtain edge that one unit read as a visible line. I had
@@ -263,7 +277,7 @@
   /* #1C1B23 SO no topo (a costura da cortina), fade pra transparente logo abaixo pra o glow (.flow)
      aparecer atras do #numbers como nas outras secoes — antes era laje solida sem glow (o "roxo
      chapado"). o wrap on-dark tbm virou transparente (abaixo), senao o glow ficaria tampado. */
-  #numbers{background:linear-gradient(180deg,#1C1B23 0, #1C1B23 7vh, rgba(28,27,35,0) 46vh);padding-top:0;scroll-margin-top:var(--nav-h)}
+  #numbers{background:linear-gradient(180deg,#1C1B23 0, #1C1B23 7vh, rgba(28,27,35,0) 46vh);padding-top:0}
   /* pin BELOW the fixed header, not at top:0 — so the "Tested where it counts" title lands under
      the nav (and clear of its blur) instead of scrolling under the backdrop-filter. height shrinks
      by the same offset so the sticky box still ends at the viewport bottom (no overflow). */
@@ -1279,9 +1293,19 @@
   </button>
 
   <div class="nav-panel" id="navPanel">
-    <!-- group 1: places on this page (in the order the page actually runs) -->
+    <!-- group 1: places on this page (in the order the page actually runs).
+         conjunto enxuto de 3: como funciona -> prova tecnica -> duvidas. o Shop ja tem o proprio
+         link a direita, entao nao se repete aqui.
+         #numbers e uma secao PINADA: ancorar nela leva ao momento em que ela trava no topo, com o
+         titulo posto e o dial em cena — que e o quadro certo pra chegar. ancorar no .pin-wrap
+         levaria ao inicio da cortina, uma tela escura ainda sem conteudo. -->
     <p class="nav-group-label">On this page</p>
-    <!-- secoes removidas (The Material/Film/Science/Numbers/FAQ) a pedido; nav so com Lab System + Shop -->
+    <ul class="nav-sections">
+      <li><a href="#science">The Science</a></li>
+      <li><a href="#numbers">The Numbers</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <span class="nav-div" aria-hidden="true"></span>
 
     <!-- group 2: other pages. a dropdown on desktop, an open list inside the drawer on mobile -->
     <div class="nav-drop">
@@ -2034,6 +2058,56 @@
 
     // leaving mobile width with the drawer open would strand the scroll lock
     matchMedia('(min-width: 821px)').addEventListener('change', e => { if (e.matches) setDrawer(false); });
+  })();
+
+  // SCROLL-SPY do nav: acende o link da secao em que o leitor esta.
+  // NAO por transicoes de IntersectionObserver: com secoes de alturas muito diferentes (as pinadas
+  // ocupam telas inteiras, e entre dois marcos do menu ha trechos longos — #possible, #rooms, #shop,
+  // #compare) o estado dependia de a faixa ter sido CRUZADA, entao pular/voltar direto deixava o
+  // link errado aceso e nada limpava ao voltar pro topo.
+  // aqui o estado e DERIVADO da posicao a cada leitura: atual = o ultimo marco cujo topo ja passou
+  // da linha de leitura. isso da as tres propriedades que um indice precisa: continuidade (o ultimo
+  // marco visitado segue aceso nos trechos entre secoes), simetria (subir devolve o anterior) e
+  // vazio honesto (acima do primeiro marco, nenhum aceso).
+  (function () {
+    const links = [...document.querySelectorAll('.nav-sections a[href^="#"]')];
+    if (!links.length) return;
+    const alvos = links
+      .map(a => ({ a, sec: document.getElementById(a.getAttribute('href').slice(1)) }))
+      .filter(o => o.sec);
+    if (!alvos.length) return;
+
+    let aceso;
+    const marcar = () => {
+      const linha = innerHeight * 0.32;          // altura de leitura: terco superior da tela
+      let atual = null;
+      for (const { a, sec } of alvos) {          // em ordem de documento: fica o ultimo que passou
+        if (sec.getBoundingClientRect().top <= linha) atual = a;
+      }
+      if (atual === aceso) return;               // so toca no DOM quando de fato muda
+      aceso = atual;
+      links.forEach(l => l.classList.toggle('is-current', l === atual));
+    };
+
+    // medicao DIRETA no handler, sem passar por requestAnimationFrame: sao 3 getBoundingClientRect
+    // e a escrita no DOM so acontece quando o marco muda, entao o custo e desprezivel — e amarrar ao
+    // rAF tornava o estado refem de o frame ser pintado (aba em segundo plano, baixo consumo, ou o
+    // painel de preview, onde o rAF e estrangulado e o link ficava travado no marco anterior).
+    // alem da medicao por evento, uma medicao ATRASADA que fecha a conta quando o movimento para.
+    // um salto programatico (clicar num link daqui, ou voltar pelo historico) dispara pouquissimos
+    // eventos de scroll, e o primeiro deles le o layout antes de assentar — sem este fecho o link
+    // podia ficar no marco anterior justamente na navegacao por menu, que e o caso principal.
+    let fim;
+    const medirNoFim = () => { clearTimeout(fim); fim = setTimeout(marcar, 120); };
+    addEventListener('scroll', () => { marcar(); medirNoFim(); }, { passive: true });
+    addEventListener('resize', () => { marcar(); medirNoFim(); }, { passive: true });
+    addEventListener('hashchange', medirNoFim);
+    // e quando a PAGINA muda de altura (imagem lazy que chega, video que define tamanho, cortina que
+    // reflui): as secoes se deslocam sem nenhum scroll acontecer, entao o marco medido antes do
+    // deslocamento fica errado e nada mais o corrigiria.
+    if (window.ResizeObserver) new ResizeObserver(medirNoFim).observe(document.documentElement);
+    addEventListener('load', medirNoFim);
+    marcar();
   })();
 
   // comparison table (mobile): the sticky label column frosts to glass in proportion to the
