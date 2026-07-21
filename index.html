@@ -272,13 +272,15 @@
   /* the hold: #numbers pins and this spacer is the scroll the ring/count build over. 150vh so the
      0 -> 100,000 count is watchable while the section sits still. two classes so it beats the later
      `.spacer{height:130vh}` rule (equal specificity would otherwise let 130vh win by order). */
-  .spacer.dial-hold{height:150vh}
+  .spacer.dial-hold{height:100vh}
   .dial{position:relative;width:100%;aspect-ratio:1}
   .dial-svg{width:100%;height:100%;display:block;overflow:visible}
   /* the radial ticks: a faint base, brightened per-tick by JS as the reveal sweeps round.
      the just-lit ticks glow. line-cap round so each reads as a clean mark, like the anchor deco. */
   .dial-tick{stroke-width:2.4;stroke-linecap:round;opacity:.13}
-  .dial-tick.on{opacity:1;filter:drop-shadow(0 0 5px currentColor)}
+  /* sem drop-shadow: no desktop (dial grande) o glow por tick somava e virava um halo forte demais
+     em volta do anel. o traco limpo, so opacity 1, e o que ja se lia melhor no mobile. */
+  .dial-tick.on{opacity:1}
   /* the new BIFMA mark is wide (no circle of its own), so size it by width and centre it inside
      the tighter tick ring. */
   /* the mark's visual weight sits ~18% above its box centre (big "BIFMA" on top, small "CERTIFIED"
@@ -979,11 +981,15 @@
   .lb-e{fill:none;stroke:#968EC3;stroke-width:3.4;opacity:0}
   .lb-word{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:27%;opacity:0}
   .logobuild .sub{margin-top:0;font-size:.7rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:var(--dim);text-align:center}
-  .lb-hold{height:260vh}   /* long enough that the logo holds formed on the dark before the curtain */
+  /* o hold define o percurso TOTAL do build (entrada + este spacer). era 260vh: o build terminava em
+     34% do percurso e sobravam ~2.3 telas de scroll morto (logo parado) antes da cortina do #problem
+     chegar. agora o JS gasta 82% do percurso no build (LB_SPAN) e o spacer so precisa da sobra do
+     hold formado — 60vh mantem a MESMA velocidade de montagem de antes, sem o vazio. */
+  .lb-hold{height:60vh}
   @media(max-width:820px){
     .logobuild.pinned{height:100svh;gap:1.8rem}
     .lb-word{width:34%}
-    .lb-hold{height:150svh}   /* menos vazio entre secoes no mobile (era 210svh); build esticado no JS */
+    .lb-hold{height:110svh}   /* idem mobile (era 150svh): mesma duracao de build, sem a cauda parada */
   }
   @media (prefers-reduced-motion: reduce){
     /* JS is skipped — show the finished logo, static */
@@ -2067,6 +2073,15 @@
       // doesn't match the sticky's real travel). clientHeight tracks the pin, so the ring fills over
       // the whole hold on both phone and desktop instead of saturating in the first third.
       const vh = document.documentElement.clientHeight || innerHeight;
+      const navH0 = parseFloat(getComputedStyle(numbersEl).top) || 0;
+      const wrapTop0 = dialWrap.getBoundingClientRect().top;
+      // NUM_RATE = velocidade do conteudo (titulo + dial) relativa ao scroll durante a ENTRADA.
+      // 1 = anda junto com a secao; <1 = sobe mais devagar que o scroll, entrando na zona da cortina
+      // bem antes dela abrir (o reveal). so existe onde o transform do --num-shift existe: desktop
+      // com motion. no resto RATE 1 => shift 0 => comportamento identico ao de antes.
+      const shiftOn = innerWidth > 820
+        && matchMedia('(prefers-reduced-motion: no-preference)').matches;
+      const NUM_RATE = shiftOn ? 0.6 : 1;
       let p;
       if (getComputedStyle(numbersEl).position === 'sticky') {
         // pinned: #numbers is held still while the spacer scrolls, so the ring/count build in place.
@@ -2075,11 +2090,15 @@
         // --nav-h, 1 exactly as it releases. keeps the count finishing right when the pin lets go.
         // conta sobre ENTRADA + hold, nao so o hold: com o num-shift o conteudo ja aparece e assenta
         // durante a entrada, entao amarrar a contagem so ao hold deixava o dial parado + contador 0 ao
-        // "bater no teto", exigindo um 2o scroll pra a animacao comecar. medir do topo do wrap cruzando
-        // desde vh (conteudo comeca a entrar) ate o fim do hold: progresso = quanto o wrap subiu sobre
-        // sua altura total. assim ticks/contador/gradiente ja sobem conforme a secao revela.
-        const total = dialWrap.offsetHeight;   // entrada (vh - navH) + hold, = altura do pin-wrap
-        p = total > 0 ? clamp01((vh - dialWrap.getBoundingClientRect().top) / total) : 0;
+        // "bater no teto", exigindo um 2o scroll pra a animacao comecar.
+        // a entrada NAO e mais (vh - navH): com NUM_RATE o conteudo sobe a 0.6 da velocidade do
+        // scroll, entao ele cruza a tela em (vh - navH)/NUM_RATE de scroll. medir a contagem sobre
+        // esse mesmo trecho + o hold amarra contador, ticks e gradiente ao movimento do titulo: tudo
+        // comeca quando ele assoma por baixo e termina quando o pin solta. um movimento so.
+        const hold = Math.max(0, dialWrap.offsetHeight - numbersEl.offsetHeight);
+        const entrySpan = (vh - navH0) / NUM_RATE;
+        const total = entrySpan + hold;
+        p = total > 0 ? clamp01((entrySpan - (wrapTop0 - navH0)) / total) : 0;
       } else {
         // not pinned (phone, where the section is too tall to hold): build by the dial's own screen
         // position instead, so it fills as it rises into view rather than off-screen.
@@ -2092,16 +2111,20 @@
       dialNum.textContent = n.toLocaleString('en-US') + (p >= 1 ? '+' : '');
       if (sweep) sweep.style.setProperty('--p', p.toFixed(3));   // sweep the title in step with the count
 
-      // num-shift: durante a ENTRADA (antes de pinar) o conteudo (titulo + dial) comeca deslocado pra
+      // num-shift: durante a ENTRADA (antes de pinar) o conteudo (titulo + dial) sobe deslocado pra
       // cima, dentro da cortina escura, e assenta em 0 exatamente quando a secao pina — a cortina
       // desliza revelando ele, em vez de o escuro (segundo.avif ~toda #1C1B23) ler como vazio.
-      // entryProg = 1 quando a secao entra la embaixo, 0 ao pinar. o transform que consome esta var
-      // so existe no CSS desktop + motion, entao setar em telas menores e inocuo (sem efeito).
-      const shiftNavH = parseFloat(getComputedStyle(numbersEl).top) || 0;
-      const entryTravel = vh - shiftNavH;
-      const entryProg = entryTravel > 0
-        ? clamp01((dialWrap.getBoundingClientRect().top - shiftNavH) / entryTravel) : 0;
-      numbersEl.style.setProperty('--num-shift', (entryProg * vh * 0.70).toFixed(1) + 'px');
+      //
+      // ANTES: shift = clamp01((wrapTop - navH)/(vh - navH)) * vh*0.70. o clamp no topo era o bug —
+      // com a secao ainda inteira abaixo da viewport o shift travava em 0.70vh e o titulo, puxado pra
+      // dentro da tela, subia na velocidade CHEIA do scroll; ao cruzar wrapTop = vh o clamp soltava e
+      // ele caia pra ~0.24 da velocidade. duas velocidades = duas subidas ate o topo ("bate no teto
+      // 2x") antes de pinar.
+      // AGORA: shift = (wrapTop - navH) * (1 - NUM_RATE), sem clamp no topo. a taxa e constante em
+      // todo o percurso, entao o conteudo faz UMA subida continua, do pe da tela ate a posicao pinada,
+      // onde para (shift 0 exatamente ao pinar; negativo e cortado pelo max).
+      numbersEl.style.setProperty('--num-shift',
+        Math.max(0, (wrapTop0 - navH0) * (1 - NUM_RATE)).toFixed(1) + 'px');
     }
 
     // social proof (Field Notes): the photo cards scroll UP over a fixed central testimonial. when a
@@ -2167,11 +2190,14 @@
       // vh (secao comeca a entrar) o logo ja se monta enquanto sobe pra dentro da tela — sem area vazia.
       const total = (vh - navH) + travel;
       const p = total > 0 ? clamp01((vh - lbWrap.getBoundingClientRect().top) / total) : 0;
-      // mobile: estica o build sobre mais scroll (pb = p/stretch) — o build ficava rapido demais e
-      // com muito formed-hold vazio depois. stretch 2 alonga a montagem (mais visivel) e faz o build
-      // terminar mais tarde (menos sobra vazia). desktop: stretch 1 (inalterado).
-      const stretch = innerWidth <= 820 ? 2 : 1;
-      const pb = clamp01(p / stretch);
+      // o build ocupa os keyframes de pb 0 -> LB_END (.34). mapeando pb = p direto, ele terminava com
+      // 34% do percurso andado e os outros 66% eram scroll MORTO (logo formado, nada acontecendo) —
+      // eram os "dois scrolls improdutivos" antes da cortina do #problem entrar. agora o build e
+      // esticado pra consumir LB_SPAN do percurso, sobrando so a cauda de hold formado.
+      // (isso substitui o antigo `stretch` mobile: a duracao agora vem do par LB_SPAN + .lb-hold,
+      // que e o que de fato controla quanto scroll a montagem custa.)
+      const LB_END = 0.34, LB_SPAN = 0.82;
+      const pb = clamp01(p * (LB_END / LB_SPAN));
       // innermost: a tiny circle grows into the central circle (rx = ry), 0 -> .08
       const t0 = lbEase(clamp01(pb / 0.08));
       const r0 = (4 + (LB_RY - 4) * t0).toFixed(1);
