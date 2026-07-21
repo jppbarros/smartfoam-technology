@@ -1062,7 +1062,16 @@
      ~1.4 tela de pos-build (contra 2.6 do 260vh original), das quais ~0.4 e logo formado sem cortina. */
   .lb-hold{height:230vh}
   @media(max-width:820px){
-    .logobuild.pinned{height:100svh;gap:1.8rem}
+    /* logo ancorado ALTO em vez de centrado. centrado, o conteudo (anel + linha de apoio, ~205px)
+       ficava a ~320px do topo da caixa de 100svh: na ENTRADA da secao essa faixa subia vazia pela
+       tela inteira antes de o anel assomar, e era o "espaco exagerado" percebido depois do
+       "Engineered at the cell" — nao havia spacer ali (o vazio em documento entre as duas secoes e
+       de 24px), era a metade de cima da propria secao pinada.
+       flex-start + padding-top = nav (72px, pra o anel nao nascer sob o header) + 6svh de respiro. */
+    .logobuild.pinned{
+      height:100svh;gap:1.8rem;
+      justify-content:flex-start;padding-top:calc(var(--nav-h) + 6svh);
+    }
     .lb-word{width:34%}
     /* nao redeclarar .lb-hold aqui: `.pin-wrap.on-dark .spacer{height:70svh}` (0,3,0) vence de
        `.lb-hold` (0,1,0), entao no mobile o hold SEMPRE foi 70svh e qualquer valor aqui e morto —
