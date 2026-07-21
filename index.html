@@ -719,8 +719,19 @@
   /* o fecho da secao, agora par do video. 46ch (nao 70ch): dentro de uma coluna, 70ch nao cabia e a
      medida de leitura tem de ser a da coluna, nao a da pagina. */
   .cap-close{max-width:46ch}
+  /* DESKTOP recebe o corte 16:9 do mesmo plano. a coluna estreita (360px) existia porque o video era
+     RETRATO — um 16:9 ali sairia com 360x203, um selo. paisagem pede largura: 1.55fr contra 1fr da
+     dao ~695px de video e ~450px de texto num conteudo de 1200, que e a medida de leitura do .cap-close.
+     o mobile nao entra aqui: la a coluna e unica e o video segue retrato 4:5. */
   .cap-video{position:relative;border:1px solid var(--glass-line);border-radius:var(--r);overflow:hidden;background:var(--glass)}
   .cap-video video{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
+  /* DEPOIS da regra base de proposito: @media NAO soma especificidade, entao `.cap-video video`
+     dentro e fora da media empatam em (0,1,1) e vence a ULTIMA declarada. com este bloco antes, o
+     4:5 voltava a ganhar e o corte paisagem era espremido numa caixa retrato. */
+  @media(min-width:821px){
+    .cap-split{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
+    .cap-video video{aspect-ratio:16/9}
+  }
   .caps{display:grid;gap:1px;background:var(--glass-line);border:1px solid var(--glass-line);border-radius:var(--r);overflow:hidden}
   .cap{background:var(--glass)}
   .cap summary{
@@ -1580,7 +1591,13 @@
   <!-- unboxing video + the compress/expand/hold accordion, moved here from #material -->
   <div class="cap-split reveal">
     <div class="cap-video">
+      <!-- duas versoes do MESMO plano: retrato 4:5 (mobile) e paisagem 16:9 (desktop). o src do
+           markup e o retrato de proposito — e o menor e o que vale sem JS. o troca-src abaixo sobe
+           pro paisagem no desktop. (<source media> nao serve: os browsers deixaram de honrar media
+           em source de video.) -->
       <video src="assets/unboxing.mp4" poster="assets/unboxing-poster.jpg"
+             data-src-desktop="assets/unboxing-desktop.mp4"
+             data-poster-desktop="assets/unboxing-desktop-poster.jpg"
              data-scrollplay muted loop playsinline preload="metadata"
              aria-label="Unboxing a Rove Lab couch: the module expands into full form"></video>
     </div>
@@ -2165,6 +2182,30 @@
     cmp.addEventListener('scroll', setGF, { passive: true });
     addEventListener('resize', setGF, { passive: true });
     setGF();
+  })();
+
+  // TROCA-SRC POR BREAKPOINT: o unboxing tem um corte retrato (4:5) e um paisagem (16:9) do mesmo
+  // plano. o markup carrega o retrato — menor, e o unico que existe sem JS. no desktop trocamos pelo
+  // paisagem. roda ANTES do bloco de autoplay abaixo, pra o observer ja pegar o arquivo definitivo.
+  // <source media> nao resolveria: os browsers pararam de honrar media em source de video.
+  (function () {
+    const alvos = [...document.querySelectorAll('video[data-src-desktop]')];
+    if (!alvos.length) return;
+    const mq = matchMedia('(min-width: 821px)');
+    const aplicar = () => alvos.forEach(v => {
+      // guarda o par retrato na primeira passada, pra saber pra onde VOLTAR se a janela encolher
+      if (!v.dataset.srcOriginal) { v.dataset.srcOriginal = v.getAttribute('src'); v.dataset.posterOriginal = v.getAttribute('poster') || ''; }
+      const src = mq.matches ? v.dataset.srcDesktop : v.dataset.srcOriginal;
+      const poster = mq.matches ? v.dataset.posterDesktop : v.dataset.posterOriginal;
+      if (!src || v.getAttribute('src') === src) return;
+      const tocava = !v.paused;
+      v.setAttribute('src', src);
+      if (poster) v.setAttribute('poster', poster);
+      v.load();
+      if (tocava) v.play().catch(() => {});
+    });
+    aplicar();
+    mq.addEventListener('change', aplicar);
   })();
 
   // videos play themselves when scrolled into view and pause when they leave.
