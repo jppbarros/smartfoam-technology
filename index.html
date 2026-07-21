@@ -993,8 +993,8 @@
   @media(max-width:820px){
     .fn-intro{padding-top:5rem}
     .fn-sticky{height:calc(100svh - var(--nav-h))}
-    .fn-band{min-height:108svh}
-    .fn-tail{height:32svh}
+    .fn-band{min-height:76svh}   /* era 108svh: 5 faixas x 108 = 4560px, o maior bloco da pagina */
+    .fn-tail{height:42svh}   /* sobe junto com a faixa menor: card center = trackBottom - tail - band/2 */
     /* bigger, still mixed sizes/shapes, alternating left / right down the column */
     .fn-band:nth-child(1) .fn-card{--fw:62vw;--fa:4/5;--fx:-15vw}
     .fn-band:nth-child(2) .fn-card{--fw:56vw;--fa:1/1;--fx:17vw}
@@ -1177,7 +1177,18 @@
     .car-eyebrow,.car-name,.car-room{text-shadow:0 1px 10px rgba(13,10,19,.85),0 0 3px rgba(13,10,19,.7)}
     .cslide,.car-center{top:49%}
     .logo .prod-suffix{display:none}
-    .shop{padding-bottom:12rem}
+    .shop{padding-bottom:64px}   /* era 12rem=192px, acima do teto de 120 */
+
+    /* RITMO VERTICAL MOBILE. o padrao pedido era 96px de padding-block, mas duas secoes vizinhas
+       somam padB + padT: com 96/96 toda fronteira dava 192px, acima do teto de 160. 96 no topo e
+       64 na base resolve os dois criterios de uma vez — a fronteira soma exatamente 160 e cada
+       secao mantem respiro proprio. as pinadas ficam de fora: o padding delas e parte da
+       coreografia (o #problem gruda no pe da cortina, o #numbers tem padding-top 0 de proposito). */
+    section:not(.pinned):not(.statement){padding-top:96px;padding-bottom:64px}
+    /* o #numbers e pinado (fora da regra acima), mas o padding-bottom dele e interno a caixa pinada,
+       nao respiro entre secoes — baixar fecha a fronteira #numbers->#possible, que somava 192. */
+    #numbers{padding-bottom:64px}
+    .cta{padding-top:120px;padding-bottom:96px}   /* secao de destaque: 120, o teto */
 
     /* mobile: lead with SmartFoam and let the table run past the right edge. the reader
        swipes to bring the traditional column in, which buys each column enough width to
@@ -2327,7 +2338,10 @@
       const vh = document.documentElement.clientHeight || innerHeight;
       if (fnTitle) {                                       // reveal the heading as it rises into view
         const t = fnTitle.getBoundingClientRect();
-        fnTitle.style.setProperty('--p', clamp01((vh * 0.95 - t.top) / (vh * 0.45)).toFixed(3));
+        // janela do sweep: comeca em .95vh (titulo assomando por baixo) e FECHA em .60vh, ainda acima
+        // do meio da tela — antes o span era .45vh (fechava so em .50vh) e o titulo chegava ao centro
+        // ainda meio apagado. span = 0.95 - 0.60 = 0.35.
+        fnTitle.style.setProperty('--p', clamp01((vh * 0.95 - t.top) / (vh * 0.35)).toFixed(3));
       }
       const sr = fnSticky.getBoundingClientRect();
       const cy = sr.top + sr.height / 2;                   // the line the testimonial sits on
