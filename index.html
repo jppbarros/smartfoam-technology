@@ -884,9 +884,12 @@
      curta demais (a foto passava, trocava, e a proxima ja chegava). 118vh abre uma janela de leitura
      clara entre cada foto. */
   .fn-band{display:grid;place-items:center;min-height:118vh}
-  /* ultimo band encurtado, foto CENTRALIZADA (mesma aparencia de antes, nao abaixada): reduz a cauda
-     vazia abaixo da foto pra o "4.6/5" ficar perto da ultima review. */
-  .fn-band:nth-child(5){min-height:80vh}
+  /* o ultimo band segue o mesmo ritmo dos outros (era 80vh, encurtado pra encostar no antigo "4.6/5",
+     que ja nao existe). encurtado, a foto ainda estava na linha do texto quando o track acabava.
+     .fn-tail: cauda DEPOIS da ultima foto. o .fn-sticky gruda enquanto o track durar, entao esta
+     altura extra e scroll em que o depoimento fica parado no centro e a ultima foto continua subindo
+     pra fora dele — a secao fecha na REVIEW, com a foto acima dela, nao na foto. */
+  .fn-tail{height:32vh}
   /* photo cards, each landing at its OWN horizontal spot AND its own size/shape (after o-scs.com's
      Field Notes): they scatter left/right/centre and mix widths + aspect ratios as they float up
      over the fixed testimonial. --fw width, --fa aspect, --fx horizontal offset, set per position. */
@@ -912,16 +915,16 @@
   /* "verified reviews" (na stat do topo do #reviews) linka pra todas as reviews na loja */
   .rv-link{color:var(--purple-deep);text-decoration:none;border-bottom:1px solid var(--glass-line);transition:color .2s,border-color .2s}
   .rv-link:hover{color:var(--ink);border-color:currentColor}
-  /* a secao .rvcards (cards + linha "4.6/5 · … · Read all reviews") saiu. ela carregava o
-     margin-top:-36vh que fechava a cauda vazia do fieldnotes (foto centralizada num band alto, ver
-     gotchas do handoff) — o fechamento passa pro #faq, + 4rem de folga que a linha ocupava. */
-  #faq{margin-top:calc(-36vh + 4rem)}
+  /* o antigo margin-top negativo aqui (herdado do .rvcards) existia pra comer a cauda VAZIA que
+     sobrava depois da ultima foto do fieldnotes. essa cauda agora e o .fn-tail e nao e vazia — e o
+     trecho em que a ultima review fica exposta e sozinha. puxar o FAQ pra cima invadiria justamente
+     essa leitura, entao a margem saiu: a secao fecha na review e o FAQ vem depois, no fluxo normal. */
 
   @media(max-width:820px){
     .fn-intro{padding-top:5rem}
     .fn-sticky{height:calc(100svh - var(--nav-h))}
     .fn-band{min-height:108svh}
-    .fn-band:nth-child(5){min-height:80svh}   /* encurtado, foto centralizada (cauda vazia menor ate o "4.6/5") */
+    .fn-tail{height:32svh}
     /* bigger, still mixed sizes/shapes, alternating left / right down the column */
     .fn-band:nth-child(1) .fn-card{--fw:62vw;--fa:4/5;--fx:-15vw}
     .fn-band:nth-child(2) .fn-card{--fw:56vw;--fa:1/1;--fx:17vw}
@@ -1715,6 +1718,10 @@
         </figure>
       </li>
     </ol>
+    <!-- cauda do track: mantem o .fn-sticky COLADO por mais um pedaco depois da ultima foto, pra ela
+         terminar de subir e sair de cima do depoimento. sem isto o track acaba com a foto ainda na
+         linha do texto (tapando a ultima review) — a secao fechava na foto, nao na review. -->
+    <div class="fn-tail" aria-hidden="true"></div>
   </div>
 </section>
 
