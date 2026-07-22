@@ -785,16 +785,20 @@
   .limits-pos li{border-bottom-color:rgba(90,70,168,.28)}
   .limits-pos{border-top-color:rgba(90,70,168,.28)}
   /* the turn: no longer buried under the list — a real statement that closes the argument. */
-  .prob-close{margin-top:2rem;font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:700;line-height:1.35;color:var(--ink)}
+  /* teto 1.2rem (era 1.35): em 1600 o cabecalho esquerdo pedia 340px numa coluna de 334 e quebrava
+     em 2 linhas. 19.2px pede ~302px — 32px de folga, o bastante pra variacao de renderizacao de
+     fonte. desce nos DOIS, que a tipografia igual e o ponto do par. */
+  .prob-close{margin-top:2rem;font-size:clamp(1.1rem,1.6vw,1.2rem);font-weight:700;line-height:1.35;color:var(--ink)}
   /* o fecho como CABECALHO da resposta (depois da base de proposito: empate de especificidade,
      ordem decide o margin-top). os dois cabecalhos — rotulo a esquerda, frase a direita — dividem
      a mesma zona de altura, assentados embaixo, pra hairline n continuar casando com a hairline n
      atraves do video: a frase e mais alta que o rotulo e sem isto desencontrava as listas. */
   .prob-kicker{margin:0 0 .4rem;display:flex;align-items:flex-end;min-height:74px}
   /* os DOIS cabecalhos com a MESMA tipografia (referencia do usuario): mesma fonte, corpo e peso —
-     a hierarquia vem so do contraste. o da esquerda apaga (#837B94, ~3.3:1 sobre o lavanda — ok pra
-     texto grande/bold), o da direita fica em tinta cheia. */
-  .prob-kicker-dim{color:#837B94}
+     a hierarquia vem so do contraste. o da esquerda apaga, o da direita fica em tinta cheia.
+     #6E6683 = 4.5:1 sobre o lavanda (era #837B94, 3.4:1 — apagado demais). segue bem abaixo dos
+     ~14:1 da tinta cheia ao lado, entao a hierarquia entre as colunas continua obvia. */
+  .prob-kicker-dim{color:#6E6683}
   /* MOBILE (pedido): listas lado a lado em cima, video embaixo atravessado. em 390px cada lista tem
      ~160px — a tipografia desce junto senao "Fits through doors..." vira 3+ linhas.
      este bloco PRECISA vir depois das regras base acima (empate de especificidade, ordem decide). */
