@@ -746,10 +746,13 @@
   .prob-neg{grid-area:neg}
   .prob-pos{grid-area:pos}
   .prob-split .th-box{grid-area:video;margin-top:0;max-width:none}
-  /* a lista-resposta: mesma anatomia da lista de dores (a simetria e o argumento), distinguida so
-     pelo peso — traco cheio e item um passo mais firme. sem checkmarks/emoji (mesma razao do ✕). */
+  /* a lista-resposta: mesma anatomia da lista de dores (a simetria e o argumento), item um passo
+     mais firme. sem checkmarks/emoji (mesma razao do ✕). */
   .limits-pos li{font-weight:600}
-  .limits-pos li::before{opacity:1}
+  /* (os marcadores-seta moram DEPOIS da base .limits li::before, mais abaixo — a base pintava o
+     traco por cima destas regras no mesmo empate de ordem de sempre.) */
+  /* (as regras do .prob-kicker moram DEPOIS da base .prob-close, mais abaixo — mesmo empate de
+     especificidade da armadilha de @media: aqui a base venceria e o margin-top:2rem voltava.) */
   /* (o bloco mobile do prob-split mora DEPOIS das regras base de .limits/.prob-close, mais abaixo:
      @media nao soma especificidade e, declarado aqui, perdia pra elas por ordem — o font-size nao
      descia e os itens estouravam 3 linhas. terceira vez que esta armadilha morde nesta pagina.) */
@@ -761,8 +764,28 @@
     padding:.85rem 0;border-bottom:1px solid var(--line);
   }
   .limits li::before{content:"";width:16px;height:1px;flex:none;background:var(--purple-deep);align-self:center;opacity:.7}
+  /* MARCADORES: seta fina pra baixo (vermelho) nas dores, pra cima (verde) nas respostas — a
+     linguagem de "tendencia", nao de joinha. traco 1.6 com pontas redondas, mesmo peso das
+     hairlines. os tons pedidos (#FFA2A2/#A2FFB3) sao de fundo escuro — nesta secao CLARA (#ECE8F7)
+     dariam ~1.2:1, invisiveis; mesmos matizes dessaturados, escurecidos ate ~3:1 (minimo grafico).
+     depois da regra base acima de proposito: empate de especificidade, ordem decide. */
+  .limits li::before{
+    width:12px;height:12px;background:none;opacity:.9;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 1.2v9.2M2.6 6.9 6 10.4l3.4-3.5' fill='none' stroke='%23C96A6A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size:contain;background-repeat:no-repeat;background-position:center;
+  }
+  .limits-pos li::before{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 10.8V1.6M2.6 5.1 6 1.6l3.4 3.5' fill='none' stroke='%234E9668' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
   /* the turn: no longer buried under the list — a real statement that closes the argument. */
   .prob-close{margin-top:2rem;font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:700;line-height:1.35;color:var(--ink)}
+  /* o fecho como CABECALHO da resposta (depois da base de proposito: empate de especificidade,
+     ordem decide o margin-top). os dois cabecalhos — rotulo a esquerda, frase a direita — dividem
+     a mesma zona de altura, assentados embaixo, pra hairline n continuar casando com a hairline n
+     atraves do video: a frase e mais alta que o rotulo e sem isto desencontrava as listas. */
+  .prob-kicker{margin:0 0 .4rem;display:flex;align-items:flex-end}
+  .prob-neg .limits-intro{margin:0 0 .4rem;display:flex;align-items:flex-end}
+  .prob-kicker,.prob-neg .limits-intro{min-height:74px}
   /* MOBILE (pedido): listas lado a lado em cima, video embaixo atravessado. em 390px cada lista tem
      ~160px — a tipografia desce junto senao "Fits through doors..." vira 3+ linhas.
      este bloco PRECISA vir depois das regras base acima (empate de especificidade, ordem decide). */
@@ -778,12 +801,12 @@
        hairlines. min-height uniforme de 2 linhas + tipo apertado o bastante pra o pior item caber
        em 2 => toda linha n da esquerda divide a mesma hairline com a linha n da direita. */
     .limits li{font-size:.72rem;line-height:1.35;padding:.5rem 0;gap:.45rem;min-height:52px;align-items:center}
-    .limits li::before{width:10px}
-    /* mesmo teto pros DOIS rotulos: o esquerdo quebra em 2 linhas e o direito nao, entao sem esta
-       reserva a lista da direita subia 11px e nenhuma hairline casava. flex-end assenta o rotulo
-       curto embaixo, colado na propria lista. */
-    .limits-intro{font-size:.58rem;letter-spacing:.1em;min-height:26px;display:flex;align-items:flex-end}
-    .prob-close{margin-top:1.2rem;font-size:1rem}
+    .limits li::before{width:10px;height:10px}
+    .limits-intro{font-size:.58rem;letter-spacing:.1em}
+    /* frase-cabecalho menor no mobile; SEM margin-top (o kicker zera — reabrir aqui desencontraria
+       as listas de novo). mesmo teto pros dois cabecalhos, assentados embaixo. */
+    .prob-close{font-size:.92rem;line-height:1.3}
+    .prob-kicker,.prob-neg .limits-intro{min-height:56px}
   }
 
   /* comparison table — traditional foam vs SmartFoam (GEO) */
@@ -1550,7 +1573,9 @@
            aria-label="Split screen: two people wrestle a framed sofa up a stairwell while one person sets up a SmartFoam module alone"></video>
    </div>
    <div class="prob-pos">
-    <p class="limits-intro">The SmartFoam™ answer</p>
+    <!-- o fecho virou o CABECALHO da resposta: os dois-pontos apontam pra lista — "rebuild it:"
+       e aqui esta o resultado. substitui o rotulo "The SmartFoam™ answer", que ficaria redundante. -->
+    <p class="prob-close prob-kicker">We started Rove Lab to rebuild it:</p>
     <ul class="limits limits-pos">
       <li>Light enough to move alone</li>
       <li>Ships compressed, in a box</li>
@@ -1559,7 +1584,6 @@
       <li>Expands on its own — no tools</li>
       <li>Delivered like a parcel</li>
     </ul>
-    <p class="prob-close">We started Rove Lab to rebuild it.</p>
    </div>
   </div>
 </section>
