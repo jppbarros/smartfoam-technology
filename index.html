@@ -731,9 +731,28 @@
      chips each with a red ✕ emoji: reads as an AI-generated feature grid, not an argument. now it's
      a labelled list with hairline dividers and a small dash marker — quieter, more considered. */
   .prob-head{max-width:none}   /* fills the centred content column */
-  .prob-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(2rem,4vw,4rem);align-items:center;max-width:1180px;margin-top:var(--gap-title)}
-  .prob-split .th-box{margin-top:0;max-width:none}
-  @media(max-width:900px){ .prob-split{grid-template-columns:1fr;gap:2.4rem} }
+  /* tres colunas: negativos | video | resposta. o video e 16:9 (split-screen, nao da pra cortar em
+     retrato sem destruir o lado-a-lado), entao a coluna central leva 1.25fr pra ele nao virar um
+     selo entre duas listas altas. as listas espelham 1:1 e ficam simetricas (1fr / 1fr). */
+  .prob-split{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);
+    grid-template-areas:"neg video pos";
+    gap:clamp(1.5rem,3vw,3rem);align-items:start;max-width:1180px;margin-top:var(--gap-title);
+  }
+  /* start, nao center: a coluna direita e mais alta (carrega o fecho) e centrar desencontrava as
+     listas em 31px — linha n da esquerda deve dividir a hairline com a linha n da direita. so o
+     video centra, entre as duas. */
+  .prob-split .th-box{align-self:center}
+  .prob-neg{grid-area:neg}
+  .prob-pos{grid-area:pos}
+  .prob-split .th-box{grid-area:video;margin-top:0;max-width:none}
+  /* a lista-resposta: mesma anatomia da lista de dores (a simetria e o argumento), distinguida so
+     pelo peso — traco cheio e item um passo mais firme. sem checkmarks/emoji (mesma razao do ✕). */
+  .limits-pos li{font-weight:600}
+  .limits-pos li::before{opacity:1}
+  /* (o bloco mobile do prob-split mora DEPOIS das regras base de .limits/.prob-close, mais abaixo:
+     @media nao soma especificidade e, declarado aqui, perdia pra elas por ordem — o font-size nao
+     descia e os itens estouravam 3 linhas. terceira vez que esta armadilha morde nesta pagina.) */
   /* the label anchors the list instead of floating: smaller tracking, a rule under it. */
   .limits-intro{margin:0 0 .3rem;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--purple-deep)}
   .limits{margin:0;list-style:none;border-top:1px solid var(--line)}
@@ -744,6 +763,28 @@
   .limits li::before{content:"";width:16px;height:1px;flex:none;background:var(--purple-deep);align-self:center;opacity:.7}
   /* the turn: no longer buried under the list — a real statement that closes the argument. */
   .prob-close{margin-top:2rem;font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:700;line-height:1.35;color:var(--ink)}
+  /* MOBILE (pedido): listas lado a lado em cima, video embaixo atravessado. em 390px cada lista tem
+     ~160px — a tipografia desce junto senao "Fits through doors..." vira 3+ linhas.
+     este bloco PRECISA vir depois das regras base acima (empate de especificidade, ordem decide). */
+  @media(max-width:900px){
+    .prob-split{
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+      grid-template-areas:"neg pos" "video video";
+      gap:1.2rem;align-items:start;
+    }
+    .prob-split .th-box{margin-top:.8rem}
+    /* as duas listas correm LADO A LADO e as divisorias precisam se alinhar atraves da calha —
+       cada linha da direita responde a da esquerda. itens com quebras diferentes desencontravam as
+       hairlines. min-height uniforme de 2 linhas + tipo apertado o bastante pra o pior item caber
+       em 2 => toda linha n da esquerda divide a mesma hairline com a linha n da direita. */
+    .limits li{font-size:.72rem;line-height:1.35;padding:.5rem 0;gap:.45rem;min-height:52px;align-items:center}
+    .limits li::before{width:10px}
+    /* mesmo teto pros DOIS rotulos: o esquerdo quebra em 2 linhas e o direito nao, entao sem esta
+       reserva a lista da direita subia 11px e nenhuma hairline casava. flex-end assenta o rotulo
+       curto embaixo, colado na propria lista. */
+    .limits-intro{font-size:.58rem;letter-spacing:.1em;min-height:26px;display:flex;align-items:flex-end}
+    .prob-close{margin-top:1.2rem;font-size:1rem}
+  }
 
   /* comparison table — traditional foam vs SmartFoam (GEO) */
   /* comparison: row label on the left, then two column panels. SmartFoam leads and sits
@@ -1487,8 +1528,12 @@
     <h2 class="h-giant">The future of furniture <span class="soft">starts without a frame.</span></h2>
     <p class="lead">For over a century, furniture has relied on the same hidden structure: wood, metal and springs.</p>
   </div>
+  <!-- tres colunas: dores do framed a esquerda, o filme (que E a comparacao: split-screen dos dois
+       mundos) no centro, e a resposta SmartFoam a direita. as listas sao espelhadas 1:1 — cada item
+       da direita responde o da mesma posicao na esquerda, atraves do video. o fecho mora sob a
+       lista da direita: e o arremate DEPOIS da resposta, nao depois do problema. -->
   <div class="prob-split reveal">
-   <div class="prob-copy">
+   <div class="prob-neg">
     <p class="limits-intro">The problem with framed furniture</p>
     <ul class="limits">
       <li>Heavy to move</li>
@@ -1498,12 +1543,24 @@
       <li>Complicated to assemble</li>
       <li>Expensive to deliver</li>
     </ul>
-    <p class="prob-close">We started Rove Lab to rebuild it.</p>
    </div>
-  <div class="th-box">
+   <div class="th-box">
     <video src="assets/m1-split-screen.mp4" poster="assets/m1-split-screen-poster.jpg"
            data-scrollplay muted loop playsinline preload="metadata"
            aria-label="Split screen: two people wrestle a framed sofa up a stairwell while one person sets up a SmartFoam module alone"></video>
+   </div>
+   <div class="prob-pos">
+    <p class="limits-intro">The SmartFoam™ answer</p>
+    <ul class="limits limits-pos">
+      <li>Light enough to move alone</li>
+      <li>Ships compressed, in a box</li>
+      <li>Compresses to a fraction of its size</li>
+      <li>Fits through doors, stairs and elevators</li>
+      <li>Expands on its own — no tools</li>
+      <li>Delivered like a parcel</li>
+    </ul>
+    <p class="prob-close">We started Rove Lab to rebuild it.</p>
+   </div>
   </div>
 </section>
 <div class="spacer"></div>
