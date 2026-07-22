@@ -674,34 +674,6 @@
   .cellcard p{color:var(--dim);font-size:.9rem;line-height:1.65}
   .cell-img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;margin-bottom:1.3rem}
 
-  /* ---------- SCRUB (video conduzido pelo scroll) ---------- */
-  /* a secao pina e o .scrub-hold e a distancia de scroll que "roda" o filme: 105 frames sobre
-     ~140vh da ~13px de scroll por frame, denso o bastante pra o movimento ler como continuo. */
-  .scrub.pinned{
-    position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));z-index:1;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s-6);
-    padding-inline:6vw;
-  }
-  /* dimensionado pela ALTURA, nao pela largura: num flex column a caixa pinada tem altura fixa, e
-     um frame medido em largura pedia mais altura do que sobrava — o flex encolhia (400x295, deitado)
-     e o object-fit:cover comia as laterais de um video que e retrato. flex:none trava o encolhimento
-     e a largura passa a sair do aspect-ratio. */
-  .scrub-frame{
-    flex:none;height:min(500px,58vh);width:auto;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;
-    background:#EFEDF2;   /* = base clara do proprio video, pra nao piscar escuro antes de decodificar */
-    border:1px solid var(--glass-line);box-shadow:0 34px 80px rgba(0,0,0,.45);
-  }
-  .scrub-frame video{width:100%;height:100%;object-fit:cover;display:block}
-  .scrub-cap{font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);text-align:center}
-  .scrub-hold{height:140vh}
-  @media(max-width:820px){
-    .scrub.pinned{height:calc(100svh - var(--nav-h));gap:var(--s-5)}
-    .scrub-frame{height:min(440px,54svh);width:auto}
-    .spacer.scrub-hold{height:120svh}   /* duas classes: `.pin-wrap.on-dark .spacer` (0,3,0) venceria */
-  }
-  /* sem motion: nada de scrub — mostra o poster (o ultimo frame seria melhor, mas o poster ja e
-     um quadro legivel do produto) e a legenda explica o resto. */
-  @media (prefers-reduced-motion: reduce){ .scrub-hold{height:0} }
 
   /* what SmartFoam does: real unboxing footage left, expandable points right */
   /* the video is portrait, so an fr-based column let it grow to ~900px tall on wide screens
@@ -1638,22 +1610,6 @@
 
 <!-- .endure removida — ver _secoes-removidas/endure.html (colar o <section> aqui pra voltar) -->
 
-<!-- SCRUB — um modulo vira um sofa de tres lugares, e o SCROLL e que roda o filme. o video nunca
-     toca sozinho: cada frame e escolhido pela posicao da pagina, entao a velocidade e a direcao sao
-     as do dedo do usuario (descer rapido corre, descer devagar arrasta, subir rebobina).
-     entra logo depois do #possible de proposito: a secao AFIRMA a modularidade, esta MOSTRA. -->
-<div class="pin-wrap scrub-wrap">
-<section class="scrub pinned" aria-label="One module becomes a three-seat sofa">
-  <p class="eyebrow">One module at a time</p>
-  <div class="scrub-frame">
-    <video data-scrollscrub src="assets/modular-build.mp4" poster="assets/modular-build-poster.jpg"
-           muted playsinline preload="auto" disablepictureinpicture
-           aria-label="A single SmartFoam module multiplying into a full three-seat sofa"></video>
-  </div>
-  <p class="scrub-cap">Start with one. Add as you go.</p>
-</section>
-<div class="spacer scrub-hold"></div>
-</div>
 
 <!-- SCROLL CAROUSEL — the modules rotate through as you move down the page -->
 <section class="car-track" id="rooms">
@@ -2485,41 +2441,7 @@
       lbWord.style.transform = `translate(-50%,-50%) scale(${(0.9 + 0.1 * wt).toFixed(3)})`;
     }
 
-    // SCRUB: o scroll escolhe o frame. nao ha play() — so currentTime, entao a "velocidade" e a
-    // direcao sao literalmente as do scroll, de graca (descer rapido corre, subir rebobina).
-    // o mp4 foi reencodado com TODOS os frames como keyframe: sem isso cada seek teria de decodificar
-    // desde o keyframe anterior e o arrasto engasgaria.
-    const scrub = document.querySelector('video[data-scrollscrub]');
-    const scrubWrap = scrub?.closest('.pin-wrap');
-    const scrubSec = scrub?.closest('.scrub');
-    let scrubPronto = false, scrubUltimo = -1;
-    if (scrub) {
-      const marcarPronto = () => { if (scrub.readyState >= 2 && scrub.duration) scrubPronto = true; };
-      scrub.addEventListener('loadeddata', marcarPronto);
-      scrub.addEventListener('canplay', marcarPronto);
-      marcarPronto();
-      // iOS so entrega frames depois de o elemento ter tocado ao menos uma vez; um play/pause mudo
-      // "acorda" o decodificador sem que nada seja visto. falha silenciosa onde nao for permitido.
-      const acordar = () => { scrub.play().then(() => scrub.pause()).catch(() => {}); };
-      scrub.addEventListener('loadedmetadata', acordar, { once: true });
-      addEventListener('touchstart', acordar, { once: true, passive: true });
-    }
-    function scrubMotion() {
-      if (!scrubPronto) return;
-      const vh = document.documentElement.clientHeight || innerHeight;
-      const navH = parseFloat(getComputedStyle(scrubSec).top) || 0;
-      const travel = scrubWrap.offsetHeight - scrubSec.offsetHeight;   // = o .scrub-hold
-      if (travel <= 0) return;
-      // 0 quando a secao trava no topo, 1 quando o hold acaba
-      const p = clamp01((navH - scrubWrap.getBoundingClientRect().top) / travel);
-      const t = p * (scrub.duration - 0.001);   // -1ms: currentTime == duration dispara 'ended'
-      if (Math.abs(t - scrubUltimo) < 0.012) return;   // ~1/2 frame a 24fps: evita seek redundante
-      scrubUltimo = t;
-      try { scrub.currentTime = t; } catch (e) {}
-    }
-
     const jobs = [];
-    if (scrub && scrubWrap && scrubSec) { jobs.push({ el: scrubWrap, run: scrubMotion }); }
     if (carTrack && carSlides.length) jobs.push({ el: carTrack, run: carMotion });
     if (dial && dialTicks.length && dialNum && dialWrap) {
       jobs.push({ el: dialWrap, run: dialMotion });
