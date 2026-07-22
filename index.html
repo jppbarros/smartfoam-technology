@@ -731,6 +731,9 @@
      chips each with a red ✕ emoji: reads as an AI-generated feature grid, not an argument. now it's
      a labelled list with hairline dividers and a small dash marker — quieter, more considered. */
   .prob-head{max-width:none}   /* fills the centred content column */
+  /* a frase cabe inteira na coluna de 1200 (~790px) — o teto global de 64ch quebrava "wood, metal
+     and springs" pra segunda linha sem necessidade. no mobile ela quebra pela largura do container. */
+  .prob-head .lead{max-width:none}
   /* tres colunas: negativos | video | resposta. o video e 16:9 (split-screen, nao da pra cortar em
      retrato sem destruir o lado-a-lado), entao a coluna central leva 1.25fr pra ele nao virar um
      selo entre duas listas altas. as listas espelham 1:1 e ficam simetricas (1fr / 1fr). */
