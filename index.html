@@ -784,6 +784,25 @@
   .prob-neg .limits li{color:var(--dim);font-weight:500}
   .limits-pos li{border-bottom-color:rgba(90,70,168,.28)}
   .limits-pos{border-top-color:rgba(90,70,168,.28)}
+  /* REVELACAO POR SCROLL: cada linha desliza pra baixo saindo DE BAIXO da anterior.
+     o efeito nao vem do transform sozinho — vem de tres coisas juntas:
+       1. fundo opaco na linha (o mesmo #ECE8F7 da secao), senao nao ha o que ocultar;
+       2. z-index DESCENDENTE, pra a linha de cima pintar por cima da que esta chegando;
+       3. overflow:hidden na lista, pra a primeira linha emergir da borda superior e nenhuma
+          vazar por cima do cabecalho.
+     --rp (0..1) e escrito pelo JS por linha. o default 1 deixa tudo visivel sem JS. */
+  .limits{overflow:hidden}
+  .limits li{
+    position:relative;background:#ECE8F7;
+    transform:translateY(calc(-70% * (1 - var(--rp,1))));
+    opacity:var(--rp,1);
+  }
+  .limits li:nth-child(1){z-index:6} .limits li:nth-child(2){z-index:5}
+  .limits li:nth-child(3){z-index:4} .limits li:nth-child(4){z-index:3}
+  .limits li:nth-child(5){z-index:2} .limits li:nth-child(6){z-index:1}
+  @media (prefers-reduced-motion: reduce){
+    .limits li{transform:none;opacity:1}
+  }
   /* the turn: no longer buried under the list — a real statement that closes the argument. */
   /* teto 1.2rem (era 1.35): em 1600 o cabecalho esquerdo pedia 340px numa coluna de 334 e quebrava
      em 2 linhas. 19.2px pede ~302px — 32px de folga, o bastante pra variacao de renderizacao de
@@ -2534,7 +2553,31 @@
       lbWord.style.transform = `translate(-50%,-50%) scale(${(0.9 + 0.1 * wt).toFixed(3)})`;
     }
 
+    // comparacao do #problem: as linhas das DUAS listas se revelam com o scroll, deslizando pra
+    // baixo de sob a anterior. a janela termina quando a secao ASSENTA — ela e pinada com top:0 e
+    // altura cheia, entao o instante em que trava e exatamente aquele em que o centro dela coincide
+    // com o centro da viewport (medido: diferenca 0). comeca em 0.60vh, que e quando a lista
+    // (offset 368 dentro de uma secao de 818) esta prestes a cruzar o pe da tela — antes disso a
+    // animacao rodaria fora de vista.
+    const probSec = document.getElementById('problem');
+    const probListas = [...document.querySelectorAll('#problem .limits')].map(ul => [...ul.children]);
+    const PROB_PASSO = 0.11, PROB_DUR = 0.34;   // linha 6 fecha em 0.55+0.34 = 0.89 < 1: tudo revelado ANTES do centro
+    function probMotion() {
+      const vh = document.documentElement.clientHeight || innerHeight;
+      const fim = parseFloat(getComputedStyle(probSec).top) || 0;   // 0 quando pinado; 'auto' -> 0 se estatico
+      const inicio = vh * 0.60;
+      const topo = probSec.getBoundingClientRect().top;
+      const p = clamp01((inicio - topo) / (inicio - fim));
+      probListas.forEach(linhas => linhas.forEach((li, i) => {
+        // as duas colunas usam o indice DENTRO da propria lista: a linha n da esquerda e a linha n
+        // da direita entram juntas, que e o que sustenta a leitura de par pergunta/resposta.
+        const rp = clamp01((p - i * PROB_PASSO) / PROB_DUR);
+        li.style.setProperty('--rp', rp.toFixed(3));
+      }));
+    }
+
     const jobs = [];
+    if (probSec && probListas.length) { jobs.push({ el: probSec, run: probMotion }); probMotion(); }
     if (carTrack && carSlides.length) jobs.push({ el: carTrack, run: carMotion });
     if (dial && dialTicks.length && dialNum && dialWrap) {
       jobs.push({ el: dialWrap, run: dialMotion });
