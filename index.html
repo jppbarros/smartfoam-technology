@@ -764,19 +764,22 @@
     padding:.85rem 0;border-bottom:1px solid var(--line);
   }
   .limits li::before{content:"";width:16px;height:1px;flex:none;background:var(--purple-deep);align-self:center;opacity:.7}
-  /* MARCADORES: seta fina pra baixo (vermelho) nas dores, pra cima (verde) nas respostas — a
-     linguagem de "tendencia", nao de joinha. traco 1.6 com pontas redondas, mesmo peso das
-     hairlines. os tons pedidos (#FFA2A2/#A2FFB3) sao de fundo escuro — nesta secao CLARA (#ECE8F7)
-     dariam ~1.2:1, invisiveis; mesmos matizes dessaturados, escurecidos ate ~3:1 (minimo grafico).
+  /* MARCADORES (referencia do usuario): x-em-circulo cinza-lavanda apagado nas dores, check-em-
+     circulo roxo (o roxo da propria secao clara, #5A46A8) nas respostas. a hierarquia vem do
+     conjunto: a coluna negativa inteira baixa o tom (texto em --dim) e a positiva fica em tinta
+     cheia com divisorias tingidas de roxo — o olho le "passado apagado / resposta viva".
      depois da regra base acima de proposito: empate de especificidade, ordem decide. */
   .limits li::before{
-    width:12px;height:12px;background:none;opacity:.9;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 1.2v9.2M2.6 6.9 6 10.4l3.4-3.5' fill='none' stroke='%23C96A6A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    width:14px;height:14px;background:none;opacity:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='6.2' fill='none' stroke='%23948DA3' stroke-width='1.2'/%3E%3Cpath d='M4.9 4.9l4.2 4.2M9.1 4.9 4.9 9.1' stroke='%23948DA3' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E");
     background-size:contain;background-repeat:no-repeat;background-position:center;
   }
   .limits-pos li::before{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 10.8V1.6M2.6 5.1 6 1.6l3.4 3.5' fill='none' stroke='%234E9668' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='6.2' fill='none' stroke='%235A46A8' stroke-width='1.2'/%3E%3Cpath d='M4.1 7.2 6.2 9.3 9.9 5' fill='none' stroke='%235A46A8' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   }
+  .prob-neg .limits li{color:var(--dim);font-weight:500}
+  .limits-pos li{border-bottom-color:rgba(90,70,168,.28)}
+  .limits-pos{border-top-color:rgba(90,70,168,.28)}
   /* the turn: no longer buried under the list — a real statement that closes the argument. */
   .prob-close{margin-top:2rem;font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:700;line-height:1.35;color:var(--ink)}
   /* o fecho como CABECALHO da resposta (depois da base de proposito: empate de especificidade,
@@ -1577,7 +1580,7 @@
        e aqui esta o resultado. substitui o rotulo "The SmartFoam™ answer", que ficaria redundante. -->
     <p class="prob-close prob-kicker">We started Rove Lab to rebuild it:</p>
     <ul class="limits limits-pos">
-      <li>Light enough to move alone</li>
+      <li>Easy to move alone</li>
       <li>Ships compressed, in a box</li>
       <li>Compresses to a fraction of its size</li>
       <li>Fits through doors, stairs and elevators</li>
