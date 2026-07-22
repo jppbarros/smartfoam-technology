@@ -362,16 +362,27 @@
     --glass-2:rgba(26,18,38,.02);
     --glass-line:rgba(26,18,38,.13);
     color:var(--ink);
-    padding-top:0;                  /* content rides in right under the white curtain base */
-    /* padding-bottom menor que os 8rem das outras secoes DE PROPOSITO, e nao e quebra de ritmo: esta
-       secao pina em altura cheia e o proximo bloco chega por cima numa cortina, entao este padding
-       nunca vira respiro VISIVEL entre secoes — ele so engorda o scrollHeight, que e exatamente o
-       numero comparado com a viewport pra decidir se a secao pina (html.mat-nofit). com 8rem a folga
-       ate o limiar era ~0px em telas de ~818px de altura: qualquer diferenca de renderizacao de fonte
-       tirava o pin. 4rem devolve essa margem sem custo visual. */
-    padding-bottom:var(--s-16);
+    /* era 0 ("content rides in right under the white curtain base"), mas a secao pina em top:0 e o
+       titulo assentava a 40px — dentro da banda de desfoque de 96px do header, ofuscado. este
+       padding tira o titulo de la E, de quebra, empurra o bloco pra dentro dos ~242px que sobravam
+       vazios no pe da secao: os dois defeitos tinham a mesma causa. o mobile tem regra propria. */
+    padding-top:calc(var(--nav-h) + 2rem);
+    /* padding-bottom ZERO, e nao e quebra de ritmo: esta secao pina em altura cheia e o proximo
+       bloco chega por cima numa cortina, entao este padding nunca vira respiro VISIVEL entre secoes
+       — ele so engorda o scrollHeight, que e exatamente o numero comparado com a viewport pra
+       decidir se a secao pina (html.mat-nofit). zerar aqui e o que paga o padding-top abaixo sem
+       estourar esse limiar (media: com 4rem em cima + 104 embaixo a secao parava de pinar a 818px). */
+    padding-bottom:0;
   }
   #problem .prob-head{margin-top:0}
+  /* TELAS BAIXAS: com 104px de padding-top o conteudo terminava a 16px do pe da viewport em 818px de
+     altura — margem fina demais, e passar do limiar faz a secao PARAR de pinar (html.mat-nofit).
+     comprime o ritmo so onde falta altura: 88px de padding (o titulo ainda sai da banda de 96) e o
+     respiro titulo->conteudo de 48 pra 32. devolve ~32px, sem tocar nas telas altas. */
+  @media (min-width:821px) and (max-height:880px){
+    #problem{padding-top:calc(var(--nav-h) + 1rem)}
+    #problem .prob-split{margin-top:var(--s-8)}
+  }
 
   /* THE TWO BOUNDARIES — a section holds still while the next one draws itself up over it on a
      curtain. no JS: sticky for the hold, one hanging image for the reveal.
@@ -1608,9 +1619,9 @@
        e aqui esta o resultado. substitui o rotulo "The SmartFoam™ answer", que ficaria redundante. -->
     <p class="prob-close prob-kicker">We started Rove Lab to rebuild it</p>
     <ul class="limits limits-pos">
-      <li>Easy to move alone</li>
-      <li>Ships compressed, in a box</li>
-      <li>Compresses to a fraction of its size</li>
+      <li>Easy to move on your own, without effort</li>
+      <li>Easy shipping with couch-in-a-box delivery</li>
+      <li>Compresses to fit into boxes for effortless delivery</li>
       <li>Fits through doors, stairs and elevators</li>
       <li>Expands on its own — no tools</li>
       <li>Delivered like a parcel</li>
@@ -1672,12 +1683,12 @@
     <div class="poss">
       <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"/></svg>
       <h3>Compression Technology</h3>
-      <p>A full sectional in boxes that fit in your elevator — and up to six times less carbon per shipment.</p>
+      <p>The couch is compacted into boxes for easy delivery through tight spaces. Just unbox and let it expand into shape in minutes.</p>
     </div>
     <div class="poss">
       <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
       <h3>Tool-Free Assembly</h3>
-      <p>No tools. No instructions. Just unbox your furniture and let it expand into full form in minutes.</p>
+      <p>No tools. No instructions. Just connect the expanded modules with hidden zippers, and your sofa is ready to enjoy.</p>
     </div>
     <div class="poss">
       <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg>
