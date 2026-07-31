@@ -2061,16 +2061,17 @@
     v.play().catch(() => {});   // some browsers reject autoplay-with-sound; muted hero is exempt, but guard anyway
   })();
 
-  // hero CTA: glide para a proxima secao com scroll suave (easeInOutCubic ~1.1s) em vez do salto
-  // seco do onclick="location.href='#material'". o salto teleporta; o glide desacelera na chegada
-  // e deixa a saida do hero (video fixo + scrim) passar em ritmo de "parallax", como o CEO pediu.
-  // respeita o scroll-margin-top da secao (offset do nav = 104px) e prefers-reduced-motion (instantaneo).
+  // hero CTA: glide para a proxima secao com scroll suave em vez do salto seco do
+  // onclick="location.href='#material'". easeOutCubic (nao InOut): arranca ja na velocidade maxima
+  // e desacelera so na chegada — o movimento comeca NA HORA (sem rampa lenta inicial) e ainda
+  // assenta macio, sem freada seca. agil mas suave. respeita o scroll-margin-top da secao
+  // (offset do nav = 104px) e prefers-reduced-motion (instantaneo).
   (function () {
     const btn = document.querySelector('.hero-action .btn-primary');
     const target = document.getElementById('material');
     if (!btn || !target) return;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-    const ease = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const ease = t => 1 - Math.pow(1 - t, 3);   // easeOutCubic: rapido no inicio, desacelera no fim
     btn.removeAttribute('onclick');
     let animating = false;
     btn.addEventListener('click', () => {
@@ -2080,8 +2081,8 @@
       const dist = destY - startY;
       if (Math.abs(dist) < 2 || animating) return;
       if (reduce.matches) { scrollTo(0, destY); return; }
-      // duracao proporcional a distancia, mas sempre deliberada: 0.9s a 1.5s.
-      const dur = Math.min(1500, Math.max(900, Math.abs(dist) * 0.7));
+      // duracao proporcional a distancia, agil: 0.42s a 0.72s (era 0.9-1.5s, lento demais).
+      const dur = Math.min(720, Math.max(420, Math.abs(dist) * 0.42));
       animating = true;
       let t0 = null;
       const step = ts => {
