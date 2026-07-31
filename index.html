@@ -484,7 +484,20 @@
   /* wide low window, unpinned: the on-light spacer is no longer covered and shows as bare
      #ECE8F7 void. collapse it. the phone block re-inflates it with svh just below. */
   @media (min-width:821px){
-    html.mat-nofit .pin-wrap.on-light .spacer,html.mat-nofit .dial-hold{height:0}
+    /* viewport largo-e-baixo (no-fit): o MESMO teste que ja despina #problem/#numbers precisa
+       degradar TODA a coreografia pinada pra um empilhamento estatico limpo. antes so colapsava o
+       spacer on-light e o dial-hold — o resto da coreografia ficava meio ligado e quebrava:
+         1) o logobuild seguia pinado por 230vh (.lb-hold) = muito scroll sem nada acontecer;
+         2) as cortinas (absolutas, top:-120vh) seguiam ativas e, com os spacers vizinhos ja
+            colapsados, a cortina ESCURA do #numbers (z-index 3) subia 120vh e cobria TODO o
+            #problem (z-index 2) — o heading "The future of furniture" nunca aparecia e as duas
+            cortinas se encavalavam. medido num viewport 1075x560: cortina do #numbers 4309-4981
+            engolindo o heading em 4365-4536.
+       despinar tudo + colapsar todos os spacers + esconder as cortinas resolve os dois de uma vez.
+       so afeta o caminho degradado (mat-nofit); no viewport alto a coreografia pinada segue igual. */
+    html.mat-nofit .pinned{position:static;height:auto}
+    html.mat-nofit .pin-wrap .spacer{height:0}
+    html.mat-nofit .curtain{display:none}
   }
   /* PHONE. svh, not vh: the mobile URL bar changes vh mid-scroll and would slide every seam.
      shorter curtain (80svh) and matched spacers keep transition 1 tight and stop transition 2's
