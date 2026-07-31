@@ -240,11 +240,12 @@
   a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid #B4A3F5;outline-offset:3px}
 
   /* shared */
-  /* padding vertical responsivo A ALTURA da tela: em telas altas fica ~o 8rem original (agrupamento
-     por proximidade); em telas "achatadas" (baixas) encolhe, senao 128px em cima + 128 embaixo = 256px
-     entre secoes viravam ~40% de uma viewport curta = o "too much spacing" reportado pelo CEO. o cap
-     8rem preserva o desktop alto; o piso 4rem mantem as secoes claramente separadas. */
-  section{position:relative;padding:clamp(4rem,8vh,8rem) 5vw}
+  /* padding vertical responsivo A ALTURA da tela. o 8rem fixo original dava 256px entre secoes
+     (2x128) — o CEO E o usuario acharam demais, em tela achatada E em altura normal. clamp(2.5,5vh,5):
+     ~45px a 900px (gap 90px, era 144), ~50px a 1080, cap 80px em telas muito altas, piso 40px nas
+     achatadas. secoes ainda claramente separadas, sem o vazio. (secoes especiais — cta, #rooms, shop —
+     tem padding proprio e nao passam por aqui.) */
+  section{position:relative;padding:clamp(2.5rem,5vh,5rem) 5vw}
   /* centre the content sections in a 1200px column: the side padding grows past 5vw once the
      viewport is wide enough, so the content sits mid-screen with equal gaps instead of pinned
      left with a void on the right. left as max(5vw, …) so narrow screens keep the 5vw gutter.
