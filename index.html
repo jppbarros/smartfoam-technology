@@ -1560,10 +1560,14 @@
     <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em>, a proprietary high-density foam system designed to:</p>
   </div>
   <!-- the film sits right under the intro copy now (id="film" keeps the nav anchor working).
-       WebP animado no lugar do <video>: anima sozinho em qualquer lugar, incluindo o Low Power Mode
-       do iOS (que bloqueia autoplay de video). o poster do .film-frame cobre o vazio ate carregar. -->
+       mp4 1080p (master, ~5Mbps) por decisao da marca: qualidade acima do autoplay em Low Power Mode.
+       width/height reservam a altura 16:9 antes de carregar (sem layout shift) e o poster do
+       .film-frame cobre o vazio ate o video pintar. o JS #filmVideo da play no scroll e, se o autoplay
+       for bloqueado (LPM do iOS), cai pra mostrar os controles (tap-to-play). -->
   <div class="film-frame reveal" id="film">
-    <img class="film-anim" src="assets/smartfoam-film.webp" alt="The SmartFoam™ film" width="1280" height="720" loading="lazy" decoding="async">
+    <video id="filmVideo" src="assets/smartfoam-film.mp4" poster="assets/film-poster.jpg"
+           width="1920" height="1080" autoplay muted loop playsinline preload="metadata"
+           aria-label="The SmartFoam™ film"></video>
   </div>
 </section>
 
