@@ -1286,10 +1286,16 @@
   /* ---------- THE FILM ---------- */
   .film-frame{
     position:relative;margin-top:var(--gap-title);overflow:hidden;
-    /* poster de fundo: cobre o vazio enquanto o webp animado (pesado) carrega. */
+    /* aspect-ratio 16:9 fixa a caixa na proporcao do video: sem isto, a tag <video> nao-carregada
+       assumia uma caixa mais baixa e o video (16:9) entrava com pillarbox — barras laterais. tambem
+       reserva a altura antes de carregar (sem layout shift). o poster de fundo cobre o vazio ate pintar. */
+    aspect-ratio:16/9;
     background:#0D0A13 url("assets/film-poster.jpg") center/cover no-repeat;
   }
-  .film-frame video,.film-frame img{display:block;width:100%;height:auto}
+  /* position:absolute + inset:0 (mesmo padrao do .hero-video): o <video> ESTATICO tinha um bug de
+     dimensionamento intrinseco que travava a largura em ~1041px (nao enchia o frame) e sobrava
+     pillarbox. absoluto forca as dimensoes exatas do frame 16:9. cover nao corta (conteudo 16:9 exato). */
+  .film-frame video,.film-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
   footer{
     border-top:1px solid var(--line);padding:3rem 5vw;
