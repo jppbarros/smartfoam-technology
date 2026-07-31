@@ -1268,8 +1268,10 @@
   /* ---------- THE FILM ---------- */
   .film-frame{
     position:relative;margin-top:var(--gap-title);overflow:hidden;
+    /* poster de fundo: cobre o vazio enquanto o webp animado (pesado) carrega. */
+    background:#0D0A13 url("assets/film-poster.jpg") center/cover no-repeat;
   }
-  .film-frame video{display:block;width:100%;height:auto}
+  .film-frame video,.film-frame img{display:block;width:100%;height:auto}
 
   footer{
     border-top:1px solid var(--line);padding:3rem 5vw;
@@ -1539,10 +1541,11 @@
     <h2 class="h-serifless">Invented to remove boundaries. <span class="soft">Frameless structures made of 100% foam.</span></h2>
     <p class="lead">SmartFoam™ is not memory foam. More than cushioning, SmartFoam™ is <em>the structure itself</em>, a proprietary high-density foam system designed to:</p>
   </div>
-  <!-- the film sits right under the intro copy now (id="film" keeps the nav anchor working) -->
+  <!-- the film sits right under the intro copy now (id="film" keeps the nav anchor working).
+       WebP animado no lugar do <video>: anima sozinho em qualquer lugar, incluindo o Low Power Mode
+       do iOS (que bloqueia autoplay de video). o poster do .film-frame cobre o vazio ate carregar. -->
   <div class="film-frame reveal" id="film">
-    <video id="filmVideo" src="assets/smartfoam-film.mp4" poster="assets/film-poster.jpg"
-           autoplay muted loop playsinline preload="metadata" aria-label="The SmartFoam film"></video>
+    <img class="film-anim" src="assets/smartfoam-film.webp" alt="The SmartFoam™ film" loading="lazy" decoding="async">
   </div>
 </section>
 
