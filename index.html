@@ -240,7 +240,11 @@
   a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid #B4A3F5;outline-offset:3px}
 
   /* shared */
-  section{position:relative;padding:8rem 5vw}
+  /* padding vertical responsivo A ALTURA da tela: em telas altas fica ~o 8rem original (agrupamento
+     por proximidade); em telas "achatadas" (baixas) encolhe, senao 128px em cima + 128 embaixo = 256px
+     entre secoes viravam ~40% de uma viewport curta = o "too much spacing" reportado pelo CEO. o cap
+     8rem preserva o desktop alto; o piso 4rem mantem as secoes claramente separadas. */
+  section{position:relative;padding:clamp(4rem,8vh,8rem) 5vw}
   /* centre the content sections in a 1200px column: the side padding grows past 5vw once the
      viewport is wide enough, so the content sits mid-screen with equal gaps instead of pinned
      left with a void on the right. left as max(5vw, …) so narrow screens keep the 5vw gutter.
@@ -1558,7 +1562,7 @@
        WebP animado no lugar do <video>: anima sozinho em qualquer lugar, incluindo o Low Power Mode
        do iOS (que bloqueia autoplay de video). o poster do .film-frame cobre o vazio ate carregar. -->
   <div class="film-frame reveal" id="film">
-    <img class="film-anim" src="assets/smartfoam-film.webp" alt="The SmartFoam™ film" loading="lazy" decoding="async">
+    <img class="film-anim" src="assets/smartfoam-film.webp" alt="The SmartFoam™ film" width="1280" height="720" loading="lazy" decoding="async">
   </div>
 </section>
 
