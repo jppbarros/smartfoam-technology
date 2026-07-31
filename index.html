@@ -2043,6 +2043,39 @@
     v.play().catch(() => {});   // some browsers reject autoplay-with-sound; muted hero is exempt, but guard anyway
   })();
 
+  // hero CTA: glide para a proxima secao com scroll suave (easeInOutCubic ~1.1s) em vez do salto
+  // seco do onclick="location.href='#material'". o salto teleporta; o glide desacelera na chegada
+  // e deixa a saida do hero (video fixo + scrim) passar em ritmo de "parallax", como o CEO pediu.
+  // respeita o scroll-margin-top da secao (offset do nav = 104px) e prefers-reduced-motion (instantaneo).
+  (function () {
+    const btn = document.querySelector('.hero-action .btn-primary');
+    const target = document.getElementById('material');
+    if (!btn || !target) return;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    const ease = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    btn.removeAttribute('onclick');
+    let animating = false;
+    btn.addEventListener('click', () => {
+      const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      const destY = target.getBoundingClientRect().top + scrollY - margin;
+      const startY = scrollY;
+      const dist = destY - startY;
+      if (Math.abs(dist) < 2 || animating) return;
+      if (reduce.matches) { scrollTo(0, destY); return; }
+      // duracao proporcional a distancia, mas sempre deliberada: 0.9s a 1.5s.
+      const dur = Math.min(1500, Math.max(900, Math.abs(dist) * 0.7));
+      animating = true;
+      let t0 = null;
+      const step = ts => {
+        if (t0 === null) t0 = ts;
+        const p = Math.min(1, (ts - t0) / dur);
+        scrollTo(0, startY + dist * ease(p));
+        if (p < 1) requestAnimationFrame(step); else animating = false;
+      };
+      requestAnimationFrame(step);
+    });
+  })();
+
   // #problem (the light pinned section) pins only if it fits the viewport — a taller pinned
   // section strands its tail. CSS can't compare content height to viewport height, so measure it
   // and toggle .mat-nofit. phones (<=820px) are always no-fit and get the svh phone layout.
