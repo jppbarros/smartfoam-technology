@@ -1069,99 +1069,43 @@
   }
   .btn-ghost:hover{border-color:var(--purple);color:var(--purple-deep)}
 
-  /* ---------- SOCIAL PROOF — Field Notes (photo cards scroll over a fixed testimonial) ---------- */
-  /* --sweep-bg re-points the sweep-title's hidden zone to THIS section's bg (#0D0A13), so the
-     "Loved where it lives" reveal starts truly invisible here too. */
-  /* sem overflow-x:clip aqui: o html ja tem clip global (mata o scroll lateral), e um ancestral com
-     clip pode fazer o .fn-sticky tremer no iOS. glow atras (era #0D0A13 chapado). */
-  .fieldnotes{background:transparent;position:relative;--sweep-bg:#0D0A13}
+  /* ---------- SOCIAL PROOF — Reviews em carrossel (texto esquerda / foto direita, estilo B-DOG) ----------
+     substituiu o Field Notes (depoimento fixo + cards subindo). backup completo (HTML+CSS+JS) em
+     _secoes-removidas/reviews-fieldnotes-technology.html. */
+  .fieldnotes{background:transparent;position:relative}
   .fn-intro{text-align:center;max-width:780px;margin:0 auto;padding:8rem 6vw 0}
   .fn-intro .lead{margin-top:1rem;font-size:1rem;color:var(--dim)}
-  .fn-track{position:relative}
-  /* LOW layer: the single central testimonial, filled by JS from the card covering it */
-  .fn-sticky{
-    position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));z-index:1;
-    display:flex;align-items:center;justify-content:center;padding:2vh 6vw;pointer-events:none;
-    /* camada GPU propria: sem isto, no iOS o depoimento fixo treme verticalmente durante o momentum
-       scroll (rasteriza a cada frame por cima do glow FIXO que agora aparece atras). */
-    transform:translateZ(0);will-change:transform;
-  }
-  /* transition inclui filter pro fade+blur suave da troca (nao "pisca") */
-  .fn-live{
-    position:relative;max-width:600px;text-align:center;opacity:1;
-    transition:opacity .4s ease, filter .4s ease;will-change:opacity,filter;
-  }
-  .fn-live blockquote{margin:0;font-size:clamp(1.3rem,2.6vw,2.05rem);line-height:1.4;font-weight:500;color:var(--ink);letter-spacing:-.01em}
-  .fn-live figcaption{margin-top:1.5rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem}
-  .fn-live .who{font-weight:800;color:var(--ink);letter-spacing:.02em}
-  .fn-live .variant{color:var(--purple-deep)}
-  /* HIGH layer: opaque photo cards, centred, one every ~120vh (so the text is exposed between them)
-     and above the text (z-index 2) — a passing card hides the text while the review swaps under it */
-  .fn-cards{position:relative;z-index:2;margin:0;padding:0;list-style:none}
-  /* mais respiro entre as fotos: o depoimento so fica exposto ENTRE fotos, e com 88vh a janela era
-     curta demais (a foto passava, trocava, e a proxima ja chegava). 118vh abre uma janela de leitura
-     clara entre cada foto. */
-  .fn-band{display:grid;place-items:center;min-height:118vh}
-  /* o ultimo band segue o mesmo ritmo dos outros (era 80vh, encurtado pra encostar no antigo "4.6/5",
-     que ja nao existe). encurtado, a foto ainda estava na linha do texto quando o track acabava.
-     .fn-tail: cauda DEPOIS da ultima foto. o .fn-sticky gruda enquanto o track durar, entao esta
-     altura extra e scroll em que o depoimento fica parado no centro e a ultima foto continua subindo
-     pra fora dele — a secao fecha na REVIEW, com a foto acima dela, nao na foto. */
-  .fn-tail{height:32vh}
-  /* photo cards, each landing at its OWN horizontal spot AND its own size/shape (after o-scs.com's
-     Field Notes): they scatter left/right/centre and mix widths + aspect ratios as they float up
-     over the fixed testimonial. --fw width, --fa aspect, --fx horizontal offset, set per position. */
-  .fn-card{
-    position:relative;width:var(--fw,300px);aspect-ratio:var(--fa,4/5);background:#2A2436;
-    border-radius:0;overflow:hidden;box-shadow:0 34px 80px rgba(0,0,0,.55);
-    transform:translateX(var(--fx,0));
-  }
-  .fn-band:nth-child(1) .fn-card{--fw:clamp(260px,25vw,380px);--fa:4/5;--fx:-19vw}
-  .fn-band:nth-child(2) .fn-card{--fw:clamp(240px,23vw,340px);--fa:1/1;--fx:22vw}
-  .fn-band:nth-child(3) .fn-card{--fw:clamp(220px,21vw,320px);--fa:4/5;--fx:-33vw}
-  .fn-band:nth-child(4) .fn-card{--fw:clamp(300px,32vw,460px);--fa:3/4;--fx:5vw}
-  .fn-band:nth-child(5) .fn-card{--fw:clamp(240px,23vw,340px);--fa:1/1;--fx:29vw}
-  .fn-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-  .fn-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(244,241,250,.22);z-index:0}
-  .fn-ph svg{width:44px;height:44px}
-  /* each card's review: visually hidden (the sticky shows the live copy) but kept for a11y / no-JS */
-  .fn-said{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-  .stars{display:inline-flex;gap:2px;color:#F2B8CE;margin-bottom:1.1rem}
-  .stars svg{width:16px;height:16px;display:block}
+  .stars{display:inline-flex;gap:2px;color:#F2B8CE;margin-bottom:1.3rem}
+  .stars svg{width:18px;height:18px;display:block}
   .badge{display:inline-flex;align-items:center;font-size:.64rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-deep);border:1px solid var(--glass-line);border-radius:999px;padding:.18rem .55rem}
-
-  /* "verified reviews" (na stat do topo do #reviews) linka pra todas as reviews na loja */
   .rv-link{color:var(--purple-deep);text-decoration:none;border-bottom:1px solid var(--glass-line);transition:color .2s,border-color .2s}
   .rv-link:hover{color:var(--ink);border-color:currentColor}
-  /* o antigo margin-top negativo aqui (herdado do .rvcards) existia pra comer a cauda VAZIA que
-     sobrava depois da ultima foto do fieldnotes. essa cauda agora e o .fn-tail e nao e vazia — e o
-     trecho em que a ultima review fica exposta e sozinha. puxar o FAQ pra cima invadiria justamente
-     essa leitura, entao a margem saiu: a secao fecha na review e o FAQ vem depois, no fluxo normal. */
 
+  .rvx{position:relative;max-width:1120px;margin:3.5rem auto 0;padding:0 clamp(1rem,5vw,4rem)}
+  .rvx-viewport{overflow:hidden}
+  .rvx-track{display:flex;transition:transform .6s cubic-bezier(.22,1,.36,1);will-change:transform}
+  .rvx-slide{flex:0 0 100%;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,4vw,4rem);align-items:center}
+  .rvx-text .stars{margin-bottom:1.4rem}
+  .rvx-text blockquote{margin:0;font-size:clamp(1.35rem,2.4vw,2.1rem);line-height:1.34;font-weight:500;color:var(--ink);letter-spacing:-.015em;text-wrap:pretty}
+  .rvx-text figcaption{margin-top:1.8rem;display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;color:var(--dim);font-size:.9rem}
+  .rvx-text .who{font-weight:800;color:var(--ink);letter-spacing:.02em}
+  .rvx-photo{position:relative;aspect-ratio:4/5;overflow:hidden;background:#2A2436;box-shadow:0 34px 80px rgba(0,0,0,.5)}
+  .rvx-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .rvx-ctrl{display:flex;align-items:center;justify-content:center;gap:1.4rem;margin-top:2.4rem}
+  .rvx-nav{width:44px;height:44px;border-radius:50%;border:1px solid var(--glass-line);background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s;flex:none}
+  .rvx-nav:hover{border-color:var(--purple-deep);background:rgba(255,255,255,.05)}
+  .rvx-nav svg{width:18px;height:18px}
+  .rvx-dots{display:flex;gap:.55rem;align-items:center}
+  .rvx-dot{width:8px;height:8px;padding:0;border-radius:50%;border:none;background:rgba(244,241,250,.28);cursor:pointer;transition:background .25s,transform .25s}
+  .rvx-dot[aria-selected="true"]{background:#F2B8CE;transform:scale(1.35)}
   @media(max-width:820px){
     .fn-intro{padding-top:5rem}
-    .fn-sticky{height:calc(100svh - var(--nav-h))}
-    .fn-band{min-height:76svh}   /* era 108svh: 5 faixas x 108 = 4560px, o maior bloco da pagina */
-    .fn-tail{height:42svh}   /* sobe junto com a faixa menor: card center = trackBottom - tail - band/2 */
-    /* bigger, still mixed sizes/shapes, alternating left / right down the column */
-    .fn-band:nth-child(1) .fn-card{--fw:62vw;--fa:4/5;--fx:-15vw}
-    .fn-band:nth-child(2) .fn-card{--fw:56vw;--fa:1/1;--fx:17vw}
-    .fn-band:nth-child(3) .fn-card{--fw:60vw;--fa:4/5;--fx:-15vw}
-    .fn-band:nth-child(4) .fn-card{--fw:66vw;--fa:3/4;--fx:13vw}
-    .fn-band:nth-child(5) .fn-card{--fw:56vw;--fa:1/1;--fx:-16vw}
-    .fn-live blockquote{font-size:1.2rem}
+    .rvx-slide{grid-template-columns:1fr;gap:1.5rem}
+    .rvx-photo{aspect-ratio:16/10;order:-1;max-height:46vh}   /* foto em cima no mobile */
+    .rvx-text blockquote{font-size:1.25rem}
   }
   @media (prefers-reduced-motion: reduce){
-    /* no pin, no cover: drop the live layer; show each card with its review below it as a list */
-    .fn-sticky{display:none}
-    .fn-band{display:block;min-height:0;margin-bottom:3.5rem;text-align:center;max-width:460px;margin-inline:auto}
-    .fn-card{margin:0 auto 1.4rem;transform:none;width:min(340px,82vw);aspect-ratio:4/5}
-    .fn-said{position:static;width:auto;height:auto;clip-path:none;white-space:normal}
-    .fn-said blockquote{margin:0;font-size:1.15rem;line-height:1.5;color:var(--ink)}
-    .fn-said figcaption{margin-top:1rem;font-size:.85rem;color:var(--dim);display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
-    .fn-said .who{font-weight:800;color:var(--ink)}
-    .fn-said .variant{color:var(--purple-deep)}
-    .fn-said .stars{margin-left:auto;margin-right:auto}
+    .rvx-track{transition:none}
   }
 
   /* dashed selection frame with handles (identity motif).
@@ -1690,7 +1634,7 @@
   <div class="dial-wrap reveal">
     <div class="dial" role="img" aria-label="BIFMA impact and drop testing: 100,000-plus cycles">
       <svg class="dial-svg" viewBox="0 0 240 240" aria-hidden="true"><g id="dialTicks"></g></svg>
-      <img class="dial-logo" src="assets/bifma-white.png" alt="BIFMA certified">
+      <img class="dial-logo" src="assets/bifma-white.svg" alt="BIFMA certified">
     </div>
     <div class="dial-copy">
       <span class="dial-num" id="dialNum">100,000+</span>
@@ -1933,69 +1877,65 @@
   </div>
 </section>
 
-<!-- 13 — SOCIAL PROOF: Field Notes. The central testimonial rides a LOW sticky layer; the customer
-     photo cards scroll UP IN FRONT of it (higher z-index), covering the text and revealing the next
-     review as they pass — the swap fires hidden behind a card, so the text never fades. Drop
-     cliente-01.avif … cliente-05.avif into assets/ and refresh to replace the placeholders. -->
+<!-- 13 — SOCIAL PROOF: Reviews em carrossel (texto esquerda / foto direita, vindo da smartfoam-landing).
+     as .stars ficam vazias — o JS global (querySelectorAll('.stars')) preenche com 5 estrelas.
+     backup do Field Notes anterior: _secoes-removidas/reviews-fieldnotes-technology.html -->
 <section class="fieldnotes" id="reviews" aria-label="Customer reviews">
   <div class="fn-intro reveal">
     <p class="eyebrow">Real homes, real reviews</p>
-    <h2 class="h-giant sweep-title h-sec">Loved where it lives.</h2>
+    <h2 class="h-giant">Loved where it lives.</h2>
     <p class="lead">4.6 out of 5 across 1,057 <a class="rv-link" href="https://rovelab.ca/products/m1-sofa-sectional" target="_blank" rel="noopener">verified reviews</a>.</p>
   </div>
-  <div class="fn-track">
-    <!-- low layer: the single central testimonial, filled by JS from the card that is covering it -->
-    <div class="fn-sticky" aria-hidden="true">
-      <figure class="fn-live" id="fnLive"></figure>
+  <div class="rvx reveal">
+    <div class="rvx-viewport">
+      <div class="rvx-track" id="rvxTrack" aria-live="polite">
+        <article class="rvx-slide">
+          <div class="rvx-text">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+            <blockquote>It was really fun opening it and watching it expand! It only took three days until it was finished expanding. Love this couch!</blockquote>
+            <figcaption><span class="who">Trinaa A.</span> <span class="badge">Verified</span></figcaption>
+          </div>
+          <div class="rvx-photo"><img src="assets/cliente-s8.webp" alt="" loading="lazy" onerror="this.closest('.rvx-photo').style.display='none'"></div>
+        </article>
+        <article class="rvx-slide">
+          <div class="rvx-text">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+            <blockquote>My favorite part is being able to change the configuration. It's like having a new couch every day. Sometimes we even split them up between rooms.</blockquote>
+            <figcaption><span class="who">Ana V.</span> <span class="badge">Verified</span></figcaption>
+          </div>
+          <div class="rvx-photo"><img src="assets/cliente-02.avif" alt="" loading="lazy" onerror="this.closest('.rvx-photo').style.display='none'"></div>
+        </article>
+        <article class="rvx-slide">
+          <div class="rvx-text">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+            <blockquote>I've been thinking about getting this couch for some time. I am extremely happy with it! It's firm and comfortable and great size!</blockquote>
+            <figcaption><span class="who">Kamile P.</span> <span class="badge">Verified</span></figcaption>
+          </div>
+          <div class="rvx-photo"><img src="assets/cliente-mb2.webp" alt="" loading="lazy" onerror="this.closest('.rvx-photo').style.display='none'"></div>
+        </article>
+        <article class="rvx-slide">
+          <div class="rvx-text">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+            <blockquote>The M1 is perfect! It's so comfortable and well made! Shipment went smoothly &amp; arrived quickly. Highly recommend!</blockquote>
+            <figcaption><span class="who">James L.</span> <span class="badge">Verified</span></figcaption>
+          </div>
+          <div class="rvx-photo"><img src="assets/cliente-04.avif" alt="" loading="lazy" onerror="this.closest('.rvx-photo').style.display='none'"></div>
+        </article>
+        <article class="rvx-slide">
+          <div class="rvx-text">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
+            <blockquote>I researched 'boneless' sofas for several months. It was a smart purchase and I am extremely pleased with the quality. I was skeptical but I am convinced.</blockquote>
+            <figcaption><span class="who">Verified buyer</span> <span class="badge">Verified</span></figcaption>
+          </div>
+          <div class="rvx-photo"><img src="assets/cliente-mb.webp" alt="" loading="lazy" onerror="this.closest('.rvx-photo').style.display='none'"></div>
+        </article>
+      </div>
     </div>
-    <!-- high layer: photo cards that scroll up over the text. each carries its own review (visually
-         hidden, but in the a11y tree and shown as a static list under reduced-motion). -->
-    <ol class="fn-cards">
-      <li class="fn-band">
-        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-s8.webp" alt="" onerror="this.style.display='none'"></div>
-        <figure class="fn-said">
-          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-          <blockquote>It was really fun opening it and watching it expand! It only took three days until it was finished expanding. Love this couch!</blockquote>
-          <figcaption><span class="who">Trinaa A.</span> <span class="badge">Verified</span></figcaption>
-        </figure>
-      </li>
-      <li class="fn-band">
-        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-02.avif" alt="" onerror="this.style.display='none'"></div>
-        <figure class="fn-said">
-          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-          <blockquote>My favorite part is being able to change the configuration. It's like having a new couch every day. Sometimes we even split them up between rooms.</blockquote>
-          <figcaption><span class="who">Ana V.</span> <span class="badge">Verified</span></figcaption>
-        </figure>
-      </li>
-      <li class="fn-band">
-        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-mb2.webp" alt="" onerror="this.style.display='none'"></div>
-        <figure class="fn-said">
-          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-          <blockquote>I've been thinking about getting this couch for some time. I am extremely happy with it! It's firm and comfortable and great size!</blockquote>
-          <figcaption><span class="who">Kamile P.</span> <span class="badge">Verified</span></figcaption>
-        </figure>
-      </li>
-      <li class="fn-band">
-        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-04.avif" alt="" onerror="this.style.display='none'"></div>
-        <figure class="fn-said">
-          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-          <blockquote>The M1 is perfect! It's so comfortable and well made! Shipment went smoothly &amp; arrived quickly. Highly recommend!</blockquote>
-          <figcaption><span class="who">James L.</span> <span class="badge">Verified</span></figcaption>
-        </figure>
-      </li>
-      <li class="fn-band">
-        <div class="fn-card"><span class="fn-ph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><img src="assets/cliente-mb.webp" alt="" onerror="this.style.display='none'"></div>
-        <figure class="fn-said">
-          <div class="stars" role="img" aria-label="Rated 5 out of 5"></div>
-          <blockquote>I researched 'boneless' sofas for several months. It was a smart purchase and I am extremely pleased with the quality. I was skeptical but I am convinced.</blockquote>
-          <figcaption><span class="who">Verified buyer</span> <span class="badge">Verified</span></figcaption>
-        </figure>
-      </li>
-    </ol>
-    <!-- cauda do track: mantem o .fn-sticky COLADO por mais um pedaco depois da ultima foto, pra ela
-         terminar de subir e sair de cima do depoimento. sem isto o track acaba com a foto ainda na
-         linha do texto (tapando a ultima review) — a secao fechava na foto, nao na review. -->
-    <div class="fn-tail" aria-hidden="true"></div>
+    <div class="rvx-ctrl">
+      <button class="rvx-nav rvx-prev" type="button" aria-label="Previous review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="rvx-dots" id="rvxDots" role="tablist" aria-label="Choose a review"></div>
+      <button class="rvx-nav rvx-next" type="button" aria-label="Next review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
   </div>
 </section>
 
@@ -2472,7 +2412,7 @@
     // the "Tested where it counts" title shares the dial's progress, so its gradient sweep reveals
     // in step with the counter: invisible at 0, colour band mid-count, solid white by 100,000+.
     const sweep = document.querySelector('.sweep-title');
-    let dialMaxP = 0;   // ratchet: a contagem so avanca; ao subir a pagina ela nao se desfaz
+    let dialDone = false;   // trava so DEPOIS de completar uma vez; antes disso a contagem segue o scroll
     function dialMotion() {
       // layout viewport, not innerHeight: the section pins in svh/layout px, and on mobile
       // innerHeight drifts with the URL bar (and the preview pane reports a scaled innerHeight that
@@ -2511,15 +2451,17 @@
         const r = dial.getBoundingClientRect();
         p = clamp01((vh * 0.65 - r.top) / (vh * 0.5));
       }
-      // contagem/ticks/sweep usam dialMaxP (o maior p ja atingido), nao o p do frame: a animacao so
-      // avanca. primeiro scroll de cima pra baixo preenche 0 -> 100,000+; ao subir a pagina depois,
-      // nada volta a 0. o --num-shift abaixo NAO entra no ratchet — e posicionamento e segue o scroll.
-      dialMaxP = Math.max(dialMaxP, p);
-      const lit = Math.round(dialMaxP * dialTicks.length);
+      // trava so DEPOIS de completar: enquanto conta, a contagem segue o scroll normalmente (subir a
+      // pagina no meio faz ela descer junto — sem congelar num valor parcial, "sobe direto"). ao
+      // chegar no fim (p~1) uma vez, dialDone fixa tudo no final pra sempre: passou pela secao => nao
+      // volta a 0. o --num-shift abaixo NAO entra nisso — e posicionamento e segue o scroll.
+      if (p >= 0.995) dialDone = true;
+      const pEff = dialDone ? 1 : p;
+      const lit = Math.round(pEff * dialTicks.length);
       dialTicks.forEach((t, i) => t.classList.toggle('on', i < lit));
-      const n = Math.round(dialMaxP * 100000);
-      dialNum.textContent = n.toLocaleString('en-US') + (dialMaxP >= 1 ? '+' : '');
-      if (sweep) sweep.style.setProperty('--p', dialMaxP.toFixed(3));   // sweep the title in step with the count
+      const n = Math.round(pEff * 100000);
+      dialNum.textContent = n.toLocaleString('en-US') + (pEff >= 1 ? '+' : '');
+      if (sweep) sweep.style.setProperty('--p', pEff.toFixed(3));   // sweep the title in step with the count
 
       // num-shift: durante a ENTRADA (antes de pinar) o conteudo (titulo + dial) sobe deslocado pra
       // cima, dentro da cortina escura, e assenta em 0 exatamente quando a secao pina — a cortina
@@ -2546,53 +2488,10 @@
         Math.max(0, Math.min(bruto, vh * 0.70)).toFixed(1) + 'px');
     }
 
-    // social proof (Field Notes): the photo cards scroll UP over a fixed central testimonial. when a
-    // card fully covers the text slot, swap the sticky's review to that card's — instantly, hidden
-    // behind the card, so the text never fades. keeps the last review while exposed; restores the
-    // previous one on the way back up (same rule). the heading uses the sweep-title effect, driven
-    // here by its own screen position (not tied to the dial counter).
-    const fnSection = document.querySelector('.fieldnotes');
-    const fnSticky = document.querySelector('.fn-sticky');
-    const fnLive = document.getElementById('fnLive');
-    const fnBands = [...document.querySelectorAll('.fn-band')];
-    const fnSaid = fnBands.map(b => b.querySelector('.fn-said'));
-    const fnTitle = document.querySelector('.fieldnotes .sweep-title');
-    let fnQuoteIdx = -1;
-    // the photos are small and scattered, so they can't hide the swap — ease the text with a quick
-    // crossfade instead (matches the reference's `transition:all` on the note text).
-    const setFnQuote = i => {
-      if (i === fnQuoteIdx || !fnLive || !fnSaid[i]) return;
-      fnQuoteIdx = i;
-      // fade + leve desfoque na saida, troca o texto escondido, depois foca de volta — nao "pisca".
-      fnLive.style.opacity = '0';
-      fnLive.style.filter = 'blur(6px)';
-      clearTimeout(fnLive._t);
-      fnLive._t = setTimeout(() => {
-        fnLive.innerHTML = fnSaid[i].innerHTML;
-        fnLive.style.opacity = '1';
-        fnLive.style.filter = 'blur(0px)';
-      }, 240);
-    };
-    if (fnLive && fnSaid[0]) { fnQuoteIdx = 0; fnLive.innerHTML = fnSaid[0].innerHTML; }  // first review, no fade
-    function fnMotion() {
-      const vh = document.documentElement.clientHeight || innerHeight;
-      if (fnTitle) {                                       // reveal the heading as it rises into view
-        const t = fnTitle.getBoundingClientRect();
-        // janela do sweep: comeca em .95vh (titulo assomando por baixo) e FECHA em .60vh, ainda acima
-        // do meio da tela — antes o span era .45vh (fechava so em .50vh) e o titulo chegava ao centro
-        // ainda meio apagado. span = 0.95 - 0.60 = 0.35.
-        fnTitle.style.setProperty('--p', clamp01((vh * 0.95 - t.top) / (vh * 0.35)).toFixed(3));
-      }
-      const sr = fnSticky.getBoundingClientRect();
-      const cy = sr.top + sr.height / 2;                   // the line the testimonial sits on
-      let near = -1, best = Infinity;                      // the photo nearest that line is "passing"
-      fnBands.forEach((b, i) => {
-        const r = b.querySelector('.fn-card').getBoundingClientRect();
-        const d = Math.abs((r.top + r.bottom) / 2 - cy);
-        if (d < best) { best = d; near = i; }
-      });
-      if (near !== -1 && best < vh * 0.4) setFnQuote(near); // swap as a photo passes; hold between
-    }
+    // social proof: a secao de reviews agora e um CARROSSEL (texto esquerda / foto direita), portado
+    // da smartfoam-landing. a logica dele mora num IIFE proprio no fim do <script> (nao entra no loop
+    // de cena rAF). o antigo Field Notes (fnMotion + sticky) foi removido — backup em
+    // _secoes-removidas/reviews-fieldnotes-technology.html.
 
     // logo build: the SmartFoam logo assembles with the pin scroll. innermost ellipse grows from a
     // tiny circle (rx/ry morph), the outer rings snap out around it, then the wordmark fades in.
@@ -2671,7 +2570,6 @@
       jobs.push({ el: dialWrap, run: dialMotion });
       dialMotion();   // set the empty start immediately, so the default-lit ring never flashes
     }
-    if (fnSection && fnBands.length) { jobs.push({ el: fnSection, run: fnMotion }); fnMotion(); }
     if (lb && lbWrap && lbRings.length && lbWord) { jobs.push({ el: lbWrap, run: lbMotion }); lbMotion(); }
     marquees.forEach(m => jobs.push({ el: m.closest('section') || m, run: marqueeMotion }));
 
@@ -2691,6 +2589,45 @@
     }, { rootMargin: '15% 0px' });
     jobs.forEach(j => sio.observe(j.el));
   }
+
+  /* Reviews em carrossel (texto esquerda / foto direita), portado da smartfoam-landing. autossuficiente:
+     autoplay 6s com pausa no hover/foco; setas, dots, teclado, wrap-around. respeita reduced-motion. */
+  (function () {
+    const track = document.getElementById('rvxTrack');
+    const dotsWrap = document.getElementById('rvxDots');
+    const root = document.querySelector('.rvx');
+    if (!track || !dotsWrap || !root) return;
+    const slides = [...track.children];
+    if (!slides.length) return;
+    const prev = root.querySelector('.rvx-prev');
+    const next = root.querySelector('.rvx-next');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let idx = 0, timer = null;
+    slides.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'rvx-dot'; b.setAttribute('role', 'tab');
+      b.setAttribute('aria-label', 'Review ' + (i + 1));
+      b.addEventListener('click', () => go(i, true));
+      dotsWrap.appendChild(b);
+    });
+    const dots = [...dotsWrap.children];
+    function render() {
+      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      dots.forEach((d, i) => d.setAttribute('aria-selected', i === idx ? 'true' : 'false'));
+    }
+    function go(i, user) { idx = (i + slides.length) % slides.length; render(); if (user) restart(); }
+    function restart() { if (reduce) return; clearInterval(timer); timer = setInterval(() => go(idx + 1, false), 6000); }
+    prev && prev.addEventListener('click', () => go(idx - 1, true));
+    next && next.addEventListener('click', () => go(idx + 1, true));
+    root.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') go(idx - 1, true);
+      else if (e.key === 'ArrowRight') go(idx + 1, true);
+    });
+    ['mouseenter', 'focusin'].forEach(ev => root.addEventListener(ev, () => clearInterval(timer)));
+    ['mouseleave', 'focusout'].forEach(ev => root.addEventListener(ev, restart));
+    render();
+    restart();
+  })();
 </script>
 </body>
 </html>
