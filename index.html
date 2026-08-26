@@ -2070,7 +2070,7 @@
   (function () {
     const g = document.getElementById('dialTicks');
     if (!g) return;
-    const N = 60, cx = 120, cy = 120, ri = 72, ro = 88, NS = 'http://www.w3.org/2000/svg';   /* tighter ring, hugs the new circle-less logo */
+    const N = 60, cx = 120, cy = 120, ri = 92, ro = 108, NS = 'http://www.w3.org/2000/svg';   /* anel maior (ri 72->92): mais espaco interno pro logo BIFMA respirar */
     const stops = [[247,168,196],[201,180,236],[143,195,247]];   // #F7A8C4 pink, #C9B4EC lilac, #8FC3F7 blue
     const lp = (a,b,t)=>Math.round(a+(b-a)*t);
     // symmetric ramp: pink -> lilac -> blue -> lilac -> pink, so the first and last tick (adjacent
