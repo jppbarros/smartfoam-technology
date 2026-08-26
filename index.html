@@ -316,7 +316,7 @@
   /* header: anel BIFMA pequeno ao lado do titulo */
   .num-head{display:flex;align-items:center;gap:clamp(1rem,2.5vw,2.2rem)}
   .num-head-txt{min-width:0}
-  .dial{position:relative;width:clamp(74px,9vw,116px);aspect-ratio:1;flex:none}
+  .dial{position:relative;width:clamp(96px,12vw,150px);aspect-ratio:1;flex:none}   /* +30% */
   .dial-svg{width:100%;height:100%;display:block;overflow:visible}
   .dial-tick{stroke-width:2.4;stroke-linecap:round;opacity:.13}
   .dial-tick.on{opacity:1}
@@ -339,7 +339,7 @@
   .dial-sub{margin:1.1rem 0 0;font-size:1rem;line-height:1.7;color:var(--dim);max-width:46ch}
   @media(max-width:820px){
     .num-head{gap:.9rem}
-    .dial{width:64px}
+    .dial{width:84px}
     .dial-wrap{grid-template-columns:1fr;gap:2rem}
     .num-photo{width:100%;aspect-ratio:16/10}
   }
@@ -2085,8 +2085,8 @@
       ln.setAttribute('y1', (cy + ri * Math.sin(ang)).toFixed(2));
       ln.setAttribute('x2', (cx + ro * Math.cos(ang)).toFixed(2));
       ln.setAttribute('y2', (cy + ro * Math.sin(ang)).toFixed(2));
-      ln.setAttribute('class', 'dial-tick on');   // lit by default = the finished state
-      ln.style.stroke = col(i / N);
+      ln.setAttribute('class', 'dial-tick on');   // sempre aceso: anel BIFMA estatico (sem animacao)
+      ln.style.stroke = '#fff';                     // branco, nao mais o gradiente
       g.appendChild(ln);
     }
     window.__dialTicks = [...g.children];
@@ -2456,8 +2456,8 @@
       // volta a 0. o --num-shift abaixo NAO entra nisso — e posicionamento e segue o scroll.
       if (p >= 0.995) dialDone = true;
       const pEff = dialDone ? 1 : p;
-      const lit = Math.round(pEff * dialTicks.length);
-      dialTicks.forEach((t, i) => t.classList.toggle('on', i < lit));
+      // o anel BIFMA agora e ESTATICO (todos os ticks acesos, sem animacao) — nao mexemos mais neles.
+      // so o numero conta.
       const n = Math.round(pEff * 100000);
       dialNum.textContent = n.toLocaleString('en-US') + (pEff >= 1 ? '+' : '');
       if (sweep) sweep.style.setProperty('--p', pEff.toFixed(3));   // sweep the title in step with the count
