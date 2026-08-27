@@ -330,7 +330,7 @@
   }
   /* the hold: #numbers pins and this spacer is the scroll the ring/count build over. two classes so
      it beats the later `.spacer{height:130vh}` rule (equal specificity would let 130vh win by order). */
-  .spacer.dial-hold{height:100vh}
+  .spacer.dial-hold{height:45vh}   /* bem menos scroll: a contagem termina rapido e o pin solta logo */
   .num-photo{margin:0;position:relative;aspect-ratio:4/3;overflow:hidden;background:#2A2436;box-shadow:0 34px 80px rgba(0,0,0,.5)}
   .num-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .dial-block{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:.4rem}
@@ -531,7 +531,7 @@
        so the heading stays fully visible and the dial sits just above centre — the framing pointed
        to. the sub paragraph rides in as the pin releases. */
     html.mat-nofit #numbers.pinned{position:sticky;height:calc(100svh - var(--nav-h))}
-    .pin-wrap.on-dark .spacer.dial-hold{height:120svh}   /* longer hold so the count finishes on-screen */
+    .pin-wrap.on-dark .spacer.dial-hold{height:55svh}   /* bem menos scroll: conta rapido e solta o pin */
   }
   .eyebrow{font-size:.7rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--purple-deep);margin-bottom:var(--s-5)}
   .h-giant{font-size:var(--fs-h2-lead);font-weight:900;line-height:1;letter-spacing:-.015em;text-transform:uppercase;text-wrap:balance}
@@ -1285,7 +1285,8 @@
        scrim lia como uma "quebra" no fundo do carrossel). a sombra da contraste sobre imagens claras
        sem pintar faixa nenhuma. */
     .car-eyebrow,.car-name,.car-room{text-shadow:0 1px 10px rgba(13,10,19,.85),0 0 3px rgba(13,10,19,.7)}
-    .cslide,.car-center{top:49%}
+    .cslide,.car-center{top:55%}   /* imagens mais abaixo: em viewport curto (barra do iOS) elas
+                                      subiam e encostavam no titulo/eyebrow — agora ficam ABAIXO dele */
     .logo .prod-suffix{display:none}
     .shop{padding-bottom:64px}   /* era 12rem=192px, acima do teto de 120 */
 
@@ -1301,13 +1302,9 @@
     /* o #numbers e pinado (fora da regra acima), mas o padding-bottom dele e interno a caixa pinada,
        nao respiro entre secoes — baixar fecha a fronteira #numbers->#possible, que somava 192. */
     #numbers{padding-bottom:64px}
-    /* FIM DO FIELD NOTES -> FAQ. o depoimento e CENTRADO numa caixa sticky de ~100svh, entao quando
-       o track acaba sobram ~290px vazios abaixo dele (a metade de baixo da caixa) + os paddings.
-       zerar o padding do #reviews e subir o #faq come exatamente essa metade morta. isto NAO e a
-       margem negativa que removi antes: aquela invadia a janela em que a ultima review fica exposta
-       (que acontece durante o .fn-tail, ANTES do track acabar); esta so atua depois do fim dele. */
-    #reviews{padding-bottom:0}
-    #faq{margin-top:-200px}
+    /* (a secao de reviews agora e um CARROSSEL curto — nao tem mais a "cauda morta" do Field Notes
+       sticky, entao o #reviews{padding-bottom:0} + #faq{margin-top:-200px} que a compensavam SAIRAM:
+       estavam puxando o FAQ 200px pra dentro do carrossel, embolando os controles com o heading.) */
     /* CARROSSEL -> "READY IN A BOX". mesmo caso: o slide fica em top:49% da caixa sticky, entao ao
        soltar sobram ~245px mortos abaixo dele antes do #shop comecar. subir o #shop come essa faixa
        sem encostar no slide (que termina em ~599 de 844). */
