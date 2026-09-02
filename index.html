@@ -495,6 +495,11 @@
     html.mat-nofit .pinned{position:static;height:auto}
     html.mat-nofit .pin-wrap .spacer{height:0}
     html.mat-nofit .curtain{display:none}
+    /* sem a cortina animada (que exige o pin), a fronteira #problem(claro) -> #numbers(escuro)
+       viraria uma borda DURA. sobrescreve o gradiente de fundo do #numbers pra COMECAR em #ECE8F7
+       (igual ao #problem, zero borda) e descer pro #1C1B23 e depois pro glow — um fade suave. o
+       padding-top empurra o conteudo pra baixo do trecho claro, mantendo o texto sobre o escuro. */
+    html.mat-nofit #numbers{background:linear-gradient(180deg,#ECE8F7 0,#1C1B23 130px,rgba(28,27,35,0) 46vh);padding-top:150px}
   }
   /* PHONE. svh, not vh: the mobile URL bar changes vh mid-scroll and would slide every seam.
      shorter curtain (80svh) and matched spacers keep transition 1 tight and stop transition 2's
