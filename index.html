@@ -302,10 +302,10 @@
      some sob o escuro. z:3 poe o titulo + dial na frente, entao aparecem enquanto a cortina ainda
      cobre. position:relative pra o z-index valer em qualquer layout. */
   .num-shift{position:relative;z-index:3}
-  @media (min-width:821px) and (prefers-reduced-motion: no-preference){
-    #numbers{--num-shift:0px}
-    .num-shift{transform:translateY(calc(-1 * var(--num-shift)))}
-  }
+  /* num-shift DESLIGADO: o transform que subia o conteudo do #numbers pra dentro da cortina fazia,
+     em certas alturas de viewport (desktop, sem reduced-motion), o titulo/badge/eyebrow aparecerem
+     SOLTOS sobre o #problem claro (bug reportado por usuario). sem o transform o conteudo fica na
+     propria secao e nunca invade o #problem. (o JS tambem forca --num-shift=0 via shiftOn=false.) */
   /* transparente: #numbers ja termina em transparente (glow), entao aqui nao precisa mais fazer o
      fade a partir de #1C1B23 — deixa o glow continuo e seamless entre as duas secoes. */
   #possible{background:transparent}
@@ -2423,8 +2423,11 @@
       // 1 = anda junto com a secao; <1 = sobe mais devagar que o scroll, entrando na zona da cortina
       // bem antes dela abrir (o reveal). so existe onde o transform do --num-shift existe: desktop
       // com motion. no resto RATE 1 => shift 0 => comportamento identico ao de antes.
-      const shiftOn = innerWidth > 820
-        && matchMedia('(prefers-reduced-motion: no-preference)').matches;
+      // num-shift DESLIGADO: ele subia o conteudo do #numbers pra dentro da zona da cortina, mas em
+      // certas alturas de viewport passava do teto e o titulo/badge/eyebrow apareciam SOLTOS sobre o
+      // #problem claro (bug reportado por um usuario, so no desktop sem reduced-motion). shift 0 = o
+      // conteudo fica na propria secao e nunca invade o #problem (igual mobile/reduced-motion).
+      const shiftOn = false;
       const NUM_RATE = shiftOn ? 0.6 : 1;
       let p;
       if (getComputedStyle(numbersEl).position === 'sticky') {
